@@ -1,0 +1,58 @@
+@import '../../bower_components/meetup-swatches/sass/colors';
+@import '../../bower_components/sassquatch2/sass/util';
+@import 'tweaks'; // TO BE CONSIDERED AS GLOBAL CHANGES TO SQ2
+@import 'hacks'; // SHAMEFUL QUICKFIXES
+@import 'icons';
+@import 'nav';
+
+/*
+------------------------------
+Discussion feed
+------------------------------
+*/
+
+// Event cards that appear in the feed
+._proto_card--mup {
+	max-width: $block-7;
+	min-height: 0;
+	padding: $space-half;
+}
+
+._proto_card--mup--past {
+
+	// .dateDisplay-day,
+	// .dateDisplay-month,
+	h5,
+	p {
+		color: $C_textSecondary;
+	}
+
+}
+
+// Flex Photos - flexbox-based photo-grid
+// used for feed
+
+._proto_flexPhotos {
+	height: $block-6;
+	width: 100%;
+	&--sm {
+		width: percentage(1/3);
+	}
+	&--lg {
+		width: percentage(2/3);
+	}
+}
+
+/*
+// vertically stacked
+._proto_flexPhotos{
+	@include display(flex);
+	@include flex-flow(row wrap);
+	padding: 0;
+	.imgFill{
+		@include flex(1 0 50%);
+		@include box-sizing(border-box);
+		border: 2px solid $C_contentBG;
+	}
+}
+*/

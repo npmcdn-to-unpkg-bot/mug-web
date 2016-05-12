@@ -1,0 +1,59 @@
+{{#if isModern}}
+
+	<p>TBD</p>
+
+{{else}}
+
+	<div class="row-item row-item--alignMiddle align--center mainNav-item">
+		<a href="http://meetup.com/">
+			<img src="assets/img/navIcons/logo.svg" height="32" class="display--none valign--bottom mainNav-logo js_logo--swarm" />
+			<img src="assets/img/navIcons/logo-script.svg" height="32" class="display--inlineBlock valign--bottom mainNav-logo js_logo--script" />
+		</a>
+	</div>
+
+	{{#if loggedIn}}
+		<div class="row-item row-item--shrink row-item--alignMiddle atMedium_display--none align--center mainNav-item">
+			<a href="#">
+				<img src="assets/img/navIcons/groups_flag_textSecondary.svg" class="display--inlineBlock valign--bottom" height="24" />
+				<span class="text--caption display--block atMedium_display--none mainNav-item-label">Groups</span>
+			</a>
+		</div>
+		<div class="row-item row-item--shrink row-item--alignMiddle atMedium_display--none align--center mainNav-item">
+			<a href="#">
+				<img src="assets/img/navIcons/calendar_textSecondary.svg" class="display--inlineBlock valign--bottom" height="24" />
+				<span class="text--caption display--block atMedium_display--none mainNav-item-label">Calendar</span>
+			</a>
+		</div>
+
+		<div class="row-item row-item--shrink row-item--alignMiddle align--center mainNav-item">
+			<a href="#">
+				<img src="assets/img/navIcons/messages.svg" class="display--inlineBlock valign--bottom" height="24" />
+				<span class="text--caption display--block atMedium_display--none atLarge_display--inlineBlock mainNav-item-label">Messages</span>
+			</a>
+		</div>
+		<div class="row-item row-item--shrink row-item--alignMiddle display--none atMedium_display--block align--center mainNav-item">
+			<a href="#">
+				<img src="assets/img/navIcons/notif_textSecondary.svg" class="display--inlineBlock valign--bottom" height="24" />
+				<span class="text--caption display--block atMedium_display--none atLarge_display--inlineBlock mainNav-item-label">Notifications</span>
+			</a>
+		</div>
+		<a href="#" class="row-item row-item--shrink row-item--alignMiddle align--center mainNav-item mainNav-item--profile">
+			<div href="#" class="avatar avatar--small avatar--person display--inlineBlock" style="background-image: url(http://photos3.meetupstatic.com/photos/member/9/1/8/4/thumb_141217252.jpeg);">Member Name</div>
+			<span class="text--secondary valign--middle display--none atMedium_display--inline"><i class="fa fa-caret-down"></i></span>
+
+			<span class="text--caption display--block atMedium_display--none mainNav-item-label">Profile</span>
+		</a>
+
+	{{else}}
+
+		<div class="row row-item row-item--shrink js_signUp display--none" style="position: absolute; right: 16px;">
+			<div class="row-item row-item--shrink row-item--alignMiddle align--center mainNav-item display--none atMedium_display--inlineBlock">
+				<a href="#" class="link">Log In</a>
+			</div>
+			<div class="row-item row-item--shrink row-item--alignMiddle align--center mainNav-item">
+				<a href="#" class="button button--primary">Sign Up</a>
+			</div>
+		</div>
+	{{/if}}
+
+{{/if}}

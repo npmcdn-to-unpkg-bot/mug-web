@@ -1,0 +1,69 @@
+<div class="stripe"><div class="bounds">
+	{{#if graphic}}
+
+		<div class="row sysmsg-msg">
+			{{#graphic}}
+				<div class="row-item row-item--shrink">
+					<img src="{{src}}" height="36">
+				</div>
+			{{/graphic}}
+			<div class="row-item">
+				<div class="chunk">
+					{{#headline}}
+					<h3 class="text--bold">{{headline}}</h3>
+					{{/headline}}
+
+					{{#body}}
+					<p class="text--small">{{body}}</p>
+					{{/body}}
+				</div>
+
+				{{#if buttons}}
+					<div class="chunk">
+						<ul class="inlineblockList">
+							{{#buttons}}
+								<li><button class="button button--small button--{{#isPrimary}}primary{{/isPrimary}}{{^isPrimary}}borderless{{/isPrimary}}" on-click="action" data-action="{{action}}">{{label}}</button></li>
+							{{/buttons}}
+						</ul>
+					</div>
+				{{/if}}
+
+			</div>
+		</div>
+
+	{{else}}
+
+		<div class="align--center">
+			<div class="row sysmsg-msg--center">
+				<div class="row-item">
+					<div class="chunk">
+						{{#headline}}
+						<h3 class="text--bold">{{headline}}</h3>
+						{{/headline}}
+
+						{{#body}}
+						<p class="text--small">{{body}}</p>
+						{{/body}}
+					</div>
+				</div>
+				<!-- <div class="row-item row-item--shrink">
+					<a href="#" title="Dismiss"><img src="style/img/cross.svg" height="24"></a>
+				</div> -->
+			</div>
+
+			{{#if buttons}}
+				<div class="chunk">
+						<ul class="inlineblockList">
+							{{#buttons}}
+								<li><button class="button button--small button--{{#isPrimary}}primary{{/isPrimary}}" on-click="action" data-action="{{action}}">{{label}}</button></li>
+							{{/buttons}}
+						</ul>
+				</div>
+			{{/if}}
+
+		</div>
+	{{/if}}
+
+	<a href="#" title="Dismiss" class="sysmsg-dismiss" on-click="hide_sysmsg"><img src="style/img/cross.svg" height="24"></a>
+
+</div></div>

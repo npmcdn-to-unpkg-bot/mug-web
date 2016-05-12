@@ -1,0 +1,90 @@
+//
+// Main nav
+//
+.mainNav {
+	min-height: $view-head-height-tablet;
+	padding: 0 $space;
+	@include justify-content(space-between);
+	@include atMediaUp(medium) {
+		@include justify-content(flex-start);
+	}
+}
+
+.mainNav-item {
+	padding: $space-half;
+
+	@include atMediaUp(medium) {
+		margin-right: $space;
+		&:last-child {
+			margin-right: 0;
+		}
+	}
+}
+
+.mainNav-item--profile { //this class is only used for the current/old nav structure
+	@include atMediaUp(medium) {
+		border-left: 1px solid $C_border;
+		padding: $space 0 $space $space;
+		height: $view-head-height-tablet;
+	}
+	.avatar--small {
+		height: 32px;
+		width: 32px;
+	}
+}
+
+.mainNav-logo {
+	height: $media-s;
+	// @include atMediaUp(medium) {
+	// 	height: $media-s;
+	// }
+}
+
+.mainNav-item-label {
+	padding-top: $space-quarter;
+	font-size: 10px;
+	@include atMediaUp(small) {
+		font-size: $font-size-small;
+	}
+}
+
+.mainNav-item--active {
+	border-bottom: 3px solid $C_accent;
+	font-weight: $W_bold;
+	color: $C_textPrimary;
+}
+
+// .hasNav #main_header {
+// 	display: none !important;
+// }
+
+/*
+ Just for Alien Home prototype
+*/
+.mainNav{
+	background: $C_contentBG;
+	box-shadow: 0px 0px $space-half 0px transparentize($C_border, .1), 0px $space-quarter $space-half 0px $C_border;
+}
+
+.mainNav .button {
+	line-height: $line-height; // hacky way to avoid extra space below
+}
+
+.mainNav--sticky {
+	position: fixed;
+	width: 100%;
+	z-index: 999;
+}
+
+.mainNav--photoOverlay, .stripe--photoHero {
+	background-color: transparent;
+	.link {
+		color: $C_textPrimaryInverted;
+	}
+}
+
+.mainNav--photoOverlay {
+	background: -webkit-linear-gradient(transparentize($C_contentBGInverted, .2), transparentize($C_contentBGInverted, 1));
+	background: linear-gradient(transparentize($C_contentBGInverted, .2), transparentize($C_contentBGInverted, 1));
+	box-shadow: none;
+}

@@ -1,0 +1,23 @@
+<div>
+  {{#if alertTitle || alertText}}
+    <div class="momentary-alert-copy">
+      {{#if alertTitle}}
+        <h3>{{alertTitle}}</h3>
+      {{/if}}
+
+      {{#if alertText}}
+        <p>{{alertText}}</p>
+      {{/if}}
+    </div>
+  {{/if}}
+
+	{{#if buttons}}
+	<ul class="momentary-btn-list">
+		{{#buttons}}
+			<li><a on-click="action" data-action="{{action}}">{{label}}</a></li>
+		{{/buttons}}
+	</ul>
+  {{#if type === 'popover'}}<a class="ios-cancel" on-click="hide_momentary">Cancel</a>{{/if}}
+
+  {{/if}}
+</div>

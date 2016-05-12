@@ -1,0 +1,77 @@
+//
+// For more info on how this magic works:
+// https://github.com/meetup/gimme
+//
+
+var groupId = getParameterByName('mugID') || '1579989',
+		urlname = 'ChicagoHOS', // could get this dynamically, but meh
+		// eventId = getParameterByName('mupID') || 223601492,
+		// topic   = getParameterByName('topic') || 'hiking',
+		// topicID = 638, //hiking
+		zip     = 60606;
+
+		// Chicago lat/lon and zip
+		// lat     = 41.8369,
+		// lon     = 87.6847;
+		// zip     = 60606
+
+var views = new ViewManager(function(){
+	gimme.apiKey = "1e84f701a17435513a17796245794d"; // 7060231d422c3421e3c13406e606631 715d68731b3913292f447f4c45547
+
+	// ↓ ↓ ↓ ↓ Where we pick which data we want ↓ ↓ ↓ ↓
+	var shoppingList = [
+			// {"gimme": "groups", "data": {"page": 8, "zip": zip}},
+			{"gimme": "group", "data": {"group_id": groupId} },
+
+			{"gimme": "events", "key": "events_short", "data": {"group_id": groupId, "page": 3}},
+			// {"gimme": "events", "key": "events_long", "data": {"group_id": groupId, "page": 20}},
+
+			{"gimme": "events", "key": "events_recent", "data": {"status": "past", "group_id": groupId, "page": 5, "desc": true}},
+
+			// {"gimme": "events_meta", "data": {"page": 20, "group_id": groupId}},
+			// {"gimme": "photo_albums", "data": {"page": 30, "group_id": groupId}},
+			// {"gimme": "members", "data":{"group_id": groupId, "page": 32}},
+
+			// {"gimme": "boards", "key": "boards_posts", data:{"urlkey": urlname, "page": 3}, children: [
+			// 	{"gimme": "discussions", data:{"urlkey": urlname, "page": 3}, "match": [["id", "board_id"]], children: [
+			// 		{"gimme": "posts", data:{"urlkey": urlname,  "page": 2}, "match": [["id", "discussion_id"],["board.id", "board_id"]] }
+			// 	]}
+			// ]}
+
+	];
+	// ↑ ↑ ↑ ↑ Where we pick which data we want ↑ ↑ ↑ ↑
+
+	gimme.get(shoppingList, true).then(function(data){
+
+		$.extend(views.data, data);
+
+		// ----------------------------------------------
+		// Create the news feed
+		// The magic happens in `data-buildNews.js`
+		// ----------------------------------------------
+		views.data.news = buildNews({
+			events: views.data.events_short,
+			events_recent: views.data.events_recent,
+			// discussions: views.data.boards_posts
+		});
+
+		// ----------------------------------------------
+		// Data manipulation
+		// ----------------------------------------------
+
+		// Hero photo
+		views.data.group.keyPhoto = views.data.group.photo;
+		// views.data.group.logo = "group_photo" in views.data.group ? views.data.group.group_photo.photo_link : null;
+
+		console.log(views.data.news);
+
+		// Now that the data is all ready, go ahead and start the router
+		window.addEventListener('hashchange', processHash);
+		processHash();
+
+	});
+
+});
+
+
+

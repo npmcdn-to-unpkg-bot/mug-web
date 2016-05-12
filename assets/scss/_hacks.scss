@@ -1,0 +1,29 @@
+/*
+-----------------------------
+	HACKS
+-----------------------------
+*/
+
+// Hide the scroll bar on hscrolls
+.hscroll::-webkit-scrollbar {
+	display: none;
+}
+
+// Ideally, I'd be able to just be
+// able to set this with `media--m`
+.icon.footerScript {
+	height: $media-m;
+	width: auto;
+}
+
+/*
+// Kill the view-head
+.view-head {
+	display: none !important;
+}
+
+// Don't let nav overlap content
+#main_body {
+	padding-top: $view-head-height-tablet;
+}
+*/

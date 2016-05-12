@@ -1,0 +1,32 @@
+<div class="bounds align--center">
+	{{#graphic}}
+		<div class="chunk">
+			<img src="{{src}}" class="display--inlineBlock" alt="Dialog graphic"/>
+		</div>
+	{{/graphic}}
+
+	<div class="chunk">
+		{{#if headline}}
+			<h3 class="text--bold">{{headline}}</h3>
+		{{/if}}
+		{{#if body}}
+			<p>{{body}}</p>
+		{{/if}}
+	</div>
+
+	{{#primaryAction}}
+		<div class="chunk">
+			<button class="button button--primary" on-click="action" data-action="{{primaryAction}}">{{label}}</button>
+		</div>
+	{{/primaryAction}}
+
+	<button class="button button--borderless" on-click="hide_dialog">
+		{{#dismissText}}
+			{{dismissText}}
+		{{/dismissText}}
+		{{^dismissText}}
+			Dismiss
+		{{/dismissText}}
+	</button>
+
+</div>

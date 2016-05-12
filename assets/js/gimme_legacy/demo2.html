@@ -1,0 +1,80 @@
+				gimme.apiKey = "715d68731b3913292f447f4c45547"; // use your own api key!
+				gimme.get(shoppingList, true).then(function(data){
+	<head>
+		<script type="text/javascript" src="gimme.js"></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.3/handlebars.min.js"></script>
+
+		<script type="text/javascript">
+			window.onload = function () {
+
+				
+				// example of simple calls
+				var shoppingList = [
+					{"gimme": "groups", "data": {"page": 10, "zip": 90210}, children: [
+						{"gimme": "photos", "key":"pics" ,"data": {"page": 10}, "match": [["id", "group_id"]]}
+					]},
+					//{"gimme": "group"},
+					//{"gimme": "open_events"},
+					//{"gimme": "dates_with_open_events"},
+					//{"gimme": "events"},
+					//{"gimme": "rsvps"},
+					//{"gimme": "event_comments"},
+					//{"gimme": "photo_albums"},
+					//{"gimme": "photos"},
+					//{"gimme": "members", "data": {"group_id": 9896242}},
+					//{"gimme": "profile"},
+					//{"gimme": "categories"},
+					//{"gimme": "discussions"}
+					//{"gimme": "conversations"}
+				];
+				
+
+
+				gimme.apiKey = "715d68731b3913292f447f4c45547"; // use your own api key!
+				gimme.get(shoppingList, true).then(function(data){
+					var source = document.getElementById('template').innerHTML;
+					var template = Handlebars.compile(source);
+					var rendered = template(data);
+					document.getElementById('target').innerHTML = rendered;
+					document.getElementById('dataBox').innerHTML = JSON.stringify(data, null, "\t");
+				});
+				
+			}
+		</script>
+	</head>
+	<body>
+		<h1>Let's get some Meetup API data</h1>
+		
+
+		<script id="template" type="text/html">
+		
+		
+			<ul>
+			{{#each groups}}
+				<li>
+					<h4>{{name}}</h4>
+					<div>
+					{{#each topics}}
+				
+							{{name}} &middot; 
+					
+					{{/each}}
+					</div>
+
+					<div>
+
+					{{#pics}}
+						<div style="background-image: url({{photo_link}}); background-size: cover; width: 260px; height: 160px; display: inline-block;"></div>
+	
+					{{/pics}}
+					</div>
+				</li>
+			{{/each}}
+			</ul>
+		</script>
+
+		<div id="target"></div>
+		<pre id="dataBox" style="background: #ccc; padding: 12px;">waiting...</pre>
+
+	</body>
+</html>

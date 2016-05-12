@@ -1,0 +1,65 @@
+<!-- <div class="row inverted"> -->
+
+	{{^cancelMode}}
+		{{#if platform == 'web'}}
+			<!-- web has logo by default, arrow in stepped flow -->
+
+			{{#if isStep || !isRoot}}
+				<div class="row-item row-item--shrink row-item--alignMiddle viewHead-back" on-click="back">
+					<i class="fa fa-arrow-left"></i>
+				</div>
+			{{else}}
+				<a href="http://meetup.com/" class="row-item row-item--shrink row-item--alignMiddle">
+					<img src="style/img/logo.svg" width="35" height="24" />
+				</a>
+			{{/if}}
+
+		{{else}}
+		<!-- native has arrows by default -->
+
+			{{#if !isRoot}}
+				<div class="row-item row-item--shrink row-item--alignMiddle viewHead-back" on-click="back">
+					<i class="fa fa-arrow-left"></i>
+				</div>
+			{{/if}}
+
+		{{/if}}
+	{{/cancelMode}}
+
+	{{#cancelMode}}
+		<div class="row-item row-item--shrink row-item--alignMiddle" on-click="cancelAction">
+			{{#icon}}
+				<i class="fa fa-{{icon}}" title="{{label}}"></i>
+			{{/icon}}
+			{{^icon}}
+				{{label}}
+			{{/icon}}
+		</div>
+	{{/cancelMode}}
+
+	<div class="row-item row-item--alignMiddle viewHead-heading">
+		<h1 class="wrap--singleLine--truncate">{{title}}</h1>
+		{{#subtitle}}
+			{{#subtitleLink}}
+				<a href="{{subtitleLink}}" class="display--block text--caption wrap--singleLine--truncate">{{subtitle}}</a>
+			{{/subtitleLink}}
+			{{^subtitleLink}}
+				<p class="text--caption wrap--singleLine--truncate">{{subtitle}}</p>
+			{{/subtitleLink}}
+		{{/subtitle}}
+	</div>
+
+  <div class="viewHead-actions row row-item row-item--shrink row-item--alignMiddle">
+    {{#buttons}}
+      <a on-click="action" data-action="{{action}}" intro="{{#intro}}{{intro}}{{/intro}}{{^intro}}none{{/intro}}" class="row-item row-item--shrink">
+        {{#icon}}
+          <i class="fa fa-{{icon}}" title="{{label}}"></i>
+        {{/icon}}
+        {{^icon}}
+          {{label}}
+        {{/icon}}
+      </a>
+    {{/buttons}}
+  </div>
+
+<!-- </div> -->

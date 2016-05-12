@@ -1,0 +1,13 @@
+*.swp
+*.swo
+*.sass-cache
+*.ruby-version
+*.lock
+*.map
+.grunt/
+node_modules/
+bower_components/
+assets/css
+assets/js/dist
+assets/icons/icons.js
+assets/icons/iconsprite.svg

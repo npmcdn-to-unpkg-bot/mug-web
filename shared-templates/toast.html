@@ -1,0 +1,8 @@
+<div class="toast-content row">
+  <p class="row-item row-item--alignMiddle">{{message}}</p>
+  {{#if button}}
+    {{#button}}
+    <a class="row-item--alignMiddle row-item--shrink" on-click="action">{{label}}</a>
+    {{/button}}
+  {{/if}}
+</div>

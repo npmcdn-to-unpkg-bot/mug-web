@@ -1,0 +1,144 @@
+/*
+	Either:
+	-Styles that live in Chapstick or somewhere outside of SQ2
+	-Quick-and-dirty fixes
+*/
+
+@import '../../bower_components/meetup-swatches/sass/colors';
+@import '../../bower_components/sassquatch2/sass/globals';
+@import '../../bower_components/sassquatch2/sass/util';
+
+/*
+**********************************************************
+Styles that live in Chapstick or somewhere outside of SQ2
+**********************************************************
+*/
+
+// MODAL VIEW FULL
+// full screen at all screen widths
+.view.view--modal-full {
+	@include modal-full;
+	z-index: map-get($zindex-map, "modal");
+}
+
+// MODAL VIEW SNAP
+// full at narrow widths, dialog at wide widths
+.view.view--modal-snap {
+	@include modal-full;
+	@include atMediaUp(small){
+		@include modal-dialog;
+	}
+	z-index: map-get($zindex-map, "modal");
+	.stripe:first-child {
+		padding-top: $view-head-height;
+		@include atMediaUp(small){
+			padding-top: $view-head-height-tablet;
+		}
+	}
+}
+
+.shade {
+	height: 100%;
+	left: 0;
+	position: absolute;
+	top: 0;
+	width: 100%;
+	z-index: map-get($zindex-map, "shade");
+	@include transition(all .15s);
+	background: $C_dimmingOverlay;
+	opacity: 1;
+	&.off{
+		opacity: 0;
+	}
+}
+
+// MOMENTARY
+// Popover menu
+.momentary {
+  @include transition(transform 150ms $ease-in-quart, opacity 150ms $ease-in-quart);
+  @include transform(translateY(0));
+  @extend %shadow;
+  background: $C_contentBG;
+  border: 1px solid $C_border;
+  border-radius: $defaultRadius;
+  opacity: 1;
+  position: absolute;
+  transition-duration: .05s!important;
+  min-width: 100px;
+  z-index: map-get($zindex-map, modal);
+
+  &.off {
+    opacity: 0;
+  }
+
+  &.top-left{
+      margin-left: -12px;
+  }
+  &.top-right{
+      margin-left: 12px;
+  }
+
+  .momentary-btn-list {
+    background: $C_contentBG;
+    list-style: none;
+    margin: 0;
+    padding-left: 0;
+  }
+
+  li {
+    a {
+      display: block;
+      height: $block;
+      line-height: $block;
+      min-width: 100%;
+      box-sizing: border-box;
+      padding: 0 $space-half;
+      @extend %buttonPersonality;
+    }
+  }
+
+  .ios-cancel {
+    display: none;
+  }
+}
+
+// DIALOG
+.dialog {
+	@include modal-dialog;
+	z-index: map-get($zindex-map, "modal");
+	margin-left: 0;
+	min-height: 0;
+	left: $space;
+	right: $space;
+	width: auto;
+
+	// @include atMediaDown(small){
+
+	// }
+	img {
+		max-width: 100%;
+	}
+}
+
+/*
+**********************
+Quick-and-dirty fixes
+**********************
+*/
+.view-head {
+	position: fixed;
+}
+.view.off{
+	display: none;
+}
+@include atMediaUp(medium) {
+	.view--splitDetail{
+		.viewHead-back{
+			display: none;
+		}
+	}
+}
+
+.gridList > li.display--none {
+	display: none;
+}

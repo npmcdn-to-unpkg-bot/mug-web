@@ -1,0 +1,45 @@
+//
+//  Hide the icon container, because the injected SVG
+//  takes up physical space.
+//
+#icon-container {
+	display: none;
+}
+
+//
+//  Set icon defaults
+//
+.icon {
+	display: inline-block;
+	width: $media-xs;
+	height: $media-xs;
+	use {
+		stroke: none;
+		fill: $C_textSecondary;
+	}
+}
+.link, .toggleButton {
+	.icon use {
+		fill: $C_link;
+	}
+}
+
+.inverted .icon use {
+	fill: $C_textPrimaryInverted;
+}
+
+.icon--hint use {
+	fill: $C_textTertiary;
+}
+
+//
+// Write our own icon styles
+//
+.icon-chevronDown use {
+	fill: $C_link;
+}
+
+.icon-card-join {
+	width: $media-s;
+	height: $media-s;
+}

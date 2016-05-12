@@ -1,0 +1,179 @@
+/*
+	Styles I'd like to see make it into SQ2
+*/
+
+.spreadable--center {
+	@include justify-content(center);
+}
+
+.span--100 { //already there, just need to update
+	width: 100%;
+}
+
+.runningText img {
+	max-width: 100%;
+}
+
+.toggleButton--lg .toggleButton-label {
+	font-size: 16px !important;
+}
+
+.input--withIcon {
+	background-position: $space-half center;
+	background-repeat: no-repeat;
+	background-size: $media-xs;
+	padding-left: $media-xs + $space;
+}
+
+.input--withIcon--right {
+	background-position: calc(100% - 8px) center; // handle `calc` for meh browsers
+	padding-left: $space;
+	padding-right: $media-xs + $space;
+}
+
+.buttonList--small li {
+	padding-bottom: $space-half;
+}
+
+.attachment .row-item:first-child {
+	padding-left: 0;
+}
+
+.toggleButton-input:checked + .toggleButton-label:hover {
+	color: $C_link;
+	use {
+		fill: $C_link;
+	}
+}
+
+$dotTimeBase: 500;
+.endlessLoader, .endlessLoader:before, .endlessLoader:after {
+	-webkit-animation: dotAnim #{$dotTimeBase}ms ease -#{$dotTimeBase/4}ms infinite alternate;
+	animation: dotAnim #{$dotTimeBase}ms ease -#{$dotTimeBase/4}ms infinite alternate;
+	background: $C_border;
+	border-radius: 100%;
+	content: "";
+	height: $space-half;
+	position: relative;
+	width: $space-half;
+}
+
+.endlessLoader:before {
+	position: absolute;
+	left: -$space;
+	-webkit-animation: dotAnim #{$dotTimeBase}ms ease -#{$dotTimeBase/2}ms infinite alternate;
+	animation: dotAnim #{$dotTimeBase}ms ease -#{$dotTimeBase/2}ms infinite alternate;
+}
+
+.endlessLoader:after {
+	position: absolute;
+	left: $space;
+	-webkit-animation: dotAnim #{$dotTimeBase}ms ease infinite alternate;
+	animation: dotAnim #{$dotTimeBase}ms ease infinite alternate;
+}
+@-webkit-keyframes dotAnim {
+	to {
+		background: black;
+		box-shadow: -1px 0 0 1px $C_textPrimary;
+	}
+}
+@keyframes dotAnim {
+	to {
+		background: black;
+		box-shadow: -1px 0 0 1px $C_textPrimary;
+	}
+}
+
+.atLarge_margin--left {
+	@include atMediaUp(large) {
+		margin-left: $space;
+	}
+}
+
+/*
+-----------------------------
+	LAYOUT
+-----------------------------
+*/
+
+/* _stripe.scss */
+.stripe-heroContent--full { // new variant
+	max-width: none;
+	width: 100%;
+}
+
+.stripe--inverted {
+	background-color: $C_contentBGInverted; // no change, just different color
+}
+
+.stripe--noBorder { // new variant
+	border-width: 0px !important;
+	padding-top: $space-double;
+}
+
+// fixes to stripe-overlap
+.stripe--overlap {
+	position: relative;
+	.bounds {
+		position: relative;
+	}
+}
+.stripe--overlap:not(.stripe--hero),
+.stripe--overlap:not(.stripe--photoHero) {
+	&:before {
+		border-top: 1px solid $C_border;
+	}
+}
+
+// fixes to hscroll
+.hscroll-content > li {
+	white-space: normal;
+}
+.hscroll--breakBounds {
+	transform: translateX($space);
+	margin-left: -#{$space};
+	@include atMediaUp(medium) {
+		transform: translateX(0);
+		margin-left: 0;
+	}
+}
+
+/*
+-----------------------------
+	NEW: ANIMATION
+-----------------------------
+// TODO: This isn't at all scalable yet.
+//       Come up with plan for animations in SQ3.
+*/
+
+$trans-dur   : 200ms;
+$trans-curve : ease-in;
+
+/* NEW: _transitions.scss */
+.trans {
+	@include transition-duration($trans-dur);
+	@include transition-timing-function($trans-curve);
+}
+
+.trans--fadeOut {
+	@include transition-property(opacity);
+	opacity: 0;
+}
+
+.trans--fadeIn {
+	@include transition-property(opacity);
+	opacity: 1;
+}
+
+.trans--fadeOutLeft {
+	@include transition-property(transform, opacity);
+	@include transform(translateX(-50px));
+	opacity: 0;
+}
+
+.trans--fadeInLeft {
+	@include transition-property(transform, opacity);
+	@include transform(translateX(0px));
+	opacity: 1;
+}
+

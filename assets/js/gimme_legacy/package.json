@@ -1,0 +1,27 @@
+{
+  "name": "gimme",
+  "version": "0.0.0",
+  "description": "Easily grab Meetup API data",
+  "main": "gimme.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/meetup/gimme.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/meetup/gimme/issues"
+  },
+  "homepage": "https://github.com/meetup/gimme",
+  "gitHead": "04b7c0434cae2e38c3b96f7c31a143f65e96d43f",
+  "readme": "# gimme\nEasily grab Meetup API data \n\n* `shoppinglist` an array of objects that request data\n* `useJsonp` optional (default: false), set `true` if you need cross-domain requests with JSONp\n* `functionThatUsesData` do stuff with the data!\n\n```\ngimme(shoppingList, useJsonp).then(functionThatUsesData);\n```\n\nYou can just clone the repo and play around, or add it to your project with npm\n```\nnpm install meetup/gimme\n```\n\n\n## simple example\nGets some groups. You don't even have to care where they come from.\n\n```\ngimme.apiKey = '_your api key here_';\n\nvar shoppingList = [\n  {\"gimme\": \"groups\"}\n];\n\ngimme.get(shoppingList, true).then(function(data){\n  // look at all these groups!\n  console.log(data);\n});\n```\n\n## simple example with requirements\nGets some groups from a Los Angeles zipcode.\n\n```\ngimme.apiKey = '_your api key here_';\n\nvar shoppingList = [\n  {\"gimme\": \"groups\", \"data\": {\"zip\": 90005}}\n];\n\ngimme.get(shoppingList, true).then(function(data){\n  // look at all these Los Angeles groups!\n  console.log(data);\n});\n```\n\n\n## multiple requests\n```\ngimme.apiKey = '_your api key here_';\n\nvar shoppingList = [\n  {\"gimme\": \"group\", \"data\": {\"group_id\": 9896242} },\n  {\"gimme\": \"members\", \"data\": {\"group_id\": 9896242} }\n];\n\ngimme.get(shoppingList, true).then(function(data){\n  // look at this group and also some members from it\n  console.log(data);\n});\n```\n\n## multiple requests of the same API method\nSet the data container \"key\" name to request multiple sets of data from the same method\n```\ngimme.apiKey = '_your api key here_';\n\nvar shoppingList = [\n  {\"gimme\": \"groups\", \"key\":\"losangeles\", \"data\": {\"zip\": 90005}},\n  {\"gimme\": \"groups\", \"key\":\"newyork\", \"data\": {\"zip\": 10012}}\n];\n\ngimme.get(shoppingList, true).then(function(data){\n  // look at all these Los Angeles and New York groups!\n  console.log(data);\n});\n```\n\n## nested requests\nYou can even nest data requests, like grabbing a list of upcoming events and then the comments from those events\n(I'll document more thoroughly how \"match\" works soon, but it's basically parent ID, child ID )\n```\ngimme.apiKey = '_your api key here_';\n\nvar shoppingList = [\n\t{\"gimme\": \"events\", \"data\": {\"group_id\": 9896242, \"page\": 3}, \"children\": [ \n\t\t{\"gimme\": \"event_comments\", \"match\": [ [\"id\", \"event_id\"] ] }\n\t  ] \n\t}\n];\n\ngimme.get(shoppingList, true).then(function(data){\n  // look at all these events and their comments\n  console.log(data);\n});\n```\n\n\n",
+  "readmeFilename": "README.md",
+  "_id": "gimme@0.0.0",
+  "_shasum": "0567f3bcf0ea3680981dcaac4e2c0fdc1b58f2c6",
+  "_from": "git+ssh://git@github.com/meetup/gimme.git",
+  "_resolved": "git+ssh://git@github.com/meetup/gimme.git#04b7c0434cae2e38c3b96f7c31a143f65e96d43f"
+}
