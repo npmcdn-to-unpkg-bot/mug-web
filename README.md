@@ -3,8 +3,4 @@ cd to whatever directory this is saved in, then run `./setup.sh`. If that doesn'
 Message me on Slack if you have issues.
 
 ## Notes
-This is a prototype for how we're thinking about introducing the rebrand and redesigned apps
-
-## Goals of this page
-1. Get users to download the new app
-2. Communicate that we've reskinned the web, but have yet to redesign it
+This is a prototype where we can experiement with MUG conversations. The overall design is based on MUG Home redesign work done in 2015.
