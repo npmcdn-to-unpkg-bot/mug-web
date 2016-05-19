@@ -28,18 +28,17 @@
 	fill: $C_textPrimaryInverted;
 }
 
+//
+// Style the icons
+//
 .icon--hint use {
-	fill: $C_textTertiary;
+	fill: $C_border;
 }
 
-//
-// Write our own icon styles
-//
-.icon-chevronDown use {
-	fill: $C_link;
+.icon-calendar--sched use {
+	fill: $C_success;
 }
 
-.icon-card-join {
-	width: $media-s;
-	height: $media-s;
+.icon-calendar--canceled use {
+	fill: $C_attention;
 }
