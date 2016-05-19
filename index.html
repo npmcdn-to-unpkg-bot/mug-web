@@ -76,7 +76,18 @@
 	/////////////////////////////////////////////////////
 	-->
 	<section class="stripe"><div class="bounds">{{#if news.length < 1}}<p class="text--secondary chunk">No news is good news. Right?</p>{{else}}<div id="discussions">
-		<ul class="list">{{#each news:i}}
+
+		<div class="row chunk _proto_postBox">
+			<a href="javascript:void(0)" class="row row-item" on-click="toggle_post_popover">
+				<div class="row-item row-item--shrink valign--middle">
+					<div class="avatar avatar--person" style="background-image: url({{current_member.photo}});"></div>
+				</div>
+				<div class="row-item valign--middle text--hint">Write a post</div>
+			</a>
+			<div class="row-item row-item--shrink valign--middle" on-click="choosePhotos">{{{helpers.svgIcon('camera')}}}</div>
+		</div>
+
+		<ul class="list bordered">{{#each news:i}}
 			<li class="row list-item">
 				<!--
 				// DISCUSSION (text post)
@@ -97,7 +108,7 @@
 						<div class="chunk">
 							<ul class="inlineblockList">
 								<li class="text--caption row valign--middle">
-									<a href="#" on-click="likePost" class="row-item row-item--shrink display--inlineBlock valign--middle">{{{helpers.svgIcon('like--empty')}}}</a>
+									<a href="#" on-click="likePost" class="row-item row-item--shrink display--inlineBlock valign--middle">{{{helpers.svgIcon('like')}}}</a>
 									{{#if like_count > 0}}<span class="row-item row-item--shrink display--inlineBlock valign--middle">{{like_count}} likes</span>{{/if}}
 								</li>
 								<li class="padding--left text--caption row valign--middle">
@@ -157,7 +168,7 @@
 				{{#if type == 'eventphotos'}}
 					<div class="row-item--shrink">
 						<div class="chunk">
-							<div class="avatar avatar--person" style="background-image: url({{photos.0.member_photo.thumb_link}});"></div>
+							<div class="avatar avatar--person avatar--smalll avatar--smallTest" style="background-image: url({{photos.0.member_photo.thumb_link}});"></div>
 						</div>
 					</div>
 					<div class="row-item">
@@ -175,58 +186,58 @@
 							</div>
 
 						</div>
-						<div class="chunk">
 
-							<div class="attachment row _proto_flexPhotos">
+						<div class="_proto_flexPhotos chunk keepAspect keepAspect--3-2">
 
-								<!--
-								Looping through photos
-								{{#photos}}
-									<a href="#!/photo-detail" class="imgFill keepAspect--3-2" data-photo-id="{{photo_id}}" style="background-image: url({{photo_link}});"></a>
-								{{/photos}}
-								-->
+							<!--
+							Looping through photos
+							{{#photos}}
+								<a href="#!/photo-detail" class="imgFill keepAspect--3-2" data-photo-id="{{photo_id}}" style="background-image: url({{photo_link}});"></a>
+							{{/photos}}
+							-->
 
-								<a href="#!/photo-detail" class="row-item imgFill _proto_flexPhotos--lg" data-photo-id="{{photos[0].photo_id}}" style="background-image: url({{photos[0].photo_link}});"></a>
+							<div class="_proto_flexPhotos-wrapper attachment chunk row">
+								<a href="#!/photo-detail" class="row-item chunk imgFill _proto_flexPhotos--lg" data-photo-id="{{photos[0].photo_id}}" style="background-image: url({{photos[0].photo_link}});"></a>
 								{{#if photos.length > 1}}
 									<span class="row-item row-item--shrink column _proto_flexPhotos--sm">
 										<a href="#!/photo-detail" class="chunk imgFill column-item" style="background-image:url('{{photos[1].photo_link}}')"></a>
 										{{#if photos.length > 2}}
-											<a href="#!/photo-detail" class="imgFill column-item" style="background-image:url('{{photos[2].photo_link}}')"></a>
+											<a href="#!/photo-detail" class="chunk imgFill column-item" style="background-image:url('{{photos[2].photo_link}}')"></a>
 										{{/if}}
 									</span>
 								{{/if}}
 							</div>
-
-							{{#if photos.0.posts.length > 0 || showCommentBox}}
-								<div class="attachment text--small">
-									<div class="chunk">
-										<ul class="list">
-											{{#photos.0.posts}}
-												<li class="row">
-													<div class="row-item--shrink">
-														<div class="chunk">
-															<div class="avatar avatar--person avatar--small" style="background-image: url({{member.photo.thumb}});"></div>
-														</div>
-													</div>
-													<div class="row-item">
-														<div class="chunk">
-															<p><strong>{{member.name}}</strong> <span class="expandableContent--inline">{{body}}</span></p>
-
-															<div class="text--small">
-																<span class="text--caption">{{helpers.dateRelative(created)}}</span> &middot;
-																<span>{{like_count}} Likes</span> &middot;
-																<a href="#" class="link" on-click="likePost">Like</a>
-															</div>
-														</div>
-													</div>
-												</li>
-											{{/photos.0.posts}}
-										</ul>
-									</div>
-								</div>
-							{{/if}}
-
 						</div>
+
+						{{#if photos.0.posts.length > 0 || showCommentBox}}
+							<div class="attachment text--small">
+								<div class="chunk">
+									<ul class="list">
+										{{#photos.0.posts}}
+											<li class="row">
+												<div class="row-item--shrink">
+													<div class="chunk">
+														<div class="avatar avatar--person avatar--small" style="background-image: url({{member.photo.thumb}});"></div>
+													</div>
+												</div>
+												<div class="row-item">
+													<div class="chunk">
+														<p><strong>{{member.name}}</strong> <span class="expandableContent--inline">{{body}}</span></p>
+
+														<div class="text--small">
+															<span class="text--caption">{{helpers.dateRelative(created)}}</span> &middot;
+															<span>{{like_count}} Likes</span> &middot;
+															<a href="#" class="link" on-click="likePost">Like</a>
+														</div>
+													</div>
+												</div>
+											</li>
+										{{/photos.0.posts}}
+									</ul>
+								</div>
+							</div>
+						{{/if}}
+
 					</div>
 				{{/if}}
 
@@ -240,7 +251,7 @@
 						-->
 						{{#if latest_comment}}
 						<div class="row-item--shrink">
-							<div class="avatar avatar--person" style="background-image: url({{latest_comment.member_photo.thumb_link}});"></div>
+							<div class="avatar avatar--person avatar--smalll avatar--smallTest" style="background-image: url({{latest_comment.member_photo.thumb_link}});"></div>
 						</div>
 						<div class="row-item">
 
@@ -276,7 +287,7 @@
 											<div class="chunk">
 												<ul class="inlineblockList">
 													<li class="text--caption row valign--middle">
-														<a href="#" on-click="likePost" class="row-item row-item--shrink display--inlineBlock valign--middle">{{{helpers.svgIcon('like--empty')}}}</a>
+														<a href="#" on-click="likePost" class="row-item row-item--shrink display--inlineBlock valign--middle">{{{helpers.svgIcon('like')}}}</a>
 														{{#if like_count > 0}}<span class="row-item row-item--shrink display--inlineBlock valign--middle">{{like_count}} likes</span>{{/if}}
 													</li>
 													<li class="padding--left text--caption row valign--middle">
@@ -290,6 +301,14 @@
 											</div>
 										</li>
 									{{/if}}{{/posts}}
+
+									{{#if event.comment_count > 2}}
+										<li>
+											<a href="{{event.event_url + '#conversation'}}" class="_proto_contentDisclosure align--center display--block chunk">
+												<span class="_proto_contentDisclosure-count display--inlineBlock text--secondary text--small">{{event.comment_count - 2}}</span>
+											</a>
+										</li>
+									{{/if}}
 
 									 <li>
 										<div class="row">
@@ -327,8 +346,8 @@
 									// MUP Past
 									/////////////////////////////////////////
 									-->
-									<div class="avatar--icon">
-										<img src="/style/img/calendar.svg" />
+									<div class="avatar--icon _tweak_avatar--icon">
+										{{{helpers.svgIcon('calendar--canceled')}}}
 									</div>
 								{{else}}
 									<!--
@@ -336,8 +355,8 @@
 									// MUP Scheduled
 									/////////////////////////////////////////
 									-->
-									<div class="avatar--icon avatar--icon--addition">
-										<img src="/style/img/newmup.svg" />
+									<div class="avatar--icon _tweak_avatar--icon">
+										{{{helpers.svgIcon('calendar--sched')}}}
 									</div>
 								{{/if}}
 							</div>
@@ -367,12 +386,11 @@
 
 							<div class="chunk">
 								<div class="attachment text--small">
-									<!--{{#event}}
+									{{#event}}
 										<a href="{{event_url}}">
 											{{> contextEvent }}
 										</a>
-									{{/event}}-->
-									<p>MUP goes here</p>
+									{{/event}}
 								</div>
 							</div>
 						</div>
@@ -386,7 +404,7 @@
 						-->
 						<div class="row-item row-item--shrink">
 							<div class="chunk">
-								<div class="avatar--icon">
+								<div class="avatar--icon _tweak_avatar--icon">
 									<img src="/style/img/calendar-canceled_color.svg" />
 								</div>
 							</div>
@@ -400,9 +418,84 @@
 					{{/if}}
 				{{/if}}
 
+				<!--
+				// POLL
+				-->
+				{{#if type == 'poll'}}
+					<div class="row-item--shrink">
+						<div class="chunk">
+							{{#if posts.length > 0}}
+								<div class="avatar avatar--person avatar--smalll avatar--smallTest" style="background-image: url({{latest_comment.member_photo.thumb_link}});"></div>
+							{{else}}
+								<div class="avatar avatar--person avatar--smalll avatar--smallTest" style="background-image: url({{poll.member.photo}});"></div>
+							{{/if}}
+						</div>
+					</div>
+					<div class="row-item">
+
+						<div class="row chunk">
+							<div class="row-item ">
+								{{#if posts.length > 0}}
+									<p><strong>{{latest_comment.member_name}}</strong> commented on a poll</p>
+									<p class="text--caption">{{helpers.dateRelative(latest_comment.time)}}</p>
+								{{else}}
+									<p><strong>{{poll.member.name}}</strong> added a poll</p>
+									<p class="text--caption">{{helpers.dateRelative(time)}}</p>
+								{{/if}}
+							</div>
+							<div class="row-item--shrink">
+								<a href="#" class="text--secondary" on-click="toggle_comment_popover"><i class="fa fa-angle-down"></i></a>
+							</div>
+						</div>
+
+						<div class="chunk"><div class="attachment">
+
+							<div class="chunk">
+								<p class="text--bold">{{poll.question}}</p>
+								{{#if posts.length > 0}}
+									<p><span class="text--caption">{{totalVotes}} votes, added {{helpers.dateRelative(time)}} by</span> <strong>{{poll.member.name}}</strong></p>
+								<!-- {{else}}
+									<p><span class="text--caption">{{totalVotes}} votes</p> -->
+								{{/if}}
+							</div>
+
+							<div class="chunk"><ul class="list list--form">
+							{{#answers:i}}
+								<li><div class="chunk row">
+									<div class="row-item row-item--alignMiddle row-item--shrink">
+										{{#if !multiple}}
+											<input id="poll{{poll.id}}-choice{{i}}" on-change="voteForPoll" name="radio-poll{{poll.id}}" type="radio" class="radio" checked="{{userPicked}}" />
+										{{else}}
+											<input id="poll{{poll.id}}-choice{{i}}" on-change="voteForPoll" type="checkbox" class="checkbox" checked="{{userPicked}}" />
+										{{/if}}
+									</div>
+									<label class="label--switch row-item row-item--alignMiddle" for="poll{{poll.id}}-choice{{i}}">
+										<span class="display--block text--small">{{answer}}</span>
+										<span class="result-bar display--block">
+											<span class="result-bar-progress display--block" style="width: {{voteCount / ../../totalVotes * 100}}%"></span>
+										</span>
+									</label>
+									<span class="text--caption row-item--shrink valign--bottom">&nbsp;{{voteCount}}&nbsp;votes</span>
+								</div></li>
+							{{/answers}}
+							</ul></div>
+
+						</div></div>
+
+						<div class="chunk"><div class="attachment text--small">
+							<!-- COMMENT POSTING UI GOES HERE -->
+						</div></div>
+
+					</div>
+				{{/if}}
+
 			</li>
 		{{/each}}</ul>
-	</div>{{/if}} <!-- end if news.length --> </div></section>
+	</div>{{/if}} <!-- end if news.length --> 
+	<div class="input-wrap--hidden">
+		<input type="file" id="photoFileInput" accept="image/*" capture="camera" value="{{uploadedPhotos}}" multiple />
+	</div>
+	</div></section>
 
 	<footer class="stripe stripe--inverted inverted">
 		<div class="bounds align--center">
@@ -431,14 +524,18 @@
 
 
 <!--
-/////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
 PARTIALS
-/////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
 -->
 
 <!--
-Event partial
+/////////////////////////////////////////////////////
+Partial: event
 #contextEvent
+
+Attached in feed posts
+/////////////////////////////////////////////////////
 -->
 <script id="contextEvent" type="text/template">
 	<div class="card _proto_card--mup _proto_card--mup--{{status}} attachment">
@@ -470,6 +567,315 @@ Event partial
 
 	{{/if}}
 </script>
+
+<!--
+/////////////////////////////////////////////////////
+Template: Posting interface
+/////////////////////////////////////////////////////
+-->
+<script id="postBox" type="text/template">
+	<div class="stripe"><div class="bounds">
+		<div class="chunk">
+			<div class="row ">
+				<div class="row-item--shrink">
+					<div class="avatar avatar--person avatar--small" style="background-image: url({{current_member.photo}});"></div>
+				</div>
+				<div class="row-item">
+					{{current_member.name}}
+				</div>
+
+			</div>
+		</div>
+
+		<div class="chunk">
+			<textarea id="post-textarea"></textarea>
+		</div>
+		<div class="row chunk">
+			<div class="row-item row-item--shrink valign--middle" on-click="choosePhotos">{{{helpers.svgIcon('camera', 'valign--middle')}}}</div>
+			<a href="#!/create-poll-post" class="row-item row-item--shrink valign--middle">{{{helpers.svgIcon('question', 'valign--middle')}}}</a>
+			<div class="row-item row-item--shrink valign--middle">{{{helpers.svgIcon('paperclip', 'valign--middle')}}}</div>
+		</div>
+		<div class="_tweak_summaryDetail bordered">
+			<div class="row chunk _tweak_summaryDetail-summary">
+				<div class="row-item row-item--shrink row-item--alignMiddle align--right" on-click="expand_summary">
+					{{{helpers.svgIcon('chevronRight','_tweak_summaryDetail-icon')}}}
+					<!-- <img src="style/img/triangle-right.svg" alt="triangle right" class="media--xs _tweak_summaryDetail-icon"> -->
+				</div>
+				<div class="row-item row-item--alignMiddle text--small" on-click="expand_summary">
+					<p class="text--bold wrap--singleLine--truncate">Visible to:</p>
+					<p class="text--secondary wrap--singleLine--truncate">members and non-members</p>
+				</div>
+				<div class="row-item row-item--shrink row-item--alignMiddle align--right">
+					<a href="#" class="button button--primary" on-click="post_text">Post</a>
+				</div>
+			</div>
+			<div class="chunk border--top _tweak_summaryDetail-detail" id="privacySettings">
+				<h3 class="text--bold chunk">Visible to</h3>
+				<label for="members-and-non" class="label--switch chunk text--small">
+					<input id="members-and-non" class="radio" name="privacySettingCtrl" value="members and non-members" type="radio" checked />
+					members and non-members
+				</label>
+
+				<label for="members-only" class="label--switch chunk text--small">
+					<input id="members-only" class="radio" name="privacySettingCtrl" value="members only" type="radio" />
+					members only
+				</label>
+			</div>
+		</div>
+
+		<div class="input-wrap--hidden">
+			<input type="file" class="offscreen" id="photoFileInput" accept="image/*" capture="camera" value="{{uploadedPhotos}}" multiple />
+		</div>
+	</div></div>
+</script>
+
+<!--
+/////////////////////////////////////////////////////
+Template: Photo posting
+/////////////////////////////////////////////////////
+-->
+<script id="photoPost" type="text/template">
+	<div class="stripe stripe--collection"><div class="bounds">
+		<div class="chunk">
+			<label for="recent-mup-list">Add to a recent Meetup</label>
+			<select id="recent-mup-list">
+				<option disabled selected value="none">Choose a recent Meetup</option>
+				<option value="{{events_short[0].id}}">
+					{{helpers.dateFormat(events_short[0].time, "MMM D")}} -
+					{{events_short[0].name}}
+				</option>
+				{{#each events_recent}}
+					<option value="{{id}}">
+						{{helpers.dateFormat(time, "MMM D")}} -
+						{{name}}
+					</option>
+				{{/each}}
+			</select>
+		</div>
+
+		<ul class="cardList row--wrap span--100 gridList gridList--has1 {{#if previewPhotos.length > 1}}atMedium_gridList--has2 atLarge_gridList--has3{{/if}}">
+			{{#previewPhotos}}
+			<li class="gridList-item">
+				<div class="chunk card">
+
+					<!-- <div class="card" style="background-image: url({{.}});"></div> -->
+					<div class="align--center _proto_photoUploadPreview">
+						<img class="chunk margin--center span--100" src="{{.}}" />
+					</div>
+
+					<input type="text" class="chunk text--small" placeholder="Add a caption" />
+					<!--<div class="chunk row row--flexEnd">
+						<a href="javascript:void(0)" class="row-item row-item--shrink row-item--alignMiddle" title="Tag member">
+							<img src="style/img/add-user.svg" class="js-tagIcon" on-click="toggle_tag_overlay" height="24" alt="Add user"/>
+						</a>
+						<a href="#" class="row-item row-item--shrink row-item--alignMiddle" title="Delete photo"><img src="style/img/trash.svg" height="24" alt="trash"/></a>
+					</div>
+
+					<div class="js-overlayContainer display--none">
+						<div class="card-overlay">
+							<div class="chunk">
+								<label for="searchForMember">Search members</label>
+								<input id="searchForMember" on-keydown="search_successor" type="text" />
+							</div>
+							<ul>
+							{{#each members:i}}
+								{{#if i < 15}}
+
+									<li>
+										<div class="row chunk">
+
+											<div class="row-item--shrink row-item--alignMiddle">
+												<div class="avatar avatar--small avatar--person" style="background-image: url({{photo}})"></div>
+											</div>
+
+											<label for="stepUp{{i}}" class="label--switch row-item row-item--alignMiddle">
+												<h3>{{name}}</h3>
+											</label>
+
+											<div class="row-item--shrink row-item--alignMiddle">
+												<input id="stepUp{{i}}" data-member-index="{{i}}" on-change="record_selected_org" class="checkbox" value="{{name}}" type="checkbox" />
+											</div>
+
+										</div>
+									</li>
+
+								{{/if}}
+							{{/each}}
+							{{#if members.length > 15}}
+								<li style="margin-bottom: 48px;">
+									<div class="chunk"><a href="#" class="button button--fullWidth">Show more</a></div>
+								</li>
+							{{/if}}
+							</ul>
+						</div>
+						<div class="card-overlayControls">
+							<ul class="inlineblockList align--right">
+								<li><button on-click="cancel_tags" class="button button--small">Cancel</a></li>
+								<li><button on-click="save_tags" class="button button--primary button--small">Save</button></li>
+							</ul>
+						</div>
+					</div>-->
+
+				</div>
+			</li>
+			{{/previewPhotos}}
+			<li class="gridList-item">
+				<button class="card chunk _proto_photoUploadNew">
+					<span class="_proto_photoUploadPreview align--center link">
+						{{{helpers.svgIcon('camera', 'align--center')}}}
+						<p>Add photos</p>
+					</span>
+				</button>
+			</li>
+		</ul>
+		<!-- <div class="chunk">
+			<div class="summaryDetail">
+				<div class="row chunk summaryDetail-summary attachment">
+					<div class="row-item row-item--shrink row-item--alignMiddle align--right" on-click="expand_summary">
+						<img src="style/img/triangle-right.svg" alt="triangle right" class="media--xs summaryDetail-icon">
+					</div>
+					<div class="row-item row-item--alignMiddle text--small" on-click="expand_summary">
+						<p class="text--bold wrap--singleLine--truncate">Add categories</p>
+					</div>
+				</div>
+				<div class="chunk summaryDetail-detail" id="privacySettings">
+					<ul class="inlineblockList">
+						<li class="toggleButton">
+							<input class="toggleButton-input" type="checkbox" name="places-to-go" id="places-to-go" value="ToggleBtn" />
+							<label class="toggleButton-label" for="places-to-go">Places to go</label>
+						</li>
+						<li class="toggleButton">
+							<input class="toggleButton-input" type="checkbox" name="for-sales" id="for-sales" value="ToggleBtn" />
+							<label class="toggleButton-label" for="for-sales">For sale</label>
+						</li>
+						<li class="toggleButton">
+							<input class="toggleButton-input" type="checkbox" name="group-ideas" id="group-ideas" value="ToggleBtn" />
+							<label class="toggleButton-label" for="group-ideas">Ideas for the group</label>
+						</li>
+						<li class="toggleButton">
+							<input class="toggleButton-input" type="checkbox" name="ask-orgs" id="ask-orgs" value="ToggleBtn" />
+							<label class="toggleButton-label" for="ask-orgs">Ask the organizers</label>
+						</li>
+						<li class="toggleButton">
+							<input class="toggleButton-input" type="checkbox" name="reccomended-equip" id="reccomended-equip" value="ToggleBtn" />
+							<label class="toggleButton-label" for="reccomended-equip">Recommended equipment</label>
+						</li>
+						{{#if current_member.membership == MEMBERSHIP.ORGANIZER}}
+						<li>
+							<a href="javascript:void(0)" class="link text--small">manage categories</a>
+						</li>
+						{{/if}}
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div></div>
+	<div class="stripe"><div class="bounds">
+		<div class="summaryDetail">
+			<div class="row chunk summaryDetail-summary">
+				<div class="row-item row-item--alignMiddle text--small" on-click="expand_summary">
+					<p class="text--bold wrap--singleLine--truncate">Visible to:</p>
+					<p class="text--secondary wrap--singleLine--truncate">members and non-members</p>
+				</div>
+				<div class="row-item row-item--shrink row-item--alignMiddle align--right">
+					<a href="#" class="button button--primary" on-click="post_photo">Post</a>
+				</div>
+			</div>
+			<div class="chunk border--top summaryDetail-detail" id="privacySettings">
+				<h3 class="text--bold chunk">Visible to</h3>
+				<label for="members-and-non" class="label--switch chunk text--small">
+					<input id="members-and-non" class="radio" name="privacySettingCtrl" value="members and non-members" type="radio" checked />
+					members and non-members
+				</label>
+
+				<label for="members-only" class="label--switch chunk text--small">
+					<input id="members-only" class="radio" name="privacySettingCtrl" value="members only" type="radio" />
+					members only
+				</label>
+			</div>
+		</div>
+	</div></div> -->
+
+	<div class="align--right">
+		<a href="#" class="button button--primary" on-click="post_photo">Post</a>
+	</div>
+</script>
+
+<!--
+/////////////////////////////////////////////////////
+Template: Poll posting
+/////////////////////////////////////////////////////
+-->
+<script id="pollPost" type="text/template">
+	<div class="stripe"><div class="bounds">
+		<ul class="list list--form">
+			<li>
+				<div class="chunk">
+					<label for="poll-question">Question</label>
+					<textarea id="poll-question"></textarea>
+				</div>
+			</li>
+
+
+			<li>
+				<div id="pollOptions">
+					<div class="chunk">
+						<label for="choice-1">Answers</label>
+						<input type="text" class="choice" id="choice-1" placeholder="1." />
+					</div>
+					<div class="chunk">
+						<input type="text" class="choice" id="choice-2" placeholder="2." />
+					</div>
+				</div>
+				<div class="chunk">
+					<div class="launcher launcher-placeholder" on-click="addPollOption">Add another option</div>
+				</div>
+
+			</li>
+			<li>
+				<div class="row"><div class="chunk">
+					<label class="label--switch">
+						<input type="checkbox" class="checkbox" id="multiple">
+							Allow more than one selection
+					</label>
+				</div></div>
+			</li>
+
+		</ul>
+		<!-- <div class="summaryDetail">
+			<div class="row chunk summaryDetail-summary">
+				<div class="row-item row-item--shrink row-item--alignMiddle align--right" on-click="expand_summary">
+					<img src="style/img/triangle-right.svg" alt="triangle right" class="media--xs summaryDetail-icon">
+				</div>
+				<div class="row-item row-item--alignMiddle text--small" on-click="expand_summary">
+					<p class="text--bold wrap--singleLine--truncate">Visible to:</p>
+					<p class="text--secondary wrap--singleLine--truncate">members and non-members</p>
+				</div>
+				<div class="row-item row-item--shrink row-item--alignMiddle align--right">
+					<a href="#" class="button button--primary" on-click="post_poll">Post</a>
+				</div>
+			</div>
+			<div class="chunk border--top summaryDetail-detail" id="privacySettings">
+				<h3 class="text--bold chunk">Visible to</h3>
+				<label for="members-and-non" class="label--switch chunk text--small">
+					<input id="members-and-non" class="radio" name="privacySettingCtrl" value="members and non-members" type="radio" checked />
+					members and non-members
+				</label>
+
+				<label for="members-only" class="label--switch chunk text--small">
+					<input id="members-only" class="radio" name="privacySettingCtrl" value="members only" type="radio" />
+					members only
+				</label>
+			</div>
+		</div> -->
+
+	<div class="align--right">
+		<a href="#" class="button button--primary" on-click="post_poll">Post</a>
+	</div>
+
+	</div></div>
+</script>
+
 
 <!-- SVG icons -->
 <div id='icon-container'></div>

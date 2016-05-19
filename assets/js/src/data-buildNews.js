@@ -37,12 +37,22 @@ var Items = {
 	EventPhotos: function(event, photos){
 		this.type = "eventphotos";
 		this.event = event;
-		this.time = event.created || (new Date).getTime();
 		this.photos = photos || [];
 		this.showCommentBox = false; // remove this when the photo viewing/commenting UI is built 
-		this.event.isPast = function(){
-			return ( event.time < Date.now() );
-		};
+		if (this.event !== undefined) {
+			this.event.isPast = function(){
+				return ( event.time < Date.now() );
+			};
+		}
+
+		// Hacky conditional to handle both uploading photos and displaying photos in the feed
+		if (photos !== undefined && photos.length > 0) {
+			// photos[0].uploadTime is faked data for handling photo uploads
+			this.time = photos[0].uploadTime || event.created || (new Date).getTime();
+		} else {
+			this.time = event.created || (new Date).getTime(); 
+		}
+
 	},
 
 	Poll: function(poll){

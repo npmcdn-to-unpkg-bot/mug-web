@@ -185,7 +185,7 @@ ViewManager.prototype = {
 
 		$(window).scrollTop(self.last_scrollTop); // back to pre-modal scrolltop
 		this._modal.$el.addClass('off');
-		this._modal.$el.one(transitionEnd, function() {
+		this._modal.$el.one('transitionend', function() {
 			self._modal.$el.hide();
 			if (self._modal.current_view) {
 				self._modal.teardown();
@@ -195,9 +195,10 @@ ViewManager.prototype = {
 
 		this.momentary_hide();
 		this._$shade.addClass('off');
-		this._$shade.one(transitionEnd, function() {
+		this._$shade.one('transitionend', function() {
 			$(this).hide();
 		});
+
 	},
 
 	media_show: function(options) {
@@ -241,7 +242,7 @@ ViewManager.prototype = {
 
 		$(window).scrollTop(self.last_scrollTop); // back to pre-modal scrolltop
 		this._media.$el.addClass('off');
-		this._media.$el.one(transitionEnd, function() {
+		this._media.$el.one('transitionend', function() {
 			self._media.$el.hide();
 			if (self._media.current_view) {
 				self._media.teardown();
@@ -251,7 +252,7 @@ ViewManager.prototype = {
 
 		this.momentary_hide();
 		// this._$shade.addClass('off');
-		// this._$shade.one(transitionEnd, function() {
+		// this._$shade.one('transitionend', function() {
 		// 	$(this).hide();
 		// });
 	},

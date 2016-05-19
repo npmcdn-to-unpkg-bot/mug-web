@@ -16,14 +16,76 @@
 	width: auto;
 }
 
-/*
-// Kill the view-head
-.view-head {
-	display: none !important;
+// CARD LIST
+// to make cards in a list have consistent heights
+.cardList {
+	@include display(flex); // make each li go full height
+	& > li {
+		@include display(flex); // make the cards go full height
+	}
+	.card {
+		width: 100%; // fill width of li
+	}
 }
 
-// Don't let nav overlap content
-#main_body {
-	padding-top: $view-head-height-tablet;
+// MODAL VIEW FULL
+// full screen at all screen widths
+.view--modal-full {
+	@include modal-full;
+	z-index: map-get($zindex-map, "modal");
 }
-*/
+
+// MODAL VIEW SNAP
+// full at narrow widths, dialog at wide widths
+.view--modal-snap {
+	@include modal-full;
+	@include atMediaUp(small){
+		@include modal-dialog;
+	}
+	z-index: map-get($zindex-map, "modal");
+}
+
+// MODAL VIEW LARGE
+// CURRENTLY ONLY USED FOR PHOTO UPLOAD DIALOG
+.view--modal-large {
+	@include atMediaUp(large) {
+		@include modal-dialog();
+		width: $breakpoint-xl;
+		margin-left: -#{($breakpoint-xl/2)}
+	}
+	@include modal-full;
+	z-index: map-get($zindex-map, "modal");
+}
+
+// Don't let view-head overlap content
+.view-body:not(#modal_body) {
+	.stripe:first-child {
+		padding-top: $view-head-height;
+		@include atMediaUp(large){
+			padding-top: $view-head-height-tablet;
+		}
+	}
+}
+
+// Style the overlay that comes up with modals
+.shade {
+	height: 100%;
+	left: 0;
+	position: absolute;
+	top: 0;
+	width: 100%;
+	z-index: map-get($zindex-map, "shade");
+	@include transition(all .15s);
+	background: $C_dimmingOverlay;
+	opacity: 1;
+	&.off{
+		opacity: 0;
+	}
+}
+
+// way to hide something conservatively, good for file inputs
+.input-wrap--hidden{
+	width: 0px;
+	height: 0px;
+	overflow: hidden;
+}

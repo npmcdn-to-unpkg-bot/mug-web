@@ -52,7 +52,7 @@ var views = new ViewManager(function(){
 		views.data.news = buildNews({
 			events: views.data.events_short,
 			events_recent: views.data.events_recent,
-			// discussions: views.data.boards_posts
+			discussions: views.data.boards_posts
 		});
 
 		// ----------------------------------------------
@@ -63,7 +63,19 @@ var views = new ViewManager(function(){
 		views.data.group.keyPhoto = views.data.group.photo;
 		// views.data.group.logo = "group_photo" in views.data.group ? views.data.group.group_photo.photo_link : null;
 
-		console.log(views.data.news);
+		// Default current user
+		views.data.current_member = {
+			photo: "https://s3.amazonaws.com/uifaces/faces/twitter/adellecharles/128.jpg",
+			name: "Sally Smeetup",
+			// membership: getParameterByName('membership') || views.data.MEMBERSHIP.ALIEN
+			membership: 1
+		};
+
+		// Containers for uploaded photos
+		views.data.previewPhotos = [];
+		views.data.uploadedPhotos = [];
+
+		// console.log(views.data);
 
 		// Now that the data is all ready, go ahead and start the router
 		window.addEventListener('hashchange', processHash);

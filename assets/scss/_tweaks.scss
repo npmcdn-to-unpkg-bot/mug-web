@@ -95,6 +95,25 @@ $dotTimeBase: 500;
 	LAYOUT
 -----------------------------
 */
+// Summary-detail element
+._tweak_summaryDetail-detail {
+	@include pseudoDisplay(none);
+}
+
+._tweak_summaryDetail--expanded {
+	._tweak_summaryDetail-detail {
+		@include pseudoDisplay(block);
+	}
+	._tweak_summaryDetail-icon {
+		@include transform(rotate(90deg));
+	}
+}
+
+/*
+-----------------------------
+	LAYOUT
+-----------------------------
+*/
 
 /* _stripe.scss */
 .stripe-heroContent--full { // new variant
@@ -136,6 +155,22 @@ $dotTimeBase: 500;
 		transform: translateX(0);
 		margin-left: 0;
 	}
+}
+
+/*
+-----------------------------
+	UI COMPONENTS
+-----------------------------
+*/
+._tweak_avatar--icon {
+	background: transparent;
+	padding: 0;
+
+	.icon {
+		height: $block;
+		width: $block;
+	}
+
 }
 
 /*

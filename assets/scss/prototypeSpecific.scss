@@ -30,17 +30,25 @@ Discussion feed
 }
 
 // Flex Photos - flexbox-based photo-grid
-// used for feed
-
 ._proto_flexPhotos {
-	height: $block-6;
-	width: 100%;
+	position: relative;
+
 	&--sm {
 		width: percentage(1/3);
 	}
+
 	&--lg {
 		width: percentage(2/3);
 	}
+
+}
+
+._proto_flexPhotos-wrapper {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	height: 100%;
+	width: 100%;
 }
 
 /*
@@ -56,3 +64,95 @@ Discussion feed
 	}
 }
 */
+
+// Link to the remaining MUP comments
+._proto_contentDisclosure {
+	@include background-image(linear-gradient(top, 
+		$C_contentBG 0%, $C_contentBG 47%, 
+		$C_border 47%, $C_border 50%, 
+		$C_contentBG 50%, $C_contentBG 100%
+	));
+
+	._proto_contentDisclosure-count {
+		background: $C_contentBG;
+		border: 1px solid $C_border;
+		border-radius: $defaultRadius;
+		padding: $space-quarter $space;
+		
+		&:after {
+			background: url('../icons/svg/chevronRight.svg');
+			background-size: contain;
+			content: '';
+			display: inline-block;
+			height: $font-size;
+			width: $font-size;
+			vertical-align: sub;
+			opacity: .12; // ask Adam D about a smarter way to pull the opacity from $C_border
+		}
+
+	}
+
+	&:hover {
+
+		._proto_contentDisclosure-count {
+			color: $C_link;
+
+			&:after {
+				// @include transform(translateX($space-quarter));
+				opacity: .54;
+			}
+
+		}
+
+	}
+
+}
+
+// Polls
+.result-bar {
+	background: $C_collectionBG;
+	border-radius: 999px;
+	height: $media-xs;
+	overflow: hidden;
+}
+.result-bar-progress {
+	background: $C_contentBGInverted;
+	// border-radius: 999px;
+	height: 100%;
+	width: 0; //will get set by js
+}
+
+/*
+------------------------------
+Posting interface
+------------------------------
+*/
+
+// At the top of the feed
+._proto_postBox {
+	border: 1px solid $C_border;
+	border-radius: 999px $defaultRadius $defaultRadius 999px;
+	padding: 0 $space-half 0 0;
+}
+
+//
+// Photo uploading
+//
+
+// placeholder for adding more photos
+._proto_photoUploadNew {
+	background: transparent;
+	border: 1px dashed;
+	color: $C_link;
+}
+
+// show the uploaded 
+._proto_photoUploadPreview {
+	@include valignChildren;
+	// height: $block-5;
+	// img {
+	// 	max-height: $block-5;
+	// 	max-width: 100%;
+	// }
+}
+

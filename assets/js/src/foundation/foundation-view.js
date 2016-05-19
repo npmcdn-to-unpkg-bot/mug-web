@@ -37,7 +37,7 @@ var View = function(id, data, type) {
 View.prototype = {
 
 	setup_dom: function() {
-		this.$header = $('<header id="' + this.header_id + '" class="view-head row inverted"></header>');
+		this.$header = $('<header id="' + this.header_id + '" class="view-head row"></header>');
 		this.$body = $('<div id="' + this.body_id + '" class="view-body"></div>');
 		this.$el = $('<div id="' + this.id + '" class="view"></div>').append(this.$header, this.$body);
 
