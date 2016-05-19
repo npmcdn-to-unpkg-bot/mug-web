@@ -251,36 +251,28 @@
 						-->
 						{{#if latest_comment}}
 						<div class="row-item--shrink">
-							<div class="avatar avatar--person avatar--smalll avatar--smallTest" style="background-image: url({{latest_comment.member_photo.thumb_link}});"></div>
+							<div class="avatar avatar--person" style="background-image: url({{latest_comment.member_photo.thumb_link}});"></div>
+							<!-- <div class="avatar--icon _tweak_avatar--icon">
+								{{{helpers.svgIcon('comment')}}}
+							</div> -->
 						</div>
 						<div class="row-item">
-
 							<div class="row">
 								<div class="row-item">
-									<p><strong>{{latest_comment.member_name}}</strong> commented on <strong>{{event.name}}</strong></p>
+									<p>
+										<strong>{{latest_comment.member_name}}</strong> 
+										{{{helpers.svgIcon('chevronRight', 'icon--textInline')}}} 
+										<a href="{{event.event_url}}" class="link">{{event.name}}</a>
+									</p>
 								</div>
 							</div>
 							<p class="text--caption chunk">{{helpers.dateRelative(time)}}</p>
 
-							<div class="chunk">
-								{{#event}}
-									<a href="{{event_url}}">
-										{{> contextEvent }}
-									</a>
-								{{/event}}
-							</div>
 							{{#if posts.length > 0 || showCommentBox}}
 								<ul>
-									{{#posts}}{{#if !isReply || isReply == "undefined" }}
+									{{#each posts:i}}{{#if !isReply || isReply == "undefined"}}
+										{{#if i < 1}}
 										<li class="attachment">
-											<div class="row chunk">
-												<div class="row-item row-item--shrink">
-													<a href="#" class="avatar avatar--person avatar--small" style="background-image: url({{member_photo.thumb_link}});"></a>
-												</div>
-												<div class="row-item valign--middle">
-													<h4 class="text--bold display--inline">{{member_name}}</h4><span class="display--inline text--secondary"> &middot; {{helpers.dateRelative(time)}}</span>
-												</div>
-											</div>
 
 											<p class="js-expandableContent--inline chunk">{{comment}}</p>
 
@@ -299,16 +291,26 @@
 													</li>
 												</ul>
 											</div>
-										</li>
-									{{/if}}{{/posts}}
 
-									{{#if event.comment_count > 2}}
+										</li>
+										{{/if}}
+									{{/if}}{{/each}}
+
+									<div class="chunk">
+										{{#event}}
+											<a href="{{event_url}}">
+												{{> contextEvent }}
+											</a>
+										{{/event}}
+									</div>
+
+									<!-- {{#if event.comment_count > 2}}
 										<li>
 											<a href="{{event.event_url + '#conversation'}}" class="_proto_contentDisclosure align--center display--block chunk">
 												<span class="_proto_contentDisclosure-count display--inlineBlock text--secondary text--small">{{event.comment_count - 2}}</span>
 											</a>
 										</li>
-									{{/if}}
+									{{/if}} -->
 
 									 <li>
 										<div class="row">
@@ -347,7 +349,7 @@
 									/////////////////////////////////////////
 									-->
 									<div class="avatar--icon _tweak_avatar--icon">
-										{{{helpers.svgIcon('calendar--canceled')}}}
+										{{{helpers.svgIcon('calendar')}}}
 									</div>
 								{{else}}
 									<!--
@@ -380,7 +382,8 @@
 									/////////////////////////////////////////
 									-->
 								<div class="chunk">
-									<p>New Meetup scheduled by <span class="text--bold">{{group.organizer.name}}</span></p>
+									<p>A new Meetup was scheduled</p>
+									<p class="text--caption">{{helpers.dateRelative(time)}} by <a href="#" class="link">{{group.organizer.name}}</a></p>
 								</div>
 							{{/if}}
 

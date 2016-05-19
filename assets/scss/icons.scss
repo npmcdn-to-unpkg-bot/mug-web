@@ -35,6 +35,24 @@
 	fill: $C_border;
 }
 
+.icon--textInline {
+	height: $font-size-small;
+	width: $font-size-small;
+
+	// use {
+	// 	fill: $C_textPrimary;
+	// }
+
+	// .text--secondary & {
+	// 	fill: $C_textSecondary;
+	// }
+
+	// .text--hint & {
+	// 	fill: $C_textHint;
+	// }
+
+}
+
 .icon-calendar--sched use {
 	fill: $C_success;
 }

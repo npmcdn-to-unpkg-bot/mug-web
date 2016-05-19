@@ -16,7 +16,7 @@ var Items = {
 		this.showCommentBox = false;
 	},
 
-	EventComment: function(event){
+	Event: function(event){
 		this.type = "event";
 		this.event = event;
 		this.event.isPast = function(){
@@ -79,68 +79,25 @@ function buildNews(sources){
 
 	// ------------------------------------------------------
 	// Comments from upcoming events
-	// Items.EventComment
+	// Items.Event
 	// ------------------------------------------------------
 	if(sources.events){
 
-		var getComments = function(thisEvent){
+		var processEventData = function(thisEvent){
 			var thisEvent = thisEvent;
-			if(thisEvent.event.comment_count > 0){
-				gimme.get([
-					{"gimme": "event_comments", data:{"event_id": thisEvent.event.id, "page": 2}}, 
-					{"gimme": "rsvps", "data": {"event_id": thisEvent.event.id, "page": 5}}
-				], true).then(function(data){
-					var this_thread;
 
-					thisEvent.latest_comment = data.event_comments[0];
-					thisEvent.posts = data.event_comments;
-					thisEvent.time = Math.max(thisEvent.latest_comment.time, thisEvent.time);
-					thisEvent.rsvps = data.rsvps;
+			gimme.get([{"gimme": "event_comments", data:{"event_id": thisEvent.event.id, "page": 2}},{"gimme": "rsvps", "data": {"event_id": thisEvent.event.id, "page": 5}}], true).then(function(data){
+				thisEvent.time = thisEvent.event.created;
+				thisEvent.rsvps = data.rsvps;
 
-					for(var i=0; i<thisEvent.posts.length; i++){
-						this_thread = thisEvent.posts[i];
-						thisEvent.posts[i].isReply = false; // should probably do this with `in_reply_to`
+				if(thisEvent.event.comment_count > 0){
+						var this_thread;
 
-						if(thisEvent.posts[i+1]){
-							while(this_thread.event_comment_id == thisEvent.posts[i+1].in_reply_to){
-								if(typeof thisEvent.posts.replies == 'undefined'){
-									// this_thread.replies = [];
-									// this_thread.has_replies = true;
-									this_thread.replyCount = i+1;
-								}
-								// this_thread.replies.push( parseComment(thisEvent.posts[i+1]) );
-								i++;
-								thisEvent.posts[i].isReply = true; // should probably do this with `in_reply_to`
-							}
-						}
-					}
-
-				});
-			}
-		};
-
-		for(var i=0; i<sources.events.length; i++){
-			var thisEvent = new Items.EventComment(sources.events[i]);
-			getComments( thisEvent );
-			news.push( thisEvent );
-		}
-
-	}
-
-	// ------------------------------------------------------
-	// Comments from recent (past) events
-	// Items.EventComment
-	// ------------------------------------------------------
-	if(sources.events_recent){
-		var getComments = function(thisEvent){
-			var thisEvent = thisEvent;
-			if(thisEvent.event.comment_count > 0){
-
-				gimme.get([{"gimme": "event_comments", data:{"event_id": thisEvent.event.id, "page": 2}}], true).then(function(data){
-					var this_thread;
-					thisEvent.latest_comment = data.event_comments[0];
-					thisEvent.posts = data.event_comments;
-					thisEvent.time = Math.max(data.event_comments[0].time, thisEvent.time);
+						thisEvent.latest_comment = data.event_comments[0];
+						thisEvent.posts = data.event_comments;
+						thisEvent.time = thisEvent.latest_comment.time;
+						// thisEvent.rsvps = data.rsvps;
+						console.log('has comments');
 
 						for(var i=0; i<thisEvent.posts.length; i++){
 							this_thread = thisEvent.posts[i];
@@ -159,14 +116,87 @@ function buildNews(sources){
 								}
 							}
 						}
+				}
 
-				});
-			}
+				/*
+				// console.log('latest_comment: ' + thisEvent.latest_comment.time);
+				console.log('latest_comment: ' + moment( thisEvent.latest_comment.time ).format("MMM Do, YYYY"));
+				// console.log('created: ' + thisEvent.event.created);
+				console.log('created: ' + moment( thisEvent.event.created ).format("MMM Do, YYYY"));
+				// console.log('ternary: ' +  thisEvent.event.comment_count > 0 ? thisEvent.latest_comment.time : thisEvent.event.created);
+				console.log('ternary: ' +  moment(thisEvent.latest_comment.time !== undefined ? thisEvent.latest_comment.time : thisEvent.event.created).format("MMM Do, YYYY"));
+				console.log('thisEvent.time: ' +  moment(thisEvent.time).format("MMM Do, YYYY"));
+				console.log('----------------------------------');
+				*/
+			});
+
+		};
+
+		for(var i=0; i<sources.events.length; i++){
+			var thisEvent = new Items.Event(sources.events[i]);
+			processEventData( thisEvent );
+			news.push( thisEvent );
+		}
+
+	}
+
+	// ------------------------------------------------------
+	// Comments from recent (past) events
+	// Items.Event
+	// ------------------------------------------------------
+	if(sources.events_recent){
+		var processEventData = function(thisEvent){
+			var thisEvent = thisEvent;
+
+			gimme.get([{"gimme": "event_comments", data:{"event_id": thisEvent.event.id, "page": 2}},{"gimme": "rsvps", "data": {"event_id": thisEvent.event.id, "page": 5}}], true).then(function(data){
+				thisEvent.time = thisEvent.event.time;
+				thisEvent.rsvps = data.rsvps;
+
+				if(thisEvent.event.comment_count > 0){
+						var this_thread;
+
+						thisEvent.latest_comment = data.event_comments[0];
+						thisEvent.posts = data.event_comments;
+						thisEvent.time = thisEvent.latest_comment.time;
+						// thisEvent.rsvps = data.rsvps;
+						console.log('has comments');
+
+						for(var i=0; i<thisEvent.posts.length; i++){
+							this_thread = thisEvent.posts[i];
+							thisEvent.posts[i].isReply = false; // should probably do this with `in_reply_to`
+
+							if(thisEvent.posts[i+1]){
+								while(this_thread.event_comment_id == thisEvent.posts[i+1].in_reply_to){
+									if(typeof thisEvent.posts.replies == 'undefined'){
+										// this_thread.replies = [];
+										// this_thread.has_replies = true;
+										this_thread.replyCount = i+1;
+									}
+									// this_thread.replies.push( parseComment(thisEvent.posts[i+1]) );
+									i++;
+									thisEvent.posts[i].isReply = true; // should probably do this with `in_reply_to`
+								}
+							}
+						}
+				}
+
+				/*
+				// console.log('latest_comment: ' + thisEvent.latest_comment.time);
+				console.log('latest_comment: ' + moment( thisEvent.latest_comment.time ).format("MMM Do, YYYY"));
+				// console.log('created: ' + thisEvent.event.created);
+				console.log('created: ' + moment( thisEvent.event.created ).format("MMM Do, YYYY"));
+				// console.log('ternary: ' +  thisEvent.event.comment_count > 0 ? thisEvent.latest_comment.time : thisEvent.event.created);
+				console.log('ternary: ' +  moment(thisEvent.latest_comment.time !== undefined ? thisEvent.latest_comment.time : thisEvent.event.created).format("MMM Do, YYYY"));
+				console.log('thisEvent.time: ' +  moment(thisEvent.time).format("MMM Do, YYYY"));
+				console.log('----------------------------------');
+				*/
+			});
+
 		};
 
 		for(var i=0; i<sources.events_recent.length; i++){
-			var thisEvent = new Items.EventComment( sources.events_recent[i] );
-			getComments( thisEvent );
+			var thisEvent = new Items.Event( sources.events_recent[i] );
+			processEventData( thisEvent );
 			news.push( thisEvent );
 		}
 	}

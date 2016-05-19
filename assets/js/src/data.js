@@ -16,7 +16,7 @@ var groupId = getParameterByName('mugID') || '1579989',
 		// zip     = 60606
 
 var views = new ViewManager(function(){
-	gimme.apiKey = "1e84f701a17435513a17796245794d"; // 7060231d422c3421e3c13406e606631 715d68731b3913292f447f4c45547
+	gimme.apiKey = "715d68731b3913292f447f4c45547"; // 1e84f701a17435513a17796245794d 7060231d422c3421e3c13406e606631
 
 	// ↓ ↓ ↓ ↓ Where we pick which data we want ↓ ↓ ↓ ↓
 	var shoppingList = [

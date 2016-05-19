@@ -165,12 +165,22 @@ $dotTimeBase: 500;
 ._tweak_avatar--icon {
 	background: transparent;
 	padding: 0;
+	position: relative;
 
 	.icon {
-		height: $block;
-		width: $block;
+		height: $media-s;
+		left: 50%;
+		position: absolute;
+		transform: translate(-50%);
+		top: 0;
+		width: $media-s;
 	}
 
+}
+
+._tweak_avatar--xsmall {
+	height: $font-size;
+	width: $font-size;
 }
 
 /*
