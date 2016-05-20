@@ -96,8 +96,6 @@ function buildNews(sources){
 						thisEvent.latest_comment = data.event_comments[0];
 						thisEvent.posts = data.event_comments;
 						thisEvent.time = thisEvent.latest_comment.time;
-						// thisEvent.rsvps = data.rsvps;
-						console.log('has comments');
 
 						for(var i=0; i<thisEvent.posts.length; i++){
 							this_thread = thisEvent.posts[i];

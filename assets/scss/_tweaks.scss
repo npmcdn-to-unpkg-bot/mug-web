@@ -183,6 +183,12 @@ $dotTimeBase: 500;
 	width: $font-size;
 }
 
+._tweak_button--contrast {
+	&:hover {
+		background: $C_textHint;
+	}
+}
+
 /*
 -----------------------------
 	NEW: ANIMATION

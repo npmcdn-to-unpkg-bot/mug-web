@@ -23,11 +23,11 @@
 <body class="lang_en">
 
 <script type="text/template" id="main-template">
-	<!--
-	/////////////////////////////////////////////////////
-	HEADER AREA
-	/////////////////////////////////////////////////////
-	-->
+<!--
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+HEADER AREA
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+-->
 	{{#group}}
 		<header class="stripe stripe--photoHero {{^photo}}photoHero--noPhoto{{/photo}}" id="heroPhoto" style="background-image: url(http://foundation.specialsnowflake.com/duotoneblend.php?url={{keyPhoto}}&colorDark=ff7900&colorLight=7700c8);">
 
@@ -70,12 +70,12 @@
 		</header>
 	{{/group}}
 
-	<!--
-	/////////////////////////////////////////////////////
-	DISCUSSION FEED
-	/////////////////////////////////////////////////////
-	-->
-	<section class="stripe"><div class="bounds">{{#if news.length < 1}}<p class="text--secondary chunk">No news is good news. Right?</p>{{else}}<div id="discussions">
+<!--
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+DISCUSSION FEED
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+-->
+	<section class="stripe stripe--collection"><div class="bounds">{{#if news.length < 1}}<p class="text--secondary chunk">No news is good news. Right?</p>{{else}}<div id="discussions">
 
 		<div class="row chunk _proto_postBox">
 			<a href="javascript:void(0)" class="row row-item" on-click="toggle_post_popover">
@@ -87,98 +87,121 @@
 			<div class="row-item row-item--shrink valign--middle" on-click="choosePhotos">{{{helpers.svgIcon('camera')}}}</div>
 		</div>
 
-		<ul class="list bordered">{{#each news:i}}
-			<li class="row list-item">
-				<!--
-				// DISCUSSION (text post)
-				-->
+		<ul class="_proto_discussionList">{{#each news:i}}
+			<li class="card chunk">
+<!--
+///////////////////////////////////////////////
+// DISCUSSION (text post)
+///////////////////////////////////////////////
+-->
 				{{#if type == 'discussion'}}
-
+				<div class="row">
 					<div class="row-item row-item--shrink">
-						<div class="avatar avatar--person" style="background-image: url({{top_post.member.photo.thumb}});"></div>
+						<div class="avatar avatar--person avatar--small" style="background-image: url({{top_post.member.photo.thumb}});"></div>
 					</div>
 
 					<div class="row-item valign--middle">
-						<h4 class="text--bold display--inline">{{top_post.member.name}}</h4> &middot; <p class="display--inline text--secondary">{{helpers.dateRelative(time)}}</p>
-						
-						<div class="expandableContent">
-							<p>{{top_post.body}}</p>
-						</div>
-
-						<div class="chunk">
-							<ul class="inlineblockList">
-								<li class="text--caption row valign--middle">
-									<a href="#" on-click="likePost" class="row-item row-item--shrink display--inlineBlock valign--middle">{{{helpers.svgIcon('like', 'icon--hint')}}}</a>
-									{{#if like_count > 0}}<span class="row-item row-item--shrink display--inlineBlock valign--middle">{{like_count}} likes</span>{{/if}}
-								</li>
-								<li class="padding--left text--caption row valign--middle">
-									<a href="#" class="row-item row-item--shrink display--inlineBlock valign--middle">{{{helpers.svgIcon('reply')}}}</a>
-									{{#if replyCount > 0}}<span class="row-item row-item--shrink display--inlineBlock valign--middle">{{replyCount}} replies</span>{{/if}}
-								</li>
-								<li class="padding--left text--caption">
-									<a href="#" class="display--inlineBlock valign--middle" on-click="toggle_comment_popover">{{{helpers.svgIcon('overflow')}}}</a>
-								</li>
-							</ul>
-						</div>
-
-						{{#if posts.length > 0 || showCommentBox}}
-							<ul>
-								{{#posts}}
-									<li class="attachment">
-										<div class="row chunk">
-											<div class="row-item row-item--shrink">
-												<a href="#" class="avatar avatar--person avatar--small" style="background-image: url({{member.photo.thumb}});"></a>
-											</div>
-											<div class="row-item valign--middle">
-												<h4 class="text--bold display--inline">{{member.name}}</h4><span class="display--inline text--secondary"> &middot; {{helpers.dateRelative(time)}}</span>
-											</div>
-										</div>
-
-										<p class="js-expandableContent--inline chunk">{{body}}</p>
-									</li>
-								{{/posts}}
-
-								 <li>
-									<div class="row">
-										<div class="row-item--shrink">
-											<div class="chunk">
-												<div class="avatar avatar--person avatar--small" style="background-image: url({{current_member.photo}});"></div>
-											</div>
-										</div>
-										<div class="row-item">
-											<div class="chunk">
-												<textarea placeholder="Write a comment&hellip;" on-keyup="showPostBtn" style="min-height: 1px;"></textarea>
-											</div>
-											<div class="chunk align--right display--none postBtnContainer">
-												<button class="button button--primary button--small" on-click="postComment">Post</button>
-											</div>
-										</div>
-									</div>
-								</li>
-							</ul>
-						{{/if}}
+						<p class="text--small text--smallTest"><span class="text--bold">{{top_post.member.name}}</span> &middot; <span class="text--secondary">{{helpers.dateRelative(time)}}</span></p>
 					</div>
+				</div>
+				<div class="expandableContent chunk">
+					<p>{{top_post.body}}</p>
+				</div>
+
+				<div class="chunk">
+					<ul class="inlineblockList">
+						<li class="text--caption row valign--middle">
+							<a href="#" on-click="likePost" class="row-item row-item--shrink display--inlineBlock valign--middle">{{{helpers.svgIcon('like', 'icon--hint')}}}</a>
+							{{#if like_count > 0}}<span class="row-item row-item--shrink display--inlineBlock valign--middle">{{like_count}} likes</span>{{/if}}
+						</li>
+						<li class="padding--left text--caption row valign--middle">
+							<a href="#" class="row-item row-item--shrink display--inlineBlock valign--middle">{{{helpers.svgIcon('reply')}}}</a>
+							{{#if replyCount > 0}}<span class="row-item row-item--shrink display--inlineBlock valign--middle">{{replyCount}} replies</span>{{/if}}
+						</li>
+						<li class="padding--left text--caption">
+							<a href="#" class="display--inlineBlock valign--middle" on-click="toggle_comment_popover">{{{helpers.svgIcon('overflow')}}}</a>
+						</li>
+					</ul>
+				</div>
+
+				{{#if posts.length > 0 || showCommentBox}}
+					<ul>
+						{{#posts}}
+							<li class="attachmentt">
+								<div class="row chunk">
+									<div class="row-item row-item--shrink">
+										<a href="#" class="avatar avatar--person avatar--small" style="background-image: url({{member.photo.thumb}});"></a>
+									</div>
+									<div class="row-item attachment">
+										<p class="text--small">
+											<span class="text--bold">{{member.name}}</span><span class="text--secondary"> &middot; {{helpers.dateRelative(time)}}</span>
+										</p>
+										
+										<p class="js-expandableContent--inline chunk">{{body}}</p>
+										
+										<div class="chunk">
+											<ul class="inlineblockList">
+												<li class="text--caption row valign--middle">
+													<a href="#" on-click="likePost" class="row-item row-item--shrink display--inlineBlock valign--middle">{{{helpers.svgIcon('like', 'icon--hint')}}}</a>
+													{{#if like_count > 0}}<span class="row-item row-item--shrink display--inlineBlock valign--middle">{{like_count}} likes</span>{{/if}}
+												</li>
+												<li class="padding--left text--caption row valign--middle">
+													<a href="#" class="row-item row-item--shrink display--inlineBlock valign--middle">{{{helpers.svgIcon('reply')}}}</a>
+													{{#if replyCount > 0}}<span class="row-item row-item--shrink display--inlineBlock valign--middle">{{replyCount}} replies</span>{{/if}}
+												</li>
+												<li class="padding--left text--caption">
+													<a href="#" class="display--inlineBlock valign--middle" on-click="toggle_comment_popover">{{{helpers.svgIcon('overflow')}}}</a>
+												</li>
+											</ul>
+										</div>
+
+									</div>
+								</div>
+							</li>
+						{{/posts}}
+
+
+						<li>
+							<div class="row chunk">
+								<div class="row-item row-item--shrink valign--middle">
+									<div class="avatar avatar--person avatar--small" style="background-image: url({{current_member.photo}});"></div>
+								</div>
+								<div class="row-item">
+									<textarea class="_proto_replyInput" placeholder="Write a comment&hellip;" on-keyup="showPostBtn"></textarea>
+								</div>
+							</div>
+
+							<div class="chunk align--right display--none postBtnContainer">
+								<button class="button button--primary button--small" on-click="postComment">Post</button>
+							</div>
+
+						</li>
+
+
+					</ul>
+				{{/if}}
 				{{/if}}
 
-				<!--
-				///////////////////////////////////////////////
-				// PHOTOS
-				///////////////////////////////////////////////
-				-->
+<!--
+///////////////////////////////////////////////
+// PHOTOS
+///////////////////////////////////////////////
+-->
 				{{#if type == 'eventphotos'}}
+				<div class="row attachment">
 					<div class="row-item--shrink">
 						<div class="chunk">
-							<div class="avatar avatar--person avatar--smalll avatar--smallTest" style="background-image: url({{photos.0.member_photo.thumb_link}});"></div>
+							<div class="avatar avatar--person avatar--small" style="background-image: url({{photos.0.member_photo.thumb_link}});"></div>
 						</div>
 					</div>
 					<div class="row-item">
 						<div class="chunk">
 							<div class="row" data-comment-count="{{photos.0.posts.length}}">
-								<div class="row-item">
+								<div class="row-item text--small text--smallTest">
 									{{#if photos.0.posts.length}}
-										<p><strong>{{photos.0.latest_comment.member_name}}</strong> commented on a photo {{#if event}}from <strong>{{event.name}}</strong>{{/if}}</p>
+										<p><strong>{{photos.0.latest_comment.member_name}}</strong> commented on a photo {{#if event}}from <a href="#" class="text--bold">{{event.name}}</a>{{/if}}</p>
 									{{else}}
-										<p><strong>{{photos.0.member.name}}</strong> added {{photos.length}} photos {{#if event}}to <strong>{{event.name}}</strong>{{/if}}</p>
+										<p><strong>{{photos.0.member.name}}</strong> added {{photos.length}} photos {{#if event}}to <a href="#" class="text--bold">{{event.name}}</a>{{/if}}</p>
 									{{/if}}
 
 									<p class="text--caption">{{helpers.dateRelative(time)}}</p>
@@ -186,244 +209,227 @@
 							</div>
 
 						</div>
-
-						<div class="_proto_flexPhotos chunk keepAspect keepAspect--3-2">
-
-							<!--
-							Looping through photos
-							{{#photos}}
-								<a href="#!/photo-detail" class="imgFill keepAspect--3-2" data-photo-id="{{photo_id}}" style="background-image: url({{photo_link}});"></a>
-							{{/photos}}
-							-->
-
-							<div class="_proto_flexPhotos-wrapper attachment chunk row">
-								<a href="#!/photo-detail" class="row-item chunk imgFill _proto_flexPhotos--lg" data-photo-id="{{photos[0].photo_id}}" style="background-image: url({{photos[0].photo_link}});"></a>
-								{{#if photos.length > 1}}
-									<span class="row-item row-item--shrink column _proto_flexPhotos--sm">
-										<a href="#!/photo-detail" class="chunk imgFill column-item" style="background-image:url('{{photos[1].photo_link}}')"></a>
-										{{#if photos.length > 2}}
-											<a href="#!/photo-detail" class="chunk imgFill column-item" style="background-image:url('{{photos[2].photo_link}}')"></a>
-										{{/if}}
-									</span>
-								{{/if}}
-							</div>
-						</div>
-
-						{{#if photos.0.posts.length > 0 || showCommentBox}}
-							<div class="attachment text--small">
-								<div class="chunk">
-									<ul class="list">
-										{{#photos.0.posts}}
-											<li class="row">
-												<div class="row-item--shrink">
-													<div class="chunk">
-														<div class="avatar avatar--person avatar--small" style="background-image: url({{member.photo.thumb}});"></div>
-													</div>
-												</div>
-												<div class="row-item">
-													<div class="chunk">
-														<p><strong>{{member.name}}</strong> <span class="expandableContent--inline">{{body}}</span></p>
-
-														<div class="text--small">
-															<span class="text--caption">{{helpers.dateRelative(created)}}</span> &middot;
-															<span>{{like_count}} Likes</span> &middot;
-															<a href="#" class="link" on-click="likePost">Like</a>
-														</div>
-													</div>
-												</div>
-											</li>
-										{{/photos.0.posts}}
-									</ul>
-								</div>
-							</div>
-						{{/if}}
-
 					</div>
-				{{/if}}
+				</div>
 
-				{{#if type == 'event'}}
-					{{#if event.status !== 'canceled'}}
+				<div class="_proto_flexPhotos chunk keepAspect keepAspect--3-2 attachment">
 
-						<!--
-						///////////////////////////////////////////////
-						// MUP COMMENTS
-						///////////////////////////////////////////////
-						-->
-						{{#if latest_comment}}
-						<div class="row-item--shrink">
-							<div class="avatar avatar--person" style="background-image: url({{latest_comment.member_photo.thumb_link}});"></div>
-							<!-- <div class="avatar--icon _tweak_avatar--icon">
-								{{{helpers.svgIcon('comment')}}}
-							</div> -->
-						</div>
-						<div class="row-item">
-							<div class="row">
-								<div class="row-item">
-									<p>
-										<strong>{{latest_comment.member_name}}</strong> 
-										{{{helpers.svgIcon('chevronRight', 'icon--textInline')}}} 
-										<a href="{{event.event_url}}" class="link">{{event.name}}</a>
-									</p>
-								</div>
-							</div>
-							<p class="text--caption chunk">{{helpers.dateRelative(time)}}</p>
+					<div class="_proto_flexPhotos-wrapper chunk row inverted">
+						<a href="#" class="_tweak_button--contrast _proto_albumLink button button--contrast">View album</a>
+						<a href="#!/photo-detail" class="row-item chunk imgFill _proto_flexPhotos--lg" data-photo-id="{{photos[0].photo_id}}" style="background-image: url({{photos[0].photo_link}});"></a>
+						{{#if photos.length > 1}}
+							<span class="row-item row-item--shrink column _proto_flexPhotos--sm">
+								<a href="#!/photo-detail" class="chunk imgFill column-item" style="background-image:url('{{photos[1].photo_link}}')"></a>
+								{{#if photos.length > 2}}
+									<a href="#!/photo-detail" class="chunk imgFill column-item" style="background-image:url('{{photos[2].photo_link}}')"></a>
+								{{/if}}
+							</span>
+						{{/if}}
+					</div>
 
-							{{#if posts.length > 0 || showCommentBox}}
-								<ul>
-									{{#each posts:i}}{{#if !isReply || isReply == "undefined"}}
-										{{#if i < 1}}
-										<li class="attachment">
+				</div>
 
-											<p class="js-expandableContent--inline chunk">{{comment}}</p>
-
+				{{#if photos.0.posts.length > 0 || showCommentBox}}
+					<div class="attachment text--small">
+						<div class="chunk">
+							<ul class="list">
+								{{#photos.0.posts}}
+									<li class="row">
+										<div class="row-item--shrink">
 											<div class="chunk">
-												<ul class="inlineblockList">
-													<li class="text--caption row valign--middle">
-														<a href="#" on-click="likePost" class="row-item row-item--shrink display--inlineBlock valign--middle">{{{helpers.svgIcon('like', 'icon--hint')}}}</a>
-														{{#if like_count > 0}}<span class="row-item row-item--shrink display--inlineBlock valign--middle">{{like_count}} likes</span>{{/if}}
-													</li>
-													<li class="padding--left text--caption row valign--middle">
-														<a href="#" class="row-item row-item--shrink display--inlineBlock valign--middle">{{{helpers.svgIcon('reply')}}}</a>
-														{{#if replyCount > 0}}<span class="row-item row-item--shrink display--inlineBlock valign--middle">{{replyCount}} replies</span>{{/if}}
-													</li>
-													<li class="padding--left text--caption">
-														<a href="#" class="display--inlineBlock valign--middle" on-click="toggle_comment_popover">{{{helpers.svgIcon('overflow')}}}</a>
-													</li>
-												</ul>
+												<div class="avatar avatar--person avatar--small" style="background-image: url({{member.photo.thumb}});"></div>
 											</div>
+										</div>
+										<div class="row-item">
+											<div class="chunk">
+												<p><strong>{{member.name}}</strong> <span class="expandableContent--inline">{{body}}</span></p>
 
-										</li>
-										{{/if}}
-									{{/if}}{{/each}}
-
-									<div class="chunk">
-										{{#event}}
-											<a href="{{event_url}}">
-												{{> contextEvent }}
-											</a>
-										{{/event}}
-									</div>
-
-									<!-- {{#if event.comment_count > 2}}
-										<li>
-											<a href="{{event.event_url + '#conversation'}}" class="_proto_contentDisclosure align--center display--block chunk">
-												<span class="_proto_contentDisclosure-count display--inlineBlock text--secondary text--small">{{event.comment_count - 2}}</span>
-											</a>
-										</li>
-									{{/if}} -->
-
-									 <li>
-										<div class="row">
-											<div class="row-item--shrink">
-												<div class="chunk">
-													<div class="avatar avatar--person avatar--small" style="background-image: url({{current_member.photo}});"></div>
-												</div>
-											</div>
-											<div class="row-item">
-												<div class="chunk">
-													<textarea placeholder="Write a comment&hellip;" on-keyup="showPostBtn" style="min-height: 1px;"></textarea>
-												</div>
-												<div class="chunk align--right display--none postBtnContainer">
-													<button class="button button--primary button--small" on-click="postComment">Post</button>
+												<div class="text--small">
+													<span class="text--caption">{{helpers.dateRelative(created)}}</span> &middot;
+													<span>{{like_count}} Likes</span> &middot;
+													<a href="#" class="link" on-click="likePost">Like</a>
 												</div>
 											</div>
 										</div>
 									</li>
-								</ul>
-							{{/if}}
+								{{/photos.0.posts}}
+							</ul>
 						</div>
-						{{else}}<!--#if latest_comment-->
+					</div>
+				{{/if}}
 
-						<!--
-						///////////////////////////////////////////////
-						// MUP STATUS
-						// Past, Scheduled, Canceled
-						///////////////////////////////////////////////
-						-->
+				{{/if}}
+
+<!--
+///////////////////////////////////////////////
+// MUP COMMENTS
+///////////////////////////////////////////////
+-->
+				{{#if type == 'event' && event.status !== 'canceled' && latest_comment}}
+				<div class="row attachment">
+					<div class="row-item--shrink">
+						<div class="avatar avatar--person avatar--small" style="background-image: url({{latest_comment.member_photo.thumb_link}});"></div>
+						<!-- <div class="avatar--icon _tweak_avatar--icon">
+							{{{helpers.svgIcon('comment')}}}
+						</div> -->
+					</div>
+					<div class="row-item text--small text--smallTest">
+						<p>
+							<strong>{{latest_comment.member_name}}</strong> 
+							{{{helpers.svgIcon('chevronRight', 'icon--textInline valign--middle')}}} 
+							<a href="{{event.event_url}}" class="link">{{event.name}}</a>
+						</p>
+						<p class="text--caption chunk">{{helpers.dateRelative(time)}}</p>
+					</div>
+				</div>
+
+				{{#if posts.length > 0 || showCommentBox}}
+				<ul>
+					{{#each posts:i}}{{#if !isReply || isReply == "undefined"}}
+						{{#if i < 1}}
+						<li class="attachment">
+
+							<p class="js-expandableContent--inline chunk">{{comment}}</p>
+
+							<div class="chunk">
+								{{#event}}
+									<a href="{{event_url}}">
+										{{> contextEvent }}
+									</a>
+								{{/event}}
+							</div>
+
+							<div class="chunk">
+								<ul class="inlineblockList">
+									<li class="text--caption row valign--middle">
+										<a href="#" on-click="likePost" class="row-item row-item--shrink display--inlineBlock valign--middle">{{{helpers.svgIcon('like', 'icon--hint')}}}</a>
+										{{#if like_count > 0}}<span class="row-item row-item--shrink display--inlineBlock valign--middle">{{like_count}} likes</span>{{/if}}
+									</li>
+									<li class="padding--left text--caption row valign--middle">
+										<a href="#" class="row-item row-item--shrink display--inlineBlock valign--middle">{{{helpers.svgIcon('reply')}}}</a>
+										{{#if replyCount > 0}}<span class="row-item row-item--shrink display--inlineBlock valign--middle">{{replyCount}} replies</span>{{/if}}
+									</li>
+									<li class="padding--left text--caption">
+										<a href="#" class="display--inlineBlock valign--middle" on-click="toggle_comment_popover">{{{helpers.svgIcon('overflow')}}}</a>
+									</li>
+								</ul>
+							</div>
+
+						</li>
+						{{/if}}
+					{{/if}}{{/each}}
+
+					<!-- {{#if event.comment_count > 2}}
+						<li>
+							<a href="{{event.event_url + '#conversation'}}" class="_proto_contentDisclosure align--center display--block chunk">
+								<span class="_proto_contentDisclosure-count display--inlineBlock text--secondary text--small">{{event.comment_count - 2}}</span>
+							</a>
+						</li>
+					{{/if}} -->
+
+					 <li>
+						<div class="row chunk">
+							<div class="row-item row-item--shrink valign--middle">
+								<div class="avatar avatar--person avatar--small" style="background-image: url({{current_member.photo}});"></div>
+							</div>
+							<div class="row-item">
+								<textarea class="_proto_replyInput" placeholder="Write a comment&hellip;" on-keyup="showPostBtn"></textarea>
+							</div>
+						</div>
+
+						<div class="chunk align--right display--none postBtnContainer">
+							<button class="button button--primary button--small" on-click="postComment">Post</button>
+						</div>
+
+					</li>
+				</ul>
+				{{/if}}<!-- if posts.length > 0 || showCommentBox -->
+				{{/if}}<!-- if type == 'event' && event.status !== 'canceled' && latest_comment-->
+
+<!--
+///////////////////////////////////////////////
+// MUP STATUS
+// Past, Scheduled
+///////////////////////////////////////////////
+-->
+				{{#if type == 'event' && event.status !== 'canceled' && !latest_comment}}
+				<div class="row">
+
+					<!--
+					// MUP Past
+					-->
+					{{#if event.status == "past"}}
 						<div class="row-item--shrink">
 							<div class="chunk ">
-								{{#if event.status == "past"}}
-									<!--
-									/////////////////////////////////////////
-									// MUP Past
-									/////////////////////////////////////////
-									-->
-									<div class="avatar--icon _tweak_avatar--icon">
+									<div class="avatar--icon _tweak_avatar--iconn">
 										{{{helpers.svgIcon('calendar')}}}
 									</div>
-								{{else}}
-									<!--
-									/////////////////////////////////////////
-									// MUP Scheduled
-									/////////////////////////////////////////
-									-->
-									<div class="avatar--icon _tweak_avatar--icon">
-										{{{helpers.svgIcon('calendar--sched')}}}
-									</div>
-								{{/if}}
 							</div>
 						</div>
 						<div class="row-item">
-
-							{{#if event.status == "past"}}
-								<div class="chunk">
-									<!--
-									/////////////////////////////////////////
-									// MUP Past
-									/////////////////////////////////////////
-									-->
-									<p><strong>{{group.organizer.name}}</strong> hosted a Meetup</p>
-									<p class="text--caption">{{helpers.dateRelative(event.time)}}</p>
-								</div>
-							{{else}}
-									<!--
-									/////////////////////////////////////////
-									// MUP Scheduled
-									/////////////////////////////////////////
-									-->
-								<div class="chunk">
-									<p>A new Meetup was scheduled</p>
-									<p class="text--caption">{{helpers.dateRelative(time)}} by <a href="#" class="link">{{group.organizer.name}}</a></p>
-								</div>
-							{{/if}}
-
-							<div class="chunk">
-								<div class="attachment text--small">
-									{{#event}}
-										<a href="{{event_url}}">
-											{{> contextEvent }}
-										</a>
-									{{/event}}
-								</div>
-							</div>
+							<p><strong>{{group.organizer.name}}</strong> hosted a Meetup</p>
+							<p class="text--caption">{{helpers.dateRelative(event.time)}}</p>
 						</div>
-						{{/if}}<!--#if latest_comment-->
 
+					<!--
+					// MUP Scheduled
+					-->
 					{{else}}
-						<!--
-						/////////////////////////////////////////
-						// MUP Canceled
-						/////////////////////////////////////////
-						-->
-						<div class="row-item row-item--shrink">
-							<div class="chunk">
-								<div class="avatar--icon _tweak_avatar--icon">
-									<img src="/style/img/calendar-canceled_color.svg" />
-								</div>
+						<div class="row-item--shrink">
+							<div class="avatar--icon _tweak_avatar--icon">
+								{{{helpers.svgIcon('calendar--sched')}}}
 							</div>
 						</div>
 						<div class="row-item">
 							<div class="chunk">
-								<p><a href="{{event.event_url}}" class="text--bold">{{event.name}}</a> was canceled by <a href="#profileUrl" class="text--bold">{{event.canceled_by.member_name}}</a></p>
-								<p class="text--caption">{{helpers.dateRelative(event.canceled_by.time)}}</p>
+								<p>A new Meetup was scheduled</p>
+								<p class="text--caption">{{helpers.dateRelative(time)}} by <a href="#" class="link">{{group.organizer.name}}</a></p>
 							</div>
 						</div>
 					{{/if}}
+
+				</div>
+
+				<div class="chunk _proto_statusEventContainer">
+					<div class="attachment text--small">
+						{{#event}}
+							<a href="{{event_url}}">
+								{{> contextEvent }}
+							</a>
+						{{/event}}
+					</div>
+				</div>
+				{{/if}}<!-- #if type == 'event' && event.status !== 'canceled' && latest_comment == 'undefined' -->
+
+<!--
+/////////////////////////////////////////
+// MUP STATUS 
+// Canceled
+/////////////////////////////////////////
+-->
+				{{#if type == 'event' && event.status == 'canceled'}}
+				<div class="row">
+					<div class="row-item row-item--shrink">
+						<div class="chunk">
+							<div class="avatar--icon _tweak_avatar--icon">
+								<img src="/style/img/calendar-canceled_color.svg" />
+							</div>
+						</div>
+					</div>
+					<div class="row-item">
+						<div class="chunk">
+							<p><a href="{{event.event_url}}" class="text--bold">{{event.name}}</a> was canceled by <a href="#profileUrl" class="text--bold">{{event.canceled_by.member_name}}</a></p>
+						</div>
+					</div>
+				</div>
+				<p class="text--caption">{{helpers.dateRelative(event.canceled_by.time)}}</p>
 				{{/if}}
 
-				<!--
-				// POLL
-				-->
+<!--
+/////////////////////////////////////////
+// POLL
+/////////////////////////////////////////
+-->
 				{{#if type == 'poll'}}
 					<div class="row-item--shrink">
 						<div class="chunk">

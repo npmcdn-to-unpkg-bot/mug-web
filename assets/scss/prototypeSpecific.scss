@@ -11,11 +11,49 @@ Discussion feed
 ------------------------------
 */
 
+// Discussion list
+._proto_discussionList {
+	margin: 0 -#{$space};
+
+	& > .card {
+		border-radius: 0;
+		border-left: 0;
+		border-right: none;
+	}
+
+	@include atMediaUp(medium) {
+		margin: 0;
+
+		& > .card {
+			border-radius: $defaultRadius;
+			border-left: 1px solid $C_border;
+			border-right: 1px solid $C_border;
+		}
+
+	}
+
+}
+
+//
+// Context Event
+//
+// wrapper for MUPs when it's just displayed for status
+._proto_statusEventContainer {
+	margin-bottom: 0 !important;
+	._proto_card--mup {
+		border-bottom: none;
+	}
+}
+
 // Event cards that appear in the feed
 ._proto_card--mup {
-	max-width: $block-7;
+	background: $C_collectionBG;
+	border-left: none;
+	border-right: none;
+	border-radius: 0;
+	margin: 0 -#{$space};
 	min-height: 0;
-	padding: $space-half;
+	padding: $space;
 }
 
 ._proto_card--mup--past {
@@ -29,6 +67,9 @@ Discussion feed
 
 }
 
+//
+// Photos
+//
 // Flex Photos - flexbox-based photo-grid
 ._proto_flexPhotos {
 	position: relative;
@@ -51,21 +92,32 @@ Discussion feed
 	width: 100%;
 }
 
-/*
-// vertically stacked
-._proto_flexPhotos{
-	@include display(flex);
-	@include flex-flow(row wrap);
-	padding: 0;
-	.imgFill{
-		@include flex(1 0 50%);
-		@include box-sizing(border-box);
-		border: 2px solid $C_contentBG;
-	}
+._proto_albumLink {
+	bottom: $space;
+	left: $space-half;
+	position: absolute;
 }
-*/
 
+
+//
+// Polls
+//
+.result-bar {
+	background: $C_collectionBG;
+	border-radius: 999px;
+	height: $media-xs;
+	overflow: hidden;
+}
+.result-bar-progress {
+	background: $C_contentBGInverted;
+	// border-radius: 999px;
+	height: 100%;
+	width: 0; //will get set by js
+}
+
+//
 // Link to the remaining MUP comments
+//
 ._proto_contentDisclosure {
 	@include background-image(linear-gradient(top, 
 		$C_contentBG 0%, $C_contentBG 47%, 
@@ -108,18 +160,10 @@ Discussion feed
 
 }
 
-// Polls
-.result-bar {
-	background: $C_collectionBG;
-	border-radius: 999px;
-	height: $media-xs;
-	overflow: hidden;
-}
-.result-bar-progress {
-	background: $C_contentBGInverted;
-	// border-radius: 999px;
-	height: 100%;
-	width: 0; //will get set by js
+._proto_replyInput {
+	height: ($font-size * $line-height) + $space;
+	margin-bottom: 0;
+	min-height: 0;
 }
 
 /*
@@ -130,6 +174,7 @@ Posting interface
 
 // At the top of the feed
 ._proto_postBox {
+	background: $C_contentBG;
 	border: 1px solid $C_border;
 	border-radius: 999px $defaultRadius $defaultRadius 999px;
 	padding: 0 $space-half 0 0;

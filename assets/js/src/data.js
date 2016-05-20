@@ -16,14 +16,14 @@ var groupId = getParameterByName('mugID') || '1579989',
 		// zip     = 60606
 
 var views = new ViewManager(function(){
-	gimme.apiKey = "715d68731b3913292f447f4c45547"; // 1e84f701a17435513a17796245794d 7060231d422c3421e3c13406e606631
+	gimme.apiKey = "1e84f701a17435513a17796245794d"; // 7060231d422c3421e3c13406e606631 715d68731b3913292f447f4c45547
 
 	// ↓ ↓ ↓ ↓ Where we pick which data we want ↓ ↓ ↓ ↓
 	var shoppingList = [
 			// {"gimme": "groups", "data": {"page": 8, "zip": zip}},
 			{"gimme": "group", "data": {"group_id": groupId} },
 
-			{"gimme": "events", "key": "events_short", "data": {"group_id": groupId, "page": 3}},
+			// {"gimme": "events", "key": "events_short", "data": {"group_id": groupId, "page": 3}},
 			// {"gimme": "events", "key": "events_long", "data": {"group_id": groupId, "page": 20}},
 
 			{"gimme": "events", "key": "events_recent", "data": {"status": "past", "group_id": groupId, "page": 5, "desc": true}},
@@ -54,6 +54,8 @@ var views = new ViewManager(function(){
 			events_recent: views.data.events_recent,
 			discussions: views.data.boards_posts
 		});
+
+		console.log(views.data.news);
 
 		// ----------------------------------------------
 		// Data manipulation
