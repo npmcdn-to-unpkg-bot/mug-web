@@ -49,7 +49,14 @@ View.prototype = {
 		// special setups for special types
 		switch (this.type) {
 			case "split":
-				this.$el.addClass('view--splitList');
+				this.$el.addClass('view--splitView view--modal-full off').hide();
+				this.$body.addClass('flexParent--row');
+				break;
+			case "splitList":
+				this.$el.addClass('view--splitList').hide();
+				break;
+			case "splitDetail":
+				this.$el.addClass('view--splitDetail').hide();
 				break;
 			case "modal-full":
 				// always full at all widths

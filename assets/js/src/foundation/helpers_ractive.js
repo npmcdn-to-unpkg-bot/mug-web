@@ -394,7 +394,7 @@ function defaultRenderCompleteActions($el){
 	//$el.find('.hscroll').hscroll();
 	//$el.find('.exactlist').exactlist();
 	// $el.find('.tabs').tabs();
-	autosize($el.find('textarea'));
+	// autosize($el.find('textarea'));
 	priorityPlusSetup();
 
 	// special platform emulation class magic

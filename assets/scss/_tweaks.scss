@@ -197,8 +197,33 @@ $dotTimeBase: 500;
 //       Come up with plan for animations in SQ3.
 */
 
-$trans-dur   : 200ms;
-$trans-curve : ease-in;
+$trans-dur       : 200ms;
+$trans-dur--fast : 120ms;
+$trans-curve     : ease-in;
+
+@include keyframes(like) {
+	0%, 100% {
+		@include transform(scale(1));
+		box-shadow: inset 0 0 1px 0 transparentize($C_accent, 1);
+	}
+	30% {
+		@include transform(scale(1.4));
+		box-shadow: inset 0 0 1px 8px transparentize($C_accent, .4);
+	}
+}
+
+@include keyframes(bounce) {
+	0%, 100% {
+		@include transform(scale(1));
+	}
+	30% {
+		@include transform(scale(1.2));
+	}
+}
+
+.anim--bounce {
+	@include animation(bounce $trans-dur $trans-curve);
+}
 
 /* NEW: _transitions.scss */
 .trans {

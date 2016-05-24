@@ -22,7 +22,9 @@ var ViewManager = function(oninit) {
 	this._main = null;
 	this._modal = null;
 	this._media = null;
-	this._split = null;
+	// this._split = null;
+	this._splitList = null;
+	this._splitDetail = null;
 
 	// momentary
 	this._momentary = null;
@@ -79,55 +81,62 @@ ViewManager.prototype = {
 				this._main.current_view.observe(options.observe);
 			if(options.header)
 				this._main.update_header(options.header);
-      	 	$(window).scrollTop(0);
+				$(window).scrollTop(0);
 		}
 
 	},
 
 	split_show: function(split_options, main_options) {
+		var self = this;
 		this.modal_hide();
 		this.media_hide();
 
-		// render split
-		this._split.$el.removeClass('off');
-		if (this._split.show(split_options.template)) {
+		var completeSplit = function() {
+			self._split.$header.detach();
+			$(self._split.$body).append(self._splitList.$el);
+			$(self._split.$body).append(self._splitDetail.$el);
+			self._main.$el.hide();
+			self._split.$el.removeClass('off').show();
+			self._splitList.$el.show();
+			self._splitDetail.$el.show();
+		};
+
+		if (this._splitList.show(split_options.template)) {
 			if(split_options.events)
-				this._split.current_view.on(split_options.events);
+				this._splitList.current_view.on(split_options.events);
 			if(split_options.observe)
-				this._split.current_view.observe(split_options.observe);
+				this._splitList.current_view.observe(split_options.observe);
 			if(split_options.header)
-				this._split.update_header(split_options.header);
+				this._splitList.update_header(split_options.header);
 		}
 
-		// render main
-		this._main.$el.addClass('view--splitDetail focus');
-		if (this._main.show(main_options.template)) {
+		if (this._splitDetail.show(main_options.template, completeSplit)) {
 			if(main_options.events)
-				this._main.current_view.on(main_options.events);
+				this._splitDetail.current_view.on(main_options.events);
 			if(main_options.observe)
-				this._main.current_view.observe(main_options.observe);
+				this._splitDetail.current_view.observe(main_options.observe);
 			if(main_options.header)
-				this._main.update_header(main_options.header);
+				this._splitDetail.update_header(main_options.header);
 		}
 
 	},
 
 	split_hide: function() {
-		this._main.$el.removeClass('view--splitDetail').removeClass('focus');
-		this._split.$el.addClass('off').removeClass('focus');
-		this._split.teardown();
-		this._split.current_href = null;
+		this._main.$el.show();
+		this._split.$el.addClass('off').hide();
+		this._splitList.$el.hide();
+		this._splitDetail.$el.hide();
 	},
 
 	focus: function(view) {
 		switch (view) {
-			case "split":
-				this._main.$el.removeClass('focus');
-				this._split.$el.addClass('focus');
+			case "splitList":
+				this._splitDetail.$el.removeClass('focus');
+				this._splitList.$el.addClass('focus');
 				break;
 			default:
-				this._main.$el.addClass('focus');
-				this._split.$el.removeClass('focus');
+				this._splitDetail.$el.addClass('focus');
+				this._splitList.$el.removeClass('focus');
 				break;
 		}
 		$(window).scrollTop(0);
@@ -369,13 +378,15 @@ ViewManager.prototype = {
 		this._media = new View("media", this.data, "media");
 		this._modal = new View("modal", this.data, "modal-snap");
 		this._split = new View("split", this.data, "split");
+		this._splitList = new View("splitList", this.data, "splitList");
+		this._splitDetail = new View("splitDetail", this.data, "splitDetail");
 
 		// shade -- the x should get pulled out into css
 		this._$shade = $('<div class="shade off"><div class="x">close</div></div>').appendTo('body').hide();
 
 		// attach "escape" and "back" events
 		var self = this;
-		$.each([this._main, this._split, this._modal, this._media], function(i, v) {
+		$.each([this._main, this._split, this._splitList, this._splitDetail, this._modal, this._media], function(i, v) {
 			v.header_view.on({
 				'back': function(event) {
 					self.back();

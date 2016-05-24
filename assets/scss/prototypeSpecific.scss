@@ -4,6 +4,8 @@
 @import 'hacks'; // SHAMEFUL QUICKFIXES
 @import 'icons';
 @import 'nav';
+@import 'proto_momentary'; // STYLES FOR POPOVER
+
 
 /*
 ------------------------------
@@ -32,6 +34,10 @@ Discussion feed
 
 	}
 
+}
+
+._proto_discussion-replies ._proto_discussion-reply {
+	display: none;
 }
 
 //

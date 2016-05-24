@@ -121,11 +121,12 @@ Momentary.prototype = {
 
 	hide: function(){
 		var self = this;
-    	self.$el.addClass('off');
-    	self.$el.one(transitionEnd, function(){
-			self.current_view.teardown();
-    	});
-    	console.log('hide firing');
+			self.$el.addClass('off');
+			self.$el.one('transitionend', function(e){
+				if ($(e.currentTarget).hasClass('off')) {
+					self.current_view.teardown();
+				}
+			});
 	}
 
 };

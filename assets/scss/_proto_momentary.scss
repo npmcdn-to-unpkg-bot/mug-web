@@ -1,0 +1,113 @@
+//
+// Momentary base styles
+//
+$pointer-size: 4px;
+@mixin pointers-for-box($size, $background, $border){
+    &:before, &:after{
+        position: absolute;
+    }
+    $vertical: 'top', 'bottom';
+    $horizontal: 'left', 'right';
+    $directions: (top: 'n', bottom: 's');
+    @each $v in $vertical{
+        @each $h in $horizontal{
+            &.#{$v}-#{$h}{
+                @if $border{
+                    &:before{
+                        #{$v}: -($size + 1px);
+                        #{$h}: -1px;
+                        @include triangle( map-get($directions, $v), $border, $size+1);
+                        @include pseudoDisplay(block);
+                    }
+                    &:after{
+                        #{$v}: -($size);
+                        #{$h}: 0;
+                        @include triangle(map-get($directions, $v), $background, $size);
+                        @include pseudoDisplay(block);
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+.momentary {
+  @include transition(transform 150ms $ease-in-quart, opacity 150ms $ease-in-quart);
+  @include transform(translateY(0));
+  @extend %shadow;
+  background: $C_contentBG;
+  border: 1px solid $C_border;
+  border-radius: $defaultRadius;
+  opacity: 1;
+  position: absolute;
+  min-width: 100px;
+  z-index: 1;
+
+  &.off {
+    opacity: 0;
+  }
+
+  &.top-left{
+      margin-left: -($pointer_size);
+  }
+  &.top-right{
+      margin-left: $pointer_size;
+  }
+
+  .momentary-btn-list {
+    background: $C_contentBG;
+    list-style: none;
+    margin: 0;
+    padding-left: 0;
+  }
+
+  li {
+    a {
+      display: block;
+      height: $block;
+      line-height: $block;
+      min-width: 100%;
+      box-sizing: border-box;
+      padding: 0 $space-half;
+      @extend %buttonPersonality;
+    }
+  }
+
+  .ios-cancel {
+    display: none;
+  }
+}
+
+//
+// Momentary popover styles
+//
+.momentary-popover {
+  @include pointers-for-box($pointer_size, $C_contentBG, $C_border);
+  margin-top: $pointer_size;
+  .momentary-btn-list {
+    border: none;
+    border-radius: $defaultRadius;
+  }
+
+  li {
+    border-top: 1px solid $C_border;
+    &:first-child {
+      border-top: none;
+    }
+  }
+
+  &.off {
+    @include transform(translateY(-10px));
+  }
+
+}
+
+.overlayScreen {
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 0;
+}

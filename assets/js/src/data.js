@@ -16,7 +16,7 @@ var groupId = getParameterByName('mugID') || '1579989',
 		// zip     = 60606
 
 var views = new ViewManager(function(){
-	gimme.apiKey = "1e84f701a17435513a17796245794d"; // 7060231d422c3421e3c13406e606631 715d68731b3913292f447f4c45547
+	gimme.apiKey = "7060231d422c3421e3c13406e606631"; // 1e84f701a17435513a17796245794d 715d68731b3913292f447f4c45547
 
 	// ↓ ↓ ↓ ↓ Where we pick which data we want ↓ ↓ ↓ ↓
 	var shoppingList = [
@@ -26,17 +26,20 @@ var views = new ViewManager(function(){
 			// {"gimme": "events", "key": "events_short", "data": {"group_id": groupId, "page": 3}},
 			// {"gimme": "events", "key": "events_long", "data": {"group_id": groupId, "page": 20}},
 
-			{"gimme": "events", "key": "events_recent", "data": {"status": "past", "group_id": groupId, "page": 5, "desc": true}},
+			// {"gimme": "events", "key": "events_recent", "data": {"status": "past", "group_id": groupId, "page": 3, "desc": true}},
 
 			// {"gimme": "events_meta", "data": {"page": 20, "group_id": groupId}},
 			// {"gimme": "photo_albums", "data": {"page": 30, "group_id": groupId}},
 			// {"gimme": "members", "data":{"group_id": groupId, "page": 32}},
 
-			// {"gimme": "boards", "key": "boards_posts", data:{"urlkey": urlname, "page": 3}, children: [
-			// 	{"gimme": "discussions", data:{"urlkey": urlname, "page": 3}, "match": [["id", "board_id"]], children: [
-			// 		{"gimme": "posts", data:{"urlkey": urlname,  "page": 2}, "match": [["id", "discussion_id"],["board.id", "board_id"]] }
-			// 	]}
-			// ]}
+			// {"gimme": "photo_albums", "data": {"page": 10, "group_id": groupId}},
+			// {"gimme": "photos", "key": "mup_photos", "data": {"page": 20, "group_id": groupId}},
+
+			{"gimme": "boards", "key": "boards_posts", data:{"urlkey": urlname, "page": 2}, children: [ // Which boards to pull?
+				{"gimme": "discussions", data:{"urlkey": urlname, "page": 2}, "match": [["id", "board_id"]], children: [ // Which threads from those boards?
+					{"gimme": "posts", data:{"urlkey": urlname,  "page": 2}, "match": [["id", "discussion_id"],["board.id", "board_id"]] } // Which posts from those threads?
+				]}
+			]}
 
 	];
 	// ↑ ↑ ↑ ↑ Where we pick which data we want ↑ ↑ ↑ ↑

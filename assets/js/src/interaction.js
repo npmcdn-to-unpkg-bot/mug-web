@@ -1,7 +1,9 @@
 /*
------------------------------
+//////////////////////////////////////////////////////////
+----------------------------------------------------------
 	DOCUMENT READY
------------------------------
+----------------------------------------------------------
+//////////////////////////////////////////////////////////
 */
 function main_onComplete() {
 	console.log('DOM is ready');
@@ -16,9 +18,11 @@ function main_onComplete() {
 }
 
 /*
------------------------------
+//////////////////////////////////////////////////////////
+----------------------------------------------------------
 	GLOBAL NAVIGATION
------------------------------
+----------------------------------------------------------
+//////////////////////////////////////////////////////////
 */
 function renderNavigation() {
 	if ($('.mainNav').length < 1) {
@@ -60,9 +64,11 @@ function renderNavigation() {
 }
 
 /*
------------------------------
+//////////////////////////////////////////////////////////
+----------------------------------------------------------
 POST TO CONVERSATION
------------------------------
+----------------------------------------------------------
+//////////////////////////////////////////////////////////
 */
 
 //
@@ -97,8 +103,16 @@ function post_text(event){
 //
 // Photo post
 //
-function choosePhotos(event){
-	$('#photoFileInput').click();
+function choosePhotos1(event){
+	$('#photoFileInput1').click();
+	return false;
+}
+function choosePhotos2(event){
+	$('#photoFileInput2').click();
+	return false;
+}
+function choosePhotos3(event){
+	$('#photoFileInput3').click();
 	return false;
 }
 
@@ -110,11 +124,11 @@ function processUploadedPhotos(){
 		for(var i=0; i<photos.length; i++){
 			var photo = photos[i];
 				if (photos) {
-					 var reader = new FileReader();
-					 reader.onload = function (e) {
-					 views.data.previewPhotos.push(e.target.result);
-					 }
-					 reader.readAsDataURL(photo);
+					var reader = new FileReader();
+					reader.onload = function (e) {
+						views.data.previewPhotos.push(e.target.result);
+					}
+					reader.readAsDataURL(photo);
 			}
 		}
 		window.location.hash = '#!/create-photo-post';
@@ -215,4 +229,252 @@ function togglePollResults(event){
 	return false;
 }
 
+/*
+//////////////////////////////////////////////////////////
+----------------------------------------------------------
+DISCUSSION FEED INTERACTIONS
+----------------------------------------------------------
+//////////////////////////////////////////////////////////
+*/
 
+// "Like" a post
+function likePost(event) {
+	if(this.get(event.keypath+'.userLiked') == true){
+		event.context.like_count--;
+		this.set(event.keypath+'.userLiked', false);
+	}
+	else{
+		event.context.like_count++;
+		this.set(event.keypath+'.userLiked', true);
+	}
+	return false;
+}
+
+function focusCommentBox(event) {
+	event.original.preventDefault();
+
+	var textareaEl = $(event.node.offsetParent).find('textarea')[0];
+	$(textareaEl).focus();
+}
+
+
+//
+// NOT USED YET
+// show comment box in post
+//
+/*
+function showCommentBox(event) {
+	console.log(this.get(event.keypath+'.showCommentBox'));
+	this.set(event.keypath+'.showCommentBox', true);
+	return false;
+}
+*/
+
+// show the post button
+function showPostBtn(event) {
+	var $postBtn = $(event.node.offsetParent).find('.js-postBtnContainer');
+
+	if (event.node.value.length < 1) {
+		$postBtn.addClass('display--none');
+	} else {
+		$postBtn.removeClass('display--none');
+	}
+}
+
+// function hidePostBtn(event) {
+// 	var $postBtn = $(event.node.offsetParent).find('.js-postBtnContainer');
+// 	$postBtn.addClass('display--none');
+// }
+
+// post the comment
+function postComment(event) {
+	var textareaEl    = $(event.node.parentNode).siblings('.chunk').find('textarea')[0],
+			$postBtn      = $(event.node.offsetParent).find('.js-postBtnContainer'),
+			replyCount    = this.get(event.keypath+'.latest_comment.replyCount'),
+			$replyCounter = $(event.node.offsetParent).find('.replyCounter');
+
+	if (replyCount) {
+		this.set(event.keypath+'.latest_comment.replyCount', replyCount+1);
+	} else {
+		this.set(event.keypath+'.latest_comment.replyCount', 1);
+	}
+
+	this.push(event.keypath+'.posts', {
+		"member": {
+			"photo": {"thumb": views.data.current_member.photo },
+			"name": views.data.current_member.name
+		},
+		"created": moment(),
+		"updated": moment(),
+		"time": moment(),
+		"like_count": 0,
+		"body": textareaEl.value //probably not the best way to do this...
+	});
+
+	// kind of hacky
+	$replyCounter.addClass('anim--bounce');
+	$postBtn.addClass('display--none');
+	textareaEl.value = '';
+	// this.set(event.keypath+'.showCommentBox', false);
+
+	return false;
+}
+
+// Comment overflow actions
+function toggleCommentPopover(event){
+	event.original.preventDefault();
+
+	views.momentary_show({
+		$target: $(event.node),
+		type	 : 'popover',
+		buttons: [
+			{label: 'Link to post', fn: function(){console.log('Open dialog with copy link input');}},
+			{label: 'Report', fn: function(){console.log('Post reported');}},
+			{label: 'Mute', fn: function(){console.log('Post muted');}}
+		]
+	});
+}
+
+
+/*
+//////////////////////////////////////////////////////////
+----------------------------------------------------------
+PHOTO BROWSING
+----------------------------------------------------------
+//////////////////////////////////////////////////////////
+*/
+// Toggle edit mode in albums. Only orgs get this
+function enter_album_edit_mode(event) {
+	$('#albumHeroContent').addClass('display--none');
+	$('#photoUploadNewContainer').css('display', 'none'); //adding '.display--none' doesn't work
+	$('#photoAlbumGrid .thumb-content').removeClass('display--none');
+	$('#photoAlbumGrid .thumb').addClass('thumbScrim');
+	$(views._main.$header).removeClass('view-head--transparent view-head--photoOverlay');
+
+	views._main.update_header({
+		title: "Album Name",
+		subtitle: "n photos",
+		cancelMode: {
+			label: "Cancel",
+			icon: "arrow-left",
+			fn: confirm_cancel_album_edits
+		},
+		buttons: [
+			{ label: "Delete", icon: "trash", fn: confirm_delete_album },
+			{ label: "Save", fn: exit_album_edit_mode}
+		]
+	});
+}
+
+// Delete photo (from album view)
+function delete_photo(event) {
+	var $thumbContainer = $(event.node).parents('li');
+	$thumbContainer.remove();
+}
+
+// Delete photo (from photo detail view)
+function delete_photo_fromPopover(event) {
+	views.dialog_show({
+		headline: "Delete this photo?",
+		primaryAction: { label: "Delete photo", fn: function(){ alert('delete photo'); }},
+		dismissText: "Cancel"
+	});
+}
+
+function confirm_delete_album() {
+	views.dialog_show({
+		headline: "Delete this album?",
+		body: "Deleting this album will remove this album and it's photos from your Meetup group",
+		primaryAction: { label: "Delete album", fn: delete_album },
+		dismissText: "Cancel"
+	});
+}
+
+function delete_album() {
+	views.dialog_hide();
+	views.data.photo_albums.splice(0,1); //replace the '0' with the right number
+	if(/\/\d+$/ig.test(window.location.href)) { //just checks if url contains a slash and a digit
+		views.back();
+	}
+	views.toast_show({
+		message	 : 'Album Name has been deleted',
+		button: {label: "Undo", fn: function(){ alert('Reverse the action'); }}
+	});
+}
+
+// pop up modal confirming to cancel changes
+function confirm_cancel_album_edits() {
+	views.dialog_show({
+		headline: "Discard changes to this album?",
+		// body: "This dialog had better be telling me something pretty god damn important since you decided to get all up in the face of the user",
+		primaryAction: { label: "Discard changes", fn: exit_album_edit_mode },
+		dismissText: "Continue Editing"
+	});
+}
+
+// cancel any changes made to the album
+function exit_album_edit_mode() {
+	views.dialog_hide();
+	$('#albumHeroContent').removeClass('display--none');
+	$('#photoUploadNewContainer').removeAttr('style');
+	$('#photoAlbumGrid li:not("#photoUploadNewContainer") .thumb-content').addClass('display--none');
+	$('#photoAlbumGrid .thumb').removeClass('thumbScrim');
+	$(views._main.$header).addClass('view-head--transparent view-head--photoOverlay');
+
+	views._main.update_header({
+		title: "Album Name",
+		subtitle: "n photos",
+		buttons: [
+			{ label: "Edit", fn: enter_album_edit_mode }
+		]
+	});
+}
+
+function activateItem(event) {
+	$(event.node.parentNode).find('.item--active').removeClass('item--active');
+	$(event.node).addClass('item--active');
+}
+
+function paginate_list(evt, pg){
+	var limit = $(evt.node.parentElement.previousElementSibling).children('li:not(".display--none")').length + pg;
+	$(evt.node).addClass('display--none');
+	$('<div class="endlessLoader"></div>').insertAfter($(evt.node));
+	setTimeout(function(){ //artificially slowing it down
+		$(evt.node.parentElement.previousElementSibling).children('li:lt(' + limit + ')').removeClass('display--none').removeAttr('style');
+	}, 1000);
+}
+
+function see_all_albums(event) {
+	paginate_list(event, 5);
+}
+
+function see_all_photos(event) {
+	paginate_list(event, 20);
+}
+
+function keyboard_photo_nav(){
+	window.addEventListener('keyup', function(event){
+
+		switch(event.keyCode) {
+
+			//left arrow
+			case 39:
+				alert('go to previous photo');
+				break;
+
+			//right arrow
+			case 37:
+				alert('go to next photo');
+				break;
+
+			//ESC
+			case 27:
+				views.media_hide();
+				window.location.hash = "";
+				break;
+
+			default:
+				return false;
+		}
+	});
+}

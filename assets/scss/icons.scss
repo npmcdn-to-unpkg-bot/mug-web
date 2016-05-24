@@ -31,8 +31,20 @@
 //
 // Style the icons
 //
-.icon--hint use {
+.icon--hint use,
+.userLiked--false use,
+.userLiked--undefined use {
 	fill: $C_border;
+}
+
+.userLiked--true {
+	@include animation(like 150ms ease-in);
+	border-radius: 999px;
+
+	use {
+		fill: $C_accent;
+	}
+
 }
 
 .icon--textInline {
