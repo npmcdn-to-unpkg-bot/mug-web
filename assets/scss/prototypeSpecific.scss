@@ -5,7 +5,7 @@
 @import 'icons';
 @import 'nav';
 @import 'proto_momentary'; // STYLES FOR POPOVER
-
+// @import 'proto_photoDetail'; // STYLES FOR POPOVER
 
 /*
 ------------------------------
@@ -46,13 +46,13 @@ Discussion feed
 // wrapper for MUPs when it's just displayed for status
 ._proto_statusEventContainer {
 	margin-bottom: 0 !important;
-	._proto_card--mup {
+	._proto_card--postAttach {
 		border-bottom: none;
 	}
 }
 
 // Event cards that appear in the feed
-._proto_card--mup {
+._proto_card--postAttach {
 	background: $C_collectionBG;
 	border-left: none;
 	border-right: none;
@@ -62,7 +62,7 @@ Discussion feed
 	padding: $space;
 }
 
-._proto_card--mup--past {
+._proto_card--postAttach--past {
 
 	// .dateDisplay-day,
 	// .dateDisplay-month,
@@ -103,6 +103,10 @@ Discussion feed
 	left: $space-half;
 	position: absolute;
 }
+
+//
+// Photo Detail View
+//
 
 
 //
@@ -184,6 +188,12 @@ Posting interface
 	border: 1px solid $C_border;
 	border-radius: 999px $defaultRadius $defaultRadius 999px;
 	padding: 0 $space-half 0 0;
+}
+
+._proto_selector-wrapper {
+	border-bottom: 1px solid $C_border;
+	margin: 0 -#{$space};
+	padding: $space-half $space;
 }
 
 //

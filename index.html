@@ -18,6 +18,11 @@
 	<script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
 	<script type="text/javascript" src="assets/js/dist/depends.min.js"></script>
 
+	<!-- Link preview -->
+	<script src="http://cdn.embed.ly/jquery.embedly-3.0.5.min.js" type="text/javascript"></script>
+	<script src="http://cdn.embed.ly/jquery.preview-0.3.2.min.js" type="text/javascript"></script>
+	<!-- <link rel="stylesheet" href="http://cdn.embed.ly/jquery.preview-0.3.2.css" /> -->
+
 </head>
 
 <body class="lang_en ieRoot_modern">
@@ -75,7 +80,20 @@ HEADER AREA
 DISCUSSION FEED
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 -->
-	<section class="stripe stripe--collection"><div class="bounds">{{#if news.length < 1}}<p class="text--secondary chunk">No news is good news. Right?</p>{{else}}<div id="discussions">
+	<section class="stripe stripe--collection"><div class="bounds">{{#if news.length < 1}}
+	<!-- <div class="chunk">
+		<form id="preview_form" class="form-vertical" method="post" action=".">
+		<div class="large-9 small-9 columns">
+			<input type="text" class="xlarge" name="url" id="id_url" placeholder="Enter a URL"/>
+		</div>
+
+		<div class="selector-wrapper"></div>
+		</form>
+	</div> -->
+<div class="chunk" id="feed">
+</div>
+	<p class="text--secondary chunk">No news is good news. Right?</p>
+	{{else}}<div id="discussions">
 
 		<div class="row chunk _proto_postBox">
 			<a href="javascript:void(0)" class="row row-item" on-click="toggle_post_popover">
@@ -95,7 +113,7 @@ DISCUSSION FEED
 ///////////////////////////////////////////////
 -->
 				{{#if type == 'discussion'}}
-				<div class="row">
+				<div class="row chunk attachment">
 					<div class="row-item row-item--shrink">
 						<div class="avatar avatar--person avatar--small" style="background-image: url({{top_post.member.photo.thumb}});"></div>
 					</div>
@@ -107,6 +125,27 @@ DISCUSSION FEED
 				<div class="expandableContent chunk">
 					<p>{{top_post.body}}</p>
 				</div>
+
+				{{#link}}
+				<div class="_proto_card--postAttach attachment chunk">
+					<a href="{{original_url}}">
+						<span class="row chunk">
+							<span class="row-item row-item--shrink">
+								<span class="thumb media--l" style="background-image:url({{thumbnail_url}})"></span>
+							</span>
+							<span class="row-item valign--middle">
+								<a href="{{original_url}}" class="link">{{title}}</a>
+								<p class="display--none atMedium_display--block">{{description}}</p>
+							</span>
+						</span>
+						<p class="display--block atMedium_display--none chunk">{{description}}</p>
+						<span class="row text--caption">
+							<span class="row-item row-item--shrink thumb" style="background-image:url({{favicon_url}}); background-color: transparent; width: 16px; height: auto;"></span>
+							<span class="row-item valign--middle">{{provider_display}}</span>
+						</span>
+					</a>
+				</div>
+				{{/link}}
 
 				<div class="chunk">
 					{{> postActions }}
@@ -178,12 +217,12 @@ DISCUSSION FEED
 
 					<div class="_proto_flexPhotos-wrapper chunk row inverted">
 						<a href="#!/albums" class="_tweak_button--contrast _proto_albumLink button button--contrast" data-event-id="{{event.id}}">View album</a>
-						<a href="#!/photo-detail/{{event.id}}" data-event-id="{{event.id}}" class="row-item chunk imgFill _proto_flexPhotos--lg" data-photo-id="{{photos[0].photo_id}}" style="background-image: url({{photos[0].photo_link}});"></a>
+						<a href="#!/photo-detail/{{photos[0].photo_id}}" data-event-id="{{event.id}}" class="row-item chunk imgFill _proto_flexPhotos--lg" style="background-image: url({{photos[0].photo_link}});"></a>
 						{{#if photos.length > 1}}
 							<span class="row-item row-item--shrink column _proto_flexPhotos--sm">
-								<a href="#!/photo-detail" class="chunk imgFill column-item" style="background-image:url('{{photos[1].photo_link}}')"></a>
+								<a href="#!/photo-detail/{{photos[1].photo_id}}" class="chunk imgFill column-item" style="background-image:url('{{photos[1].photo_link}}')"></a>
 								{{#if photos.length > 2}}
-									<a href="#!/photo-detail" class="chunk imgFill column-item" style="background-image:url('{{photos[2].photo_link}}')"></a>
+									<a href="#!/photo-detail/{{photos[2].photo_id}}" class="chunk imgFill column-item" style="background-image:url('{{photos[2].photo_link}}')"></a>
 								{{/if}}
 							</span>
 						{{/if}}
@@ -486,7 +525,7 @@ Attached in feed posts
 /////////////////////////////////////////////////////
 -->
 <script id="contextEvent" type="text/template">
-	<div class="card _proto_card--mup _proto_card--mup--{{status}} attachment">
+	<div class="card _proto_card--postAttach _proto_card--postAttach--{{status}} attachment">
 	{{#if status !== 'past'}}
 
 		<div class="row">
@@ -588,8 +627,11 @@ Template: Posting interface
 			</div>
 		</div>
 
-		<div class="chunk">
+		<div class="chunk attachment">
 			<textarea id="post-textarea"></textarea>
+
+			<div class="selector-wrapper _proto_selector-wrapper chunk display--none"></div>
+
 		</div>
 		<div class="row chunk">
 			<div class="row-item row-item--shrink valign--middle" on-click="choosePhotos2">{{{helpers.svgIcon('camera', 'valign--middle')}}}</div>
@@ -986,18 +1028,18 @@ Template: Photo Detail View
 /////////////////////////////////////////////////////
 -->
 <script id="photoDetail" type="text/template">
-
-	<div class="stripe--media inverted">
+<!--
+	<div class="stripe--media inverted spreadable-item">
 		<div class="bounds">
 
 			<a href="javascript:void(0)" on-click="show_prev_photo" class="mediaNav mediaNav--prev"><i class="fa fa-chevron-left mediaNav-icon"></i></a>
 			<a href="javascript:void(0)" on-click="show_next_photo" class="mediaNav mediaNav--next"><i class="fa fa-chevron-right mediaNav-icon"></i></a>
-			<img class="media" src="http://photos2.meetupstatic.com/photos/event/9/6/3/1/600_438878449.jpeg" alt="test"/>
+			<img class="media span--100" src="{{displayed_photo.highres_link}}" alt="test"/>
 
 		</div>
 	</div>
 
-	<div class="stripe">
+	<div class="stripe spreadable-item">
 		<div class="bounds attachment">
 			<div class="chunk">
 				<p>Fun times!</p>
@@ -1015,12 +1057,8 @@ Template: Photo Detail View
 					<p class="wrap--singleLine--truncate">Shallow Cliffs 9 Mile fast paced hike</p>
 				</div>
 			</a>
-
 		</div>
-	</div>
-
-	<div class="stripe">
-		<div class="bounds attachment">
+		<div class="bounds attachment bordered">
 
 			<div class="attachment text--small">
 				<div class="chunk">
@@ -1077,8 +1115,123 @@ Template: Photo Detail View
 		</div>
 
 	</div>
+-->
+
+<div class="view view--mediaContent spreadable-item">
+	<div class="view-body view-body--mediaContent" style="background-image: url({{displayed_photo.highres_link}});">
+		<a class="mediaNav mediaNav--prev" rel="prev" href="#">
+			<span class="mediaNav-icon">&#10094;</span>
+		</a>
+		<a class="mediaNav mediaNav--next" rel="next" href="#">
+			<span class="mediaNav-icon">&#10095;</span>
+		</a>
+	</div>
+</div>
+
+<div class="view view--mediaMeta spreadable-item spreadable-item--shrink">
+	<div class="view-body">
+		<section class="stripe border--none">
+			<div class="bounds bounds--mediaMeta attachment">
+				<div class="chunk">
+					<p>Photo caption</p>
+					<!-- <p class="text--secondary">&mdash; with <a class="link" href="#">somebody</a></p> -->
+				</div>
+				<div class="chunk">
+					<p class="text--caption">Added to <a href="{{group.link}}" class="link">{{group.name}}</a> by <a href="#" class="link">{{displayed_photo.member.name}}</a> on {{helpers.dateFormat(displayed_photo.created)}}</p>
+				</div>
+
+				{{#if displayed_photo.event_data}}
+					<div class="chunk bordered text--small">
+						<a class="link row" href="{{displayed_photo.event_data.event_url}}">
+							{{{helpers.svgIcon('calendar', 'row-item row-item--shrink valign--middle')}}} 
+							<span class="row-item">{{displayed_photo.event_data.name}}</span>
+						</a>
+					</div>
+				{{/if}}
+
+			</div>
+		</section>
+		<section class="stripe">
+
+			<div class="bounds bounds--mediaMeta attachment">
+				<div class="attachment text--small">
+					<div class="chunk">
+						<p class="text--small"><strong>2 Likes</strong> &middot; <a href="#" class="link">Like</a> &middot; <a href="#" class="link">Comment</a> &middot; <a href="#!/tag-members" class="link">Tag members</a></p>
+					</div>
+
+					<ul class="list">
+
+						<li class="row">
+							<div class="row-item--shrink">
+								<div class="chunk ">
+									<div class="avatar avatar--person avatar--small" style="background-image: url(http://lorempixel.com/people/50/50);"></div>
+								</div>
+							</div>
+							<div class="row-item">
+								<div class="chunk">
+									<p><strong>Member Name</strong> <span class="expandableContent--inline">What a great photo! Our group is the coolest.</span></p>
+								</div>
+							</div>
+						</li>
+
+						<li class="row">
+							<div class="row-item--shrink">
+								<div class="chunk ">
+									<div class="avatar avatar--person avatar--small" style="background-image: url(http://lorempixel.com/people/48/48);"></div>
+								</div>
+							</div>
+							<div class="row-item">
+								<div class="chunk">
+									<p><strong>Member Name</strong> <span class="expandableContent--inline">Yea, that was such a fun day we had. Thanks for uploading this to the event album.</span></p>
+								</div>
+							</div>
+						</li>
+
+						<li class="row">
+							<div class="row-item--shrink">
+								<div class="chunk">
+									<div class="avatar avatar--person avatar--small" style="background-image: url({{current_member.photo}});"></div>
+								</div>
+							</div>
+							<div class="row-item">
+								<div class="chunk">
+									<textarea placeholder="Write a comment&hellip;" on-keyup="showPostBtn"></textarea>
+								</div>
+								<div class="chunk align--right display--none postBtnContainer">
+									<button class="button button--primary button--small" on-click="postComment">Post</button>
+								</div>
+							</div>
+						</li>
+
+					</ul>
+				</div>
+
+			</div>
+		</section>
+	</div>
+</div>
 
 </script>
+
+<!--
+<script>
+	// Set up preview.
+	$('#url').preview({key:'3ed15b53335b475b850d014fdb84c97a'})
+
+	// On submit add hidden inputs to the form.
+	$('form').on('submit', function(){
+		$(this).addInputs($('#url').data('preview'));
+		return true;
+	});
+
+
+	// On submit add hidden inputs to the form.
+	$('form').on('submit', function(){
+	  $(this).addInputs($('#url').data('preview'));
+	  return true;
+	});
+</script>
+-->
 
 <!-- SVG icons -->
 <div id='icon-container'></div>

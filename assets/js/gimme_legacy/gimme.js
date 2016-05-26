@@ -23,10 +23,12 @@ var gimme = {
 			var buildChildShoppingList = function(parentData, children){
 				var shoppingList = [];
 				for(var c=0; c<children.length; c++){
+					console.log(children[c]);
 					var child = children[c];
 					var match = child.match;
 
 					for(var m=0; m<match.length; m++){
+						console.log(match[m]);
 						var parent_match, child_match;
 						if( Array.isArray(match[m]) ){
 							parent_match = match[m][0];
@@ -178,6 +180,8 @@ var defaults = {
 	page: 20,
 	event_id: 223601492,
 	group_id: 1227102,
+	photo_id: 450326858,
+	photo_album_id: 26970146,
 	urlkey: 'shutterbugexcursions',
 	board_id: 854675,
 	member_id: 95860782,
@@ -195,10 +199,12 @@ var defaults = {
 
 var inventory = {
 
-// single event
+// single event - THIS IS DEPRACATED
+/*
 event: function( item ){
 	var event_id = item.event_id || defaults.event_id;
 	delete item.event_id; // api does not like alphanumic ghost ids as a param
+	console.log(event_id);
 	return {
 		method: '2/event/'+event_id,
 		parse: function(data){
@@ -209,6 +215,7 @@ event: function( item ){
 		}
 	};
 },
+*/
 
 // non-private events from groups across the system
 open_events: function( item ){
@@ -279,6 +286,37 @@ events: function( item ){
 		},
 		data: {
 			group_id: defaults.group_id,
+			page: defaults.page,
+			status: defaults.event_status,
+            limited_events: true,
+            text_format: 'plain',
+			"fields": "venue_visibility,comment_count,photo_count,rsvp_rules,group_photo",
+			desc: defaults.event_desc
+		}
+	};
+},
+
+// get a single event by event_id
+event: function( item ){
+	return {
+		method: '2/events/',
+		parse: function(data){
+			var events = data.results.map( function(n, i){
+				if( typeof n.group.photos !== 'undefined' && n.group.photos.length > 0 ){
+					n.group.photo = n.group.photos[0].photo_link;
+					n.group.photo_large = n.group.photos[0].highres_link;
+				}
+				else if( typeof n.group.group_photo !== 'undefined'){
+					n.group.photo = n.group.group_photo.photo_link;
+					n.group.photo_large = n.group.group_photo.highres_link;
+				}
+				return n;
+			});
+
+			return events;
+		},
+		data: {
+			event_id: defaults.event_id,
 			page: defaults.page,
 			status: defaults.event_status,
             limited_events: true,
@@ -557,6 +595,7 @@ photo_albums: function( item ){
 			return data.results;
 		},
 		data: {
+			photo_album_id: defaults.photo_album_id,
 			group_id: defaults.group_id
 		}
 	};
@@ -571,6 +610,18 @@ photos: function( item ){
 		data: {
 			group_id: defaults.group_id,
 			fields: 'member_photo'
+		}
+	};
+},
+
+photo: function( item ){
+	return {
+		method: '2/photos',
+		parse: function(data){
+			return data.results;
+		},
+		data: {
+			photo_id: defaults.photo_id
 		}
 	};
 },

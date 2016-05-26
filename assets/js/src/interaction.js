@@ -8,6 +8,9 @@
 function main_onComplete() {
 	console.log('DOM is ready');
 
+	//
+	// Text truncation
+	//
 	// this is weird, make it easier
 	$('.js-fndTextTrunc').each(function() {
 		var $el = $(this);
@@ -94,10 +97,63 @@ function post_text(event){
 		},
 		body: document.getElementById('post-textarea').value
 	};
+	newDiscussion.link = views.data.linkPost;
 
 	console.log(newDiscussion);
 
 	views.data.news.unshift( newDiscussion );
+}
+
+//
+// Text post woth link
+//
+function linkPosting() {
+	var $postTextarea = $('#post-textarea');
+	var render = function(data, options) {
+
+		var selectorHTML = [
+		'<div class="row chunk attachment">',
+			'<div class="row-item row-item--shrink">',
+				'<div class="thumb media--m" style=background-image:url(\'' + data.thumbnail_url + '\');"></div>',
+			'</div>',
+			'<div class="row-item valign--middle">',
+				'<a href="' + data.original_url + '" class="link">' + data.title + '</a>',
+			'</div>',
+			'<div class="row-item row-item--shrink">',
+				'<p id="removeLink">x</p>',
+			'</div>',
+		'</div>',
+		'<p>' + data.description + '</p>',
+		'<div class="row text--caption">',
+			'<div class="thumb row-item row-item--shrink valign--middle" style="background-image:url(\'' + data.favicon_url + '\'); background-color: transparent; width: 16px; height: auto;"></div>',
+			'<p class="row-item valign--middle">' + data.provider_display + '</p>',
+		'</div>'
+		].join('');
+
+		$('.selector-wrapper').html(selectorHTML).show();
+
+		$('#removeLink').on('click', function(){
+			$('#post-textarea').trigger('close');
+		});
+
+		// remove the preview box
+		$(this).on('close', function(e){
+			$(this).siblings('.selector-wrapper').hide();
+			views.data.linkPost = {};
+		});
+
+	};
+
+	$postTextarea.preview({
+		key     : '3ed15b53335b475b850d014fdb84c97a',
+		render  : render,
+		bind    : false,
+		success : function(obj) {
+			views.data.linkPost = obj;
+		}
+	}).on('paste keyup blur', function(e){
+		$(this).trigger('preview');
+	});
 }
 
 //
@@ -476,5 +532,23 @@ function keyboard_photo_nav(){
 			default:
 				return false;
 		}
+	});
+}
+
+function embedlyStuff(){
+	// Set up preview.
+	$('#url').preview({key:'3ed15b53335b475b850d014fdb84c97a'})
+
+	// On submit add hidden inputs to the form.
+	$('form').on('submit', function(){
+		$(this).addInputs($('#url').data('preview'));
+		return true;
+	});
+
+
+	// On submit add hidden inputs to the form.
+	$('form').on('submit', function(){
+		$(this).addInputs($('#url').data('preview'));
+		return true;
 	});
 }

@@ -218,7 +218,7 @@ ViewManager.prototype = {
 		var reveal = function() {
 			self.last_scrollTop = $(window).scrollTop();
 			self._media.$el.show();
-			// self._$shade.show();
+			self._media.$body.find('.view--mediaContent').prepend(self._media.$header);
 			self._media.$el.css({
 				top: self.last_scrollTop
 			});

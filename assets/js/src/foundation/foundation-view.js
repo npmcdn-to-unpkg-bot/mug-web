@@ -65,6 +65,8 @@ View.prototype = {
 			case "media":
 				// always full at all widths
 				this.$el.addClass('view--modal-full view--media off').hide();
+				this.$body.addClass('spreadable spreadable--noGutters atLarge_spreadable--spread');
+				this.$header.addClass('view-head--mediaContent inverted');
 				break;
 			case "modal-snap":
 				// at wide screens, is dialog, at small screens is full

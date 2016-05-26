@@ -15,6 +15,7 @@ var Items = {
 		this.top_post = {};
 		this.showCommentBox = false;
 		this.like_count = 0; // likes on discussion boards don't exist IRL
+		this.link = undefined;
 	},
 
 	Event: function(event){

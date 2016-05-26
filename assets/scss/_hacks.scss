@@ -85,12 +85,12 @@
 
 }
 
-.view-head {
+.view-head:not(.view-head--mediaContent):not(#modal_header) {
 	position: fixed;
 
-	&#modal_header {
-		position: initial;
-	}
+	// &#modal_header {
+	// 	position: initial;
+	// }
 
 	#splitList_header & {
 		width: 320px;

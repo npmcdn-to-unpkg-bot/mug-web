@@ -55,7 +55,8 @@ router.add('create-new-post', function(context){
 		template: "postBox",
 		events: {
 			"post_text": post_text,
-			"choosePhotos2": choosePhotos2
+			"choosePhotos2": choosePhotos2,
+			"complete": linkPosting
 			// "expand_summary": expand_summary,
 			// "toggleCommentPopover": toggleCommentPopover
 		},
@@ -172,7 +173,7 @@ router.add('albums', function(context){
 	// views.data.selectedAlbum = views.data.albums[0];
 
 	show_album_split();
-	views.focus('split');
+	views.focus('splitList');
 });
 
 // ROUTE: photo album photo grid (split)
@@ -186,6 +187,28 @@ router.add('albums/:i', function(context){
 
 // ROUTE: Photo detail screen
 router.add('photo-detail/:i', function(context){
+	var groupId = views.data.group.id;
+	views.data.displayed_photo = {};
+
+	gimme.get([
+		{"gimme": "photo", "key": "photo_detail", "data": {"page": 1, "photo_id": context.params.i}, children: [
+			{"gimme": "photo_albums", "key":"album_data" ,"data": {"page": 1}, "match": [["photo_album.photo_album_id", "photo_album_id"], ["photo_album.group_id", "group_id"]]},
+			{"gimme": "event", "key":"event_data" ,"data": {"page": 1}, "match": [["photo_album.event_id", "event_id"]]}
+		]}
+	], true).then(function(data){
+		console.log(data);
+		views.data.displayed_photo = data.photo_detail[0];
+		views.data.displayed_photo.album_data = views.data.displayed_photo.album_data[0];
+		views.data.displayed_photo.event_data = views.data.displayed_photo.event_data[0];
+	}).then(function(){
+
+		// TODO: handle this logic elsewhere
+		// update the data for the media view based on the above call
+		views._media.header_data.title = views.data.displayed_photo.album_data.title;
+
+		console.log(views._media);
+
+	});
 
 	views.media_show({
 		template: "photoDetail",
@@ -193,7 +216,7 @@ router.add('photo-detail/:i', function(context){
 			"keyboard_photo_nav": keyboard_photo_nav()
 		},
 		header : {
-			title: "Shallow Cliffs 9 Mile fast paced hike",
+			title: 'Meetup album', // gets updated after the data is pulled
 			subtitle: views.data.group.name,
 			subtitleLink: views.data.group.link,
 			buttons: [
@@ -202,5 +225,6 @@ router.add('photo-detail/:i', function(context){
 			]
 		}
 	});
+
 });
 

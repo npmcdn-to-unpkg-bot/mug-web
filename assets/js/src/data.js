@@ -26,20 +26,20 @@ var views = new ViewManager(function(){
 			// {"gimme": "events", "key": "events_short", "data": {"group_id": groupId, "page": 3}},
 			// {"gimme": "events", "key": "events_long", "data": {"group_id": groupId, "page": 20}},
 
-			// {"gimme": "events", "key": "events_recent", "data": {"status": "past", "group_id": groupId, "page": 3, "desc": true}},
+			{"gimme": "events", "key": "events_recent", "data": {"status": "past", "group_id": groupId, "page": 3, "desc": true}},
 
 			// {"gimme": "events_meta", "data": {"page": 20, "group_id": groupId}},
 			// {"gimme": "photo_albums", "data": {"page": 30, "group_id": groupId}},
 			// {"gimme": "members", "data":{"group_id": groupId, "page": 32}},
 
 			// {"gimme": "photo_albums", "data": {"page": 10, "group_id": groupId}},
-			// {"gimme": "photos", "key": "mup_photos", "data": {"page": 20, "group_id": groupId}},
+			{"gimme": "photos", "key": "mup_photos", "data": {"page": 20, "group_id": groupId}},
 
-			{"gimme": "boards", "key": "boards_posts", data:{"urlkey": urlname, "page": 2}, children: [ // Which boards to pull?
-				{"gimme": "discussions", data:{"urlkey": urlname, "page": 2}, "match": [["id", "board_id"]], children: [ // Which threads from those boards?
-					{"gimme": "posts", data:{"urlkey": urlname,  "page": 2}, "match": [["id", "discussion_id"],["board.id", "board_id"]] } // Which posts from those threads?
-				]}
-			]}
+			// {"gimme": "boards", "key": "boards_posts", data:{"urlkey": urlname, "page": 2}, children: [ // Which boards to pull?
+			// 	{"gimme": "discussions", data:{"urlkey": urlname, "page": 2}, "match": [["id", "board_id"]], children: [ // Which threads from those boards?
+			// 		{"gimme": "posts", data:{"urlkey": urlname,  "page": 2}, "match": [["id", "discussion_id"],["board.id", "board_id"]] } // Which posts from those threads?
+			// 	]}
+			// ]}
 
 	];
 	// ↑ ↑ ↑ ↑ Where we pick which data we want ↑ ↑ ↑ ↑
@@ -57,8 +57,6 @@ var views = new ViewManager(function(){
 			events_recent: views.data.events_recent,
 			discussions: views.data.boards_posts
 		});
-
-		console.log(views.data.news);
 
 		// ----------------------------------------------
 		// Data manipulation
@@ -80,7 +78,10 @@ var views = new ViewManager(function(){
 		views.data.previewPhotos = [];
 		views.data.uploadedPhotos = [];
 
-		// console.log(views.data);
+		// Store data about a link
+		views.data.linkPost = {};
+
+		console.log(views.data);
 
 		// Now that the data is all ready, go ahead and start the router
 		window.addEventListener('hashchange', processHash);
