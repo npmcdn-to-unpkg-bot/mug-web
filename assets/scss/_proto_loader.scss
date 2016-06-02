@@ -1,0 +1,32 @@
+$speed: 1s;
+$background-color: rgba(0,0,0,.26); //$C_textHint
+
+._proto_swarm {
+  animation: swarm-anim 1s steps(56) infinite;
+  background-position: 0;
+  background-color: $background-color;
+  mask: url('http://mperrotti.com/temp_storage/loadersprite.svg') no-repeat 0 0;
+  -webkit-mask:  url('http://mperrotti.com/temp_storage/loadersprite.svg') no-repeat 0 0;
+  margin: 0 auto;
+  width: 32px;
+  height: 32px;
+}
+
+@keyframes swarm-anim {
+  0% {
+    mask-position: 0 0;
+    -webkit-mask-position: 0 0;
+  }
+  100% {
+    mask-position: -1792px 0;
+    -webkit-mask-position: -1792px 0;
+  }
+}
+
+// nothing to do with loader, just centering
+._proto_abs-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+}

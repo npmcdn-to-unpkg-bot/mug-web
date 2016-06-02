@@ -108,7 +108,8 @@ function post_text(event){
 // Text post woth link
 //
 function linkPosting() {
-	var $postTextarea = $('#post-textarea');
+	var $postTextarea = $('#post-textarea'),
+			$swarmLoader   = $('<div class="_proto_swarm _proto_abs-center"></div>');
 	var render = function(data, options) {
 
 		var selectorHTML = [
@@ -120,7 +121,7 @@ function linkPosting() {
 				'<a href="' + data.original_url + '" class="link">' + data.title + '</a>',
 			'</div>',
 			'<div class="row-item row-item--shrink">',
-				'<p id="removeLink">x</p>',
+				'<a href="javascript:void(0)" id="removeLink">' + helpers.svgIcon('cross', 'icon--s icon--hint') + '</a>',
 			'</div>',
 		'</div>',
 		'<p>' + data.description + '</p>',
@@ -139,7 +140,7 @@ function linkPosting() {
 		// remove the preview box
 		$(this).on('close', function(e){
 			$(this).siblings('.selector-wrapper').hide();
-			views.data.linkPost = {};
+			views.data.linkPost = undefined;
 		});
 
 	};
@@ -153,6 +154,12 @@ function linkPosting() {
 		}
 	}).on('paste keyup blur', function(e){
 		$(this).trigger('preview');
+	}).on('loading', function(e){
+		setTimeout($(this).after($swarmLoader), 50);
+		// console.log('loading');
+	}).on('loaded', function(e){
+		$swarmLoader.remove();
+		// console.log('loaded');
 	});
 }
 
@@ -284,6 +291,131 @@ function togglePollResults(event){
 	this.set(event.keypath+'.resultsShown', !visible);
 	return false;
 }
+
+function toggleDatePopover(e){
+	e.original.preventDefault();
+
+	views.momentary_show({
+		$target: $(e.node),
+		type	 : 'popover',
+		buttons: [
+			{label: 'Next week', fn: sparkedEventDate },
+			{label: 'Next weekend', fn: sparkedEventDate },
+			{label: 'Next month', fn: sparkedEventDate },
+			{label: 'A specific date', fn: pickSpecific}
+		]
+	});
+}
+
+function sparkedEventDate(e) {
+	// console.log(e);
+	console.log('rough date picked');
+}
+
+function pickSpecific(){
+	window.location.href= "#!/calendar/";
+}
+
+function Calendar($el, events){
+	this.$el = $el;
+	this.$dates = null;
+	this.$month = null;
+	this.$back = null;
+	this.$forward = null;
+	this.events = events;
+	this.calendarized_events = {};
+	this.today = moment();
+	this.cursor = moment();
+	this.init();
+
+}
+Calendar.prototype = {
+
+	update_month: function(months){
+		this.cursor.add(months, "months");
+		this.redraw();
+	},
+
+	redraw: function(){
+		var calendarOutput = '';
+		var month = this.calendarized_events[this.cursor.year()][this.cursor.month()] || false;
+		var days = moment(this.cursor).daysInMonth();
+		var startOfMonth = moment(this.cursor).startOf('month');
+		var dayOfWeekOffset = parseInt(moment(startOfMonth).format("d"),10);
+
+		// offset days to correct day of week
+		for (i = 0; i < dayOfWeekOffset; i++) {
+			calendarOutput += "<div class=\"atMedium_border--top _proto_calendar-date _proto_calendar-day\">";
+			calendarOutput += "</div>";
+		}
+
+		// draw the actual days
+		for (i = 1; i <= days; i++) {
+
+			// if there's a mup, do this
+			if( month && month[i] ){
+				calendarOutput += "<div class=\"atMedium_border--top _proto_calendar-date--hasEvents _proto_calendar-day _proto_calendar-date\">";
+				calendarOutput += "<strong class=\"display--block\">"+i+"</strong>";
+
+				// uncomment this to put event count
+				// calendarOutput += "<span class=\"display--inlineBlock atMedium_display--block\">" + month[i].length + " Meetups</span>";
+
+				// uncomment this to put actual events in the calendar
+				$.map(month[i], function(val, n){
+					calendarOutput += '<span class="display--inlineBlock _proto_calendar-event" href="' + val.event_url + '"></span>';
+					// calendarOutput += '<a class="display--inlineBlock atMedium_display--block link _proto_calendar-event" href="' + val.event_url + '">'+val.name+'</a>';
+				});
+
+				calendarOutput += "</div>";
+			}
+
+			// if there's not a mup, do this
+			else {
+				calendarOutput += '<div data-date-test="' + this.cursor.format('MM') + '/' + i + '/' + this.cursor.format('YYYY') + ' 0:00' + '" class="atMedium_border--top _proto_calendar-day _proto_calendar-date">';
+				calendarOutput += "<span class=\"display--block\">"+i+"</span>";
+				calendarOutput += "</div>";
+			}
+
+		}
+		this.$dates.html(calendarOutput);
+		this.$month.text( this.cursor.format("MMMM YYYY") );
+	},
+
+	init: function(){
+		// collate events into a nice data structure
+		console.log(this);
+		for(var i=0; i<this.events.length; i++){
+			var event = this.events[i];
+			var date = moment(event.time);
+			if(!this.calendarized_events[ date.year() ])
+				this.calendarized_events[ date.year() ] = {};
+			if(!this.calendarized_events[ date.year() ][ date.month() ])
+				this.calendarized_events[ date.year() ][ date.month() ] = {};
+			if(!this.calendarized_events[ date.year() ][ date.month() ][ date.date() ])
+				this.calendarized_events[ date.year() ][ date.month() ][ date.date() ] = [];
+			this.calendarized_events[ date.year() ][ date.month() ][ date.date() ].push(event);
+		}
+
+		// set up DOM
+		var self = this;
+		this.$month = this.$el.find('._proto_calendar-month');
+		this.$back = this.$el.find('._proto_calendarControl--back').click(function(){
+			self.update_month(-1);
+		});
+		this.$forward = this.$el.find('._proto_calendarControl--forward').click(function(){
+			self.update_month(1);
+		});
+		this.$dates = this.$el.find('._proto_calendar-dates');
+
+		// let's go!
+		this.redraw();
+
+		$('#calendar-container').on('click', '._proto_calendar-date', function(){
+			window.location.href= "#!/events/" + moment($(this).data('dateTest')).valueOf();
+		});
+
+	}
+};
 
 /*
 //////////////////////////////////////////////////////////
@@ -535,6 +667,7 @@ function keyboard_photo_nav(){
 	});
 }
 
+/*
 function embedlyStuff(){
 	// Set up preview.
 	$('#url').preview({key:'3ed15b53335b475b850d014fdb84c97a'})
@@ -552,3 +685,4 @@ function embedlyStuff(){
 		return true;
 	});
 }
+*/

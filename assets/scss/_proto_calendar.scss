@@ -1,0 +1,60 @@
+// RESPONSIVE CALENDAR
+._proto_calendarControl {
+	min-width: $media-xs;
+}
+
+._proto_calendar-day {
+	border-bottom: 1px solid $C_border;
+	box-sizing: border-box;
+	padding: $space-half;
+	width: percentage(1/7);
+}
+
+._proto_calendar-dates{
+	@include display(flex);
+	@include flex-flow(row wrap);
+	@include align-items(stretch);
+}
+
+._proto_calendar-date{
+	min-height: $media-l;
+}
+
+._proto_calendar-date--hasEvents{
+	background-color: $C_collectionBG;
+}
+
+._proto_calendar-event{
+	// plain event styles
+	font-size: $font-size-small;
+	margin-bottom: 2px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+
+	// as dots at mobile
+	background: $C_red;
+	border-radius: 999px;
+	height: $space-quarter;
+	margin-right: 2px;
+	padding: 0;
+	pointer-events: none;
+	width: $space-quarter;
+	&:last-child {
+		margin-right: 0;
+	}
+}
+
+@include atMediaUp(medium) {
+	// uncomment this for showing event names
+	//
+	// ._proto_calendar-event{
+	// 	background: $C_collectionBG;
+	// 	border-radius: $defaultRadius;
+	// 	height: auto;
+	// 	padding: 0 2px;
+	// 	pointer-events: auto;
+	// 	width: auto;
+	// }
+
+}

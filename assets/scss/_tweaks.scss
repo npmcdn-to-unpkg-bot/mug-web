@@ -1,92 +1,16 @@
 /*
+	TWEAKS:
 	Styles I'd like to see make it into SQ2
 */
 
-.spreadable--center {
-	@include justify-content(center);
-}
-
-.span--100 { //already there, just need to update
-	width: 100%;
-}
-
-.runningText img {
-	max-width: 100%;
-}
-
 .toggleButton--lg .toggleButton-label {
 	font-size: 16px !important;
-}
-
-.input--withIcon {
-	background-position: $space-half center;
-	background-repeat: no-repeat;
-	background-size: $media-xs;
-	padding-left: $media-xs + $space;
-}
-
-.input--withIcon--right {
-	background-position: calc(100% - 8px) center; // handle `calc` for meh browsers
-	padding-left: $space;
-	padding-right: $media-xs + $space;
-}
-
-.buttonList--small li {
-	padding-bottom: $space-half;
-}
-
-.attachment .row-item:first-child {
-	padding-left: 0;
 }
 
 .toggleButton-input:checked + .toggleButton-label:hover {
 	color: $C_link;
 	use {
 		fill: $C_link;
-	}
-}
-
-$dotTimeBase: 500;
-.endlessLoader, .endlessLoader:before, .endlessLoader:after {
-	-webkit-animation: dotAnim #{$dotTimeBase}ms ease -#{$dotTimeBase/4}ms infinite alternate;
-	animation: dotAnim #{$dotTimeBase}ms ease -#{$dotTimeBase/4}ms infinite alternate;
-	background: $C_border;
-	border-radius: 100%;
-	content: "";
-	height: $space-half;
-	position: relative;
-	width: $space-half;
-}
-
-.endlessLoader:before {
-	position: absolute;
-	left: -$space;
-	-webkit-animation: dotAnim #{$dotTimeBase}ms ease -#{$dotTimeBase/2}ms infinite alternate;
-	animation: dotAnim #{$dotTimeBase}ms ease -#{$dotTimeBase/2}ms infinite alternate;
-}
-
-.endlessLoader:after {
-	position: absolute;
-	left: $space;
-	-webkit-animation: dotAnim #{$dotTimeBase}ms ease infinite alternate;
-	animation: dotAnim #{$dotTimeBase}ms ease infinite alternate;
-}
-@-webkit-keyframes dotAnim {
-	to {
-		background: black;
-		box-shadow: -1px 0 0 1px $C_textPrimary;
-	}
-}
-@keyframes dotAnim {
-	to {
-		background: black;
-		box-shadow: -1px 0 0 1px $C_textPrimary;
-	}
-}
-
-.atLarge_margin--left {
-	@include atMediaUp(large) {
-		margin-left: $space;
 	}
 }
 
@@ -107,6 +31,26 @@ $dotTimeBase: 500;
 	._tweak_summaryDetail-icon {
 		@include transform(rotate(90deg));
 	}
+}
+
+.spreadable--center {
+	@include justify-content(center);
+}
+
+.span--100 { //already there, just need to update
+	width: 100%;
+}
+
+.runningText img {
+	max-width: 100%;
+}
+
+.buttonList--small li {
+	padding-bottom: $space-half;
+}
+
+.attachment .row-item:first-child {
+	padding-left: 0;
 }
 
 /*
@@ -157,6 +101,10 @@ $dotTimeBase: 500;
 	}
 }
 
+.spreadable--noGutters > .spreadable-item {
+	padding-left: 0;
+}
+
 /*
 -----------------------------
 	UI COMPONENTS
@@ -188,6 +136,66 @@ $dotTimeBase: 500;
 		background: $C_textHint;
 	}
 }
+
+/*
+-----------------------------
+	FORMS
+-----------------------------
+*/
+// add launcher into the input stack styles
+._tweak_inputStack-field {
+
+	input,
+	textarea,
+	.launcher{
+		border-bottom-width: 0;
+		border-radius: 0;
+		margin-bottom: 0;
+
+		&:focus {
+			border-bottom-width: 1px;
+		}
+	}
+
+	&:first-of-type {
+		input,
+		textarea,
+		.launcher {
+			border-radius: $defaultRadius $defaultRadius 0 0;
+		}
+	}
+
+	&:last-child {
+		input,
+		textarea,
+		.launcher {
+			border-bottom-width: 1px;
+			border-radius: 0 0 $defaultRadius $defaultRadius;
+		}
+	}
+
+}
+
+// Add icons to inputs
+.input--withIcon {
+	background-position: $space-half center;
+	background-repeat: no-repeat;
+	background-size: $media-xs;
+	padding-left: $media-xs + $space;
+}
+
+.input--withIcon--right {
+	background-position: calc(100% - 8px) center; // handle `calc` for meh browsers
+	padding-left: $space;
+	padding-right: $media-xs + $space;
+}
+
+// keep icon shown on focus
+.launcher:focus {
+	background-position: center right #{$space-quarter};
+	background-repeat: no-repeat;
+}
+
 
 /*
 -----------------------------

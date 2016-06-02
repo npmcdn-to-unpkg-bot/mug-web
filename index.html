@@ -637,6 +637,7 @@ Template: Posting interface
 			<div class="row-item row-item--shrink valign--middle" on-click="choosePhotos2">{{{helpers.svgIcon('camera', 'valign--middle')}}}</div>
 			<a href="#!/create-poll-post" class="row-item row-item--shrink valign--middle">{{{helpers.svgIcon('question', 'valign--middle')}}}</a>
 			<div class="row-item row-item--shrink valign--middle">{{{helpers.svgIcon('paperclip', 'valign--middle')}}}</div>
+			<a href="#!/spark-meetup" class="row-item row-item--shrink valign--middle">{{{helpers.svgIcon('calendar', 'valign--middle')}}}</a>
 		</div>
 		<div class="_tweak_summaryDetail bordered">
 			<div class="row chunk _tweak_summaryDetail-summary">
@@ -921,6 +922,81 @@ Template: Poll posting
 
 <!--
 /////////////////////////////////////////////////////
+Template: Spark a Meetup
+/////////////////////////////////////////////////////
+-->
+<script id="sparkMeetup" type="text/template">
+	<div class="stripe"><div class="bounds">
+
+		<div class="chunk">
+			<label for="mup-title">What should we meet up for?</label>
+			<textarea id="mup-title" placeholder="Let's meet up and..."></textarea>
+		</div>
+
+		<fieldset class="inputStack chunk">
+			<legend>When?</legend>
+
+			<div class="inputStack-field _tweak_inputStack-field">
+				<label for="date">Pick a date</label>
+				<a id="date" class="launcher _tweak_launcher _proto_launcher--date" on-click="toggleDatePopover" href="javascript:void(0)">Next week</a>
+			</div>
+
+			<div class="inputStack-field _tweak_inputStack-field">
+				<label for="time">Pick a time</label>
+				<a id="time" class="launcher _tweak_launcher _proto_launcher--time" href="javascript:void(0)">In the evening</a>
+				<!-- <label for="specificTime">Pick a time</label>
+				<input id="specificTime" type="time" placeholder="Pick a time" /> -->
+			</div>
+
+		</fieldset>
+
+	</div></div>
+</script>
+
+<!--
+/////////////////////////////////////////////////////
+Template: Calendar
+Temporary for styling
+/////////////////////////////////////////////////////
+-->
+<script type="text/template" id="calendar-template">
+	<div class="stripe">
+		<div class="bounds bounds--wide">
+			<div class="chunk" id="calendar-container">
+
+				<!-- calendar template -->
+				<div id="calendar" class="calendar">
+					<div class="row chunk">
+						<div class="row-item">
+							<h2 class="_proto_calendar-month"></h2>
+						</div>
+						<div class="row-item row-item--shrink">
+							<span class="text--secondary display--inlineBlock _proto_calendarControl _proto_calendarControl--back"> &lt; </span>
+						</div>
+						<div class="row-item row-item--shrink">
+							<span class="text--secondary display--inlineBlock align--right _proto_calendarControl _proto_calendarControl--forward"> &gt; </span>
+						</div>
+					</div>
+					<div class="row row--wrap">
+						<div class="text--caption align--center atMedium_align--left _proto_calendar-day">Sun</div>
+						<div class="text--caption align--center atMedium_align--left _proto_calendar-day">Mon</div>
+						<div class="text--caption align--center atMedium_align--left _proto_calendar-day">Tue</div>
+						<div class="text--caption align--center atMedium_align--left _proto_calendar-day">Wed</div>
+						<div class="text--caption align--center atMedium_align--left _proto_calendar-day">Thu</div>
+						<div class="text--caption align--center atMedium_align--left _proto_calendar-day">Fri</div>
+						<div class="text--caption align--center atMedium_align--left _proto_calendar-day">Sat</div>
+					</div>
+					<div class="_proto_calendar-dates"></div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+</script>
+
+<!--
+/////////////////////////////////////////////////////
 Template: Album listing
 Rendered as part of the photo split view
 /////////////////////////////////////////////////////
@@ -1028,94 +1104,6 @@ Template: Photo Detail View
 /////////////////////////////////////////////////////
 -->
 <script id="photoDetail" type="text/template">
-<!--
-	<div class="stripe--media inverted spreadable-item">
-		<div class="bounds">
-
-			<a href="javascript:void(0)" on-click="show_prev_photo" class="mediaNav mediaNav--prev"><i class="fa fa-chevron-left mediaNav-icon"></i></a>
-			<a href="javascript:void(0)" on-click="show_next_photo" class="mediaNav mediaNav--next"><i class="fa fa-chevron-right mediaNav-icon"></i></a>
-			<img class="media span--100" src="{{displayed_photo.highres_link}}" alt="test"/>
-
-		</div>
-	</div>
-
-	<div class="stripe spreadable-item">
-		<div class="bounds attachment">
-			<div class="chunk">
-				<p>Fun times!</p>
-				<p class="text--secondary">— with <a href="#" class="link">Adam</a>, <a href="#" class="link">Rick</a>, and <a href="#" class="link">3 others</a></p>
-			</div>
-			<div class="chunk">
-				<p class="text--caption">Added to <a href="{{group.link}}" class="link">{{group.name}}</a> by <a href="#" class="link">John Doe</a> on Jun 20, 2015</p>
-			</div>
-
-			<a href="#" class="row border--top link text--small">
-				<div class="row-item--shrink row-item--alignMiddle">
-					<img src="style/img/calendar.svg" alt="Calendar" height="24">
-				</div>
-				<div class="row-item row-item--alignMiddle">
-					<p class="wrap--singleLine--truncate">Shallow Cliffs 9 Mile fast paced hike</p>
-				</div>
-			</a>
-		</div>
-		<div class="bounds attachment bordered">
-
-			<div class="attachment text--small">
-				<div class="chunk">
-					<p class="text--small"><strong>2 Likes</strong> &middot; <a href="#" class="link">Like</a> &middot; <a href="#" class="link">Comment</a> &middot; <a href="#!/tag-members" class="link">Tag members</a></p>
-				</div>
-
-				<ul class="list">
-
-					<li class="row">
-						<div class="row-item--shrink">
-							<div class="chunk ">
-								<div class="avatar avatar--person avatar--small" style="background-image: url(http://lorempixel.com/people/50/50);"></div>
-							</div>
-						</div>
-						<div class="row-item">
-							<div class="chunk">
-								<p><strong>Member Name</strong> <span class="expandableContent--inline">What a great photo! Our group is the coolest.</span></p>
-							</div>
-						</div>
-					</li>
-
-					<li class="row">
-						<div class="row-item--shrink">
-							<div class="chunk ">
-								<div class="avatar avatar--person avatar--small" style="background-image: url(http://lorempixel.com/people/48/48);"></div>
-							</div>
-						</div>
-						<div class="row-item">
-							<div class="chunk">
-								<p><strong>Member Name</strong> <span class="expandableContent--inline">Yea, that was such a fun day we had. Thanks for uploading this to the event album.</span></p>
-							</div>
-						</div>
-					</li>
-
-					<li class="row">
-						<div class="row-item--shrink">
-							<div class="chunk">
-								<div class="avatar avatar--person avatar--small" style="background-image: url({{current_member.photo}});"></div>
-							</div>
-						</div>
-						<div class="row-item">
-							<div class="chunk">
-								<textarea placeholder="Write a comment&hellip;" on-keyup="showPostBtn"></textarea>
-							</div>
-							<div class="chunk align--right display--none postBtnContainer">
-								<button class="button button--primary button--small" on-click="postComment">Post</button>
-							</div>
-						</div>
-					</li>
-
-				</ul>
-			</div>
-
-		</div>
-
-	</div>
--->
 
 <div class="view view--mediaContent spreadable-item">
 	<div class="view-body view-body--mediaContent" style="background-image: url({{displayed_photo.highres_link}});">
@@ -1133,7 +1121,7 @@ Template: Photo Detail View
 		<section class="stripe border--none">
 			<div class="bounds bounds--mediaMeta attachment">
 				<div class="chunk">
-					<p>Photo caption</p>
+					<p>Photo caption goes here</p>
 					<!-- <p class="text--secondary">&mdash; with <a class="link" href="#">somebody</a></p> -->
 				</div>
 				<div class="chunk">
@@ -1212,26 +1200,6 @@ Template: Photo Detail View
 </div>
 
 </script>
-
-<!--
-<script>
-	// Set up preview.
-	$('#url').preview({key:'3ed15b53335b475b850d014fdb84c97a'})
-
-	// On submit add hidden inputs to the form.
-	$('form').on('submit', function(){
-		$(this).addInputs($('#url').data('preview'));
-		return true;
-	});
-
-
-	// On submit add hidden inputs to the form.
-	$('form').on('submit', function(){
-	  $(this).addInputs($('#url').data('preview'));
-	  return true;
-	});
-</script>
--->
 
 <!-- SVG icons -->
 <div id='icon-container'></div>

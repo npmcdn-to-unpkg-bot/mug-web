@@ -328,7 +328,14 @@ ViewManager.prototype = {
 	},
 
 	handle_modal_outclick: function(e) {
-		if (!this._modal.open) {
+
+		// overlayClicked is a hack. Will require user to click twice to close the modal on desktop if a momentary is open
+		var overlayClicked = $(e.target).is('.overlayScreen');
+
+		// momentaryClicked is a hack. Should handle this in a more graceful way
+		var momentaryClicked = $(e.target.offsetParent).is('.momentary');
+
+		if (!this._modal.open || overlayClicked || momentaryClicked) {
 			return false;
 		}
 		if (!this._modal.$el.is(e.target) && this._modal.$el.has(e.target).length === 0) {

@@ -123,6 +123,46 @@ router.add('create-poll-post', function(context){
 	});
 });
 
+// ROUTE: Spark MUP
+router.add('spark-meetup', function(context){
+	views.modal_show({
+		template: "sparkMeetup",
+		events: {
+			"toggleDatePopover" : toggleDatePopover,
+			"sparkedEventDate" : sparkedEventDate,
+			"pickSpecific" : pickSpecific
+		},
+		header : {
+			title: "Spark a Meetup",
+			// buttons: [
+			// 	{ label: "Post", fn: spark_meetup }
+			// ]
+		}
+	});
+});
+
+//ROUTE: Calendar (temporary)
+router.add('calendar', function(context){
+	views.show({
+		template: "calendar-template",
+		events: {
+			//"attemptJoin": attemptJoin
+		},
+		header : {
+			title: "Calendar",
+			subtitle: views.data.group.name,
+			subtitleLink: views.data.group.link,
+			isRoot: false,
+			buttons: [
+				//{ label: "YEAH!", icon: "/css/whatever.png", fn: function(){ alert('ok!'); }}
+			]
+		}
+	});
+
+	var cal = new Calendar( $('#calendar'), views.data.events_long );
+
+});
+
 // Album split
 function show_album_split(){
 

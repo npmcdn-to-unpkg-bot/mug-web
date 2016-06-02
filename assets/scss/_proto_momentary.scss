@@ -42,7 +42,7 @@ $pointer-size: 4px;
   opacity: 1;
   position: absolute;
   min-width: 100px;
-  z-index: 1;
+  z-index: map-get($zindex-map, "popup");
 
   &.off {
     opacity: 0;
@@ -85,6 +85,8 @@ $pointer-size: 4px;
 .momentary-popover {
   @include pointers-for-box($pointer_size, $C_contentBG, $C_border);
   margin-top: $pointer_size;
+  z-index: map-get($zindex-map, "popup");
+
   .momentary-btn-list {
     border: none;
     border-radius: $defaultRadius;
@@ -109,5 +111,5 @@ $pointer-size: 4px;
   position: absolute;
   top: 0;
   width: 100%;
-  z-index: 0;
+  z-index: map-get($zindex-map, "modal");
 }

@@ -5,7 +5,8 @@
 @import 'icons';
 @import 'nav';
 @import 'proto_momentary'; // STYLES FOR POPOVER
-// @import 'proto_photoDetail'; // STYLES FOR POPOVER
+@import 'proto_calendar'; // STYLES FOR CALENDAR
+@import 'proto_loader'; // STYLES FOR ANIMATED LOADER
 
 /*
 ------------------------------
@@ -103,10 +104,6 @@ Discussion feed
 	left: $space-half;
 	position: absolute;
 }
-
-//
-// Photo Detail View
-//
 
 
 //
@@ -216,4 +213,27 @@ Posting interface
 	// 	max-width: 100%;
 	// }
 }
+
+//
+// Spark a Meetup
+//
+$calendarSVG: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300"><path fill-rule="evenodd" clip-rule="evenodd" d="M204.677 165.92c12.446 0 22.57 10.125 22.57 22.57 0 12.448-10.124 22.572-22.57 22.572-12.445 0-22.57-10.124-22.57-22.57-.002-12.447 10.124-22.572 22.57-22.572zm45.185-38.29c0-3.112-.878-5.925-3.992-5.925H52.89c-3.115 0-5.308 2.813-5.308 5.926v84.24c0 12.498 9.8 21.734 22.296 21.734h159.276c12.348 0 20.708-9.113 20.708-21.46v-84.513zm15.066-66.18c12.498 0 23.67 9.506 23.67 22.002v135.433c0 30.342-25.64 55.605-55.98 55.605H65.05c-30.342 0-54.05-25.264-54.05-55.605V83.452c0-12.496 9.243-22 21.74-22l21.617-.604c2.438 0 4.146-2.31 4.146-4.745 0 0-.454-6.673-.454-7.532 0-12.392 9.44-22.482 21.807-22.57 12.09-.083 21.523 10.1 21.523 22.19v7.724c0 2.7 2.694 5.537 5.395 5.537h81.934c2.71 0 5.202-2.825 5.202-5.536v-7.26c0-12.124 9.383-22.352 21.505-22.608 12.67-.27 22.76 9.998 22.76 22.605 0 .857-.313 7.608-.313 7.608 0 2.438 1.89 4.59 4.33 4.59l22.734.603z"/></svg>';
+$clockSVG: 'data:image/svg+xml;utf8,<svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/><path d="M0 0h24v24H0z" fill="none"/><path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>';
+
+._proto_launcher--date, ._proto_launcher--date:focus{
+	background-image: url($calendarSVG);
+	background-size: $media-xs;
+}
+
+._proto_launcher--time, ._proto_launcher--time:focus {
+	background-image: url($clockSVG);
+	background-size: $media-xs;
+}
+
+
+
+
+
+
+
 

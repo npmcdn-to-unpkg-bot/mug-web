@@ -636,15 +636,15 @@ members: function( item ){
 
 			// sort people with bios to the top
 			members.sort(function(a, b){
-			    var keyA = (a.bio)? a.bio.length : 0;
-			    var keyB = (b.bio)? b.bio.length : 0;
-			    if(keyA > keyB) return -1;
-			    if(keyA < keyB) return 1;
-			    return 0;
+					var keyA = (a.bio)? a.bio.length : 0;
+					var keyB = (b.bio)? b.bio.length : 0;
+					if(keyA > keyB) return -1;
+					if(keyA < keyB) return 1;
+					return 0;
 			});
 
 			members = members.map( function(n, i){
-                n.match = n.name.toUpperCase();
+				n.match = n.name.toUpperCase();
 				if( (typeof n.photo !== 'undefined') && (typeof n.photo.photo_link !== 'undefined') ){
 					n.photo = n.photo.photo_link;
 				}
