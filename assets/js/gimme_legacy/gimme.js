@@ -23,12 +23,10 @@ var gimme = {
 			var buildChildShoppingList = function(parentData, children){
 				var shoppingList = [];
 				for(var c=0; c<children.length; c++){
-					console.log(children[c]);
 					var child = children[c];
 					var match = child.match;
 
 					for(var m=0; m<match.length; m++){
-						console.log(match[m]);
 						var parent_match, child_match;
 						if( Array.isArray(match[m]) ){
 							parent_match = match[m][0];

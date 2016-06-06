@@ -475,6 +475,69 @@ DISCUSSION FEED
 
 					</div>
 				{{/if}}
+<!--
+/////////////////////////////////////////
+// SPARKED MEETUP
+/////////////////////////////////////////
+-->
+				{{#if type == 'sparkedEvent'}}
+					<div class="_proto_statusEventContainer">
+						<div class="row chunk attachment">
+							<div class="row-item row-item--shrink">
+								<div class="avatar avatar--person avatar--small" style="background-image: url({{sparkedEvent.member.photo}});"></div>
+							</div>
+
+							<div class="row-item valign--middle">
+								<p class="text--small text--smallTest"><span class="text--bold">{{sparkedEvent.member.name}}</span> &middot; <span class="text--secondary">{{helpers.dateRelative(sparkedEvent.time)}}</span></p>
+							</div>
+						</div>
+						<div class="expandableContent chunk">
+							<p>{{sparkedEvent.description}}</p>
+						</div>
+
+						<!-- <div class="row">
+							<div class="row-item--shrink">
+								<div class="avatar--icon _tweak_avatar--icon">
+									{{{helpers.svgIcon('calendar--sched')}}}
+								</div>
+							</div>
+							<div class="row-item">
+								<div class="chunk">
+									<p>A new Meetup was sparked</p>
+									<p class="text--caption">{{helpers.dateRelative(time)}} by <a href="#" class="link">{{current_member.name}}</a></p>
+								</div>
+							</div>
+						</div>
+
+						<p class="chunk">{{sparkedEvent.description}}</p>-->
+
+						<div class="card _proto_card--postAttach">
+							<div class="row chunk">
+								<div class="row-item row-item--shrink">{{{helpers.svgIcon('calendar')}}}</div>
+								<div class="row-item"><p>{{sparkedEvent.sugDate.value}}</p></div>
+							</div>
+							<div class="row chunk">
+								<div class="row-item row-item--shrink">{{{helpers.svgIcon('clock')}}}</div>
+								<div class="row-item"><p>{{sparkedEvent.sugTime.value}}</p></div>
+							</div>
+
+							<div class="row">
+								{{#if interested}}
+									<div class="row-item">
+										<ul class="inlineblockList">
+											{{#interested}}
+												<li><a href="#" class="avatar avatar--person avatar--small" style="background-image: url({{photo}});">{{Name}}</a></li>
+											{{/interested}}
+											<li class="text--caption">{{interested.length}}</li>
+										</ul>
+									</div>
+								{{/if}}
+								<div class="row-item row-item--shrink"><a href="#" class="link" on-click="addInterested">{{#userInterested}}Not Interested{{/userInterested}}{{^userInterested}}Interested{{/userInterested}}</a></div>
+							</div>
+
+						</div>
+					</div>
+				{{/if}}
 
 			</li>
 		{{/each}}</ul>
@@ -600,6 +663,45 @@ Textarea for users to write a comment reply
 
 	<div class="chunk align--right display--none js-postBtnContainer">
 		<button class="button button--primary button--small" on-click="postComment">Post</button>
+	</div>
+</script>
+
+<!--
+/////////////////////////////////////////////////////
+Partial: Calendar
+#calendar-template
+
+Calendar used for "Spark a Meetup"
+/////////////////////////////////////////////////////
+-->
+<script type="text/template" id="calendar-template">
+	<div class="bordered" id="calendar-container">
+
+		<!-- calendar template -->
+		<div id="calendar" class="calendar">
+			<div class="row chunk">
+				<div class="row-item">
+					<h2 class="_proto_calendar-month"></h2>
+				</div>
+				<div class="row-item row-item--shrink">
+					<span class="text--secondary display--inlineBlock _proto_calendarControl _proto_calendarControl--back"> {{{helpers.svgIcon('chevronLeft')}}} </span>
+				</div>
+				<div class="row-item row-item--shrink">
+					<span class="text--secondary display--inlineBlock align--right _proto_calendarControl _proto_calendarControl--forward"> {{{helpers.svgIcon('chevronRight')}}} </span>
+				</div>
+			</div>
+			<div class="row row--wrap">
+				<div class="text--caption align--center atMedium_align--left _proto_calendar-day">Sun</div>
+				<div class="text--caption align--center atMedium_align--left _proto_calendar-day">Mon</div>
+				<div class="text--caption align--center atMedium_align--left _proto_calendar-day">Tue</div>
+				<div class="text--caption align--center atMedium_align--left _proto_calendar-day">Wed</div>
+				<div class="text--caption align--center atMedium_align--left _proto_calendar-day">Thu</div>
+				<div class="text--caption align--center atMedium_align--left _proto_calendar-day">Fri</div>
+				<div class="text--caption align--center atMedium_align--left _proto_calendar-day">Sat</div>
+			</div>
+			<div class="_proto_calendar-dates"></div>
+		</div>
+
 	</div>
 </script>
 
@@ -928,9 +1030,10 @@ Template: Spark a Meetup
 <script id="sparkMeetup" type="text/template">
 	<div class="stripe"><div class="bounds">
 
+		{{#sparkedMeetup}}
 		<div class="chunk">
-			<label for="mup-title">What should we meet up for?</label>
-			<textarea id="mup-title" placeholder="Let's meet up and..."></textarea>
+			<label for="sparkedMupSummary">What should we meet up for?</label>
+			<textarea id="sparkedMupSummary" placeholder="Let's meet up and..."></textarea>
 		</div>
 
 		<fieldset class="inputStack chunk">
@@ -938,61 +1041,34 @@ Template: Spark a Meetup
 
 			<div class="inputStack-field _tweak_inputStack-field">
 				<label for="date">Pick a date</label>
-				<a id="date" class="launcher _tweak_launcher _proto_launcher--date" on-click="toggleDatePopover" href="javascript:void(0)">Next week</a>
+				<!-- {{#if date.isGeneral}}{{date.value}}{{else}}{{helpers.dateFormat(date.value)}}{{/if}} -->
+				<a id="date" class="launcher _tweak_launcher _proto_launcher--date" on-click="toggleDatePopover" href="javascript:void(0)">{{#if date.isGeneral}}{{date.value}}{{else}}{{helpers.dateFormat(date.value)}}{{/if}}</a>
+			</div>
+
+			<div class="chunk display--none" id="calendar-template-container">
+				{{> calendar-template}}
 			</div>
 
 			<div class="inputStack-field _tweak_inputStack-field">
-				<label for="time">Pick a time</label>
-				<a id="time" class="launcher _tweak_launcher _proto_launcher--time" href="javascript:void(0)">In the evening</a>
-				<!-- <label for="specificTime">Pick a time</label>
-				<input id="specificTime" type="time" placeholder="Pick a time" /> -->
+				<div id="sparkTimeLauncher">
+					<label for="time">Pick a time</label>
+					<a id="time" class="launcher _tweak_launcher _proto_launcher--time" href="javascript:void(0)" on-click="toggleTimePopover">{{time.value}}</a>
+				</div>
+				<div class="display--none" id="sparkTimeSpecific">
+					<label for="specificTimeInput">Pick a time</label>
+					<input id="specificTimeInput" type="time" placeholder="Pick a time" class="input--withIcon input--withIcon--right _proto_launcher--time" value="19:00" />
+					<a href="javascript:void(0)" class="link text--small" on-click="pickGeneralTime">{{{helpers.svgIcon('chevronLeft', 'icon--s valign--middle')}}} Pick a time of day</a>
+				</div>
 			</div>
 
 		</fieldset>
+		{{/sparkedMeetup}}
+
+		<div class="chunk align--right">
+			<a href="javascript:void(0)" class="button button--primary" on-click="postSparkedMeetup">Post</a>
+		</div>
 
 	</div></div>
-</script>
-
-<!--
-/////////////////////////////////////////////////////
-Template: Calendar
-Temporary for styling
-/////////////////////////////////////////////////////
--->
-<script type="text/template" id="calendar-template">
-	<div class="stripe">
-		<div class="bounds bounds--wide">
-			<div class="chunk" id="calendar-container">
-
-				<!-- calendar template -->
-				<div id="calendar" class="calendar">
-					<div class="row chunk">
-						<div class="row-item">
-							<h2 class="_proto_calendar-month"></h2>
-						</div>
-						<div class="row-item row-item--shrink">
-							<span class="text--secondary display--inlineBlock _proto_calendarControl _proto_calendarControl--back"> &lt; </span>
-						</div>
-						<div class="row-item row-item--shrink">
-							<span class="text--secondary display--inlineBlock align--right _proto_calendarControl _proto_calendarControl--forward"> &gt; </span>
-						</div>
-					</div>
-					<div class="row row--wrap">
-						<div class="text--caption align--center atMedium_align--left _proto_calendar-day">Sun</div>
-						<div class="text--caption align--center atMedium_align--left _proto_calendar-day">Mon</div>
-						<div class="text--caption align--center atMedium_align--left _proto_calendar-day">Tue</div>
-						<div class="text--caption align--center atMedium_align--left _proto_calendar-day">Wed</div>
-						<div class="text--caption align--center atMedium_align--left _proto_calendar-day">Thu</div>
-						<div class="text--caption align--center atMedium_align--left _proto_calendar-day">Fri</div>
-						<div class="text--caption align--center atMedium_align--left _proto_calendar-day">Sat</div>
-					</div>
-					<div class="_proto_calendar-dates"></div>
-				</div>
-
-			</div>
-		</div>
-	</div>
-
 </script>
 
 <!--

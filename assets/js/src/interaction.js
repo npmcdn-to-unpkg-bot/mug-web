@@ -18,6 +18,7 @@ function main_onComplete() {
 	});
 
 	$(document.body).on('click', '[data-ellipsis-applied] [data-toggle-ellipsis]', function(e) { toggleEllipsis(e) });
+
 }
 
 /*
@@ -292,6 +293,9 @@ function togglePollResults(event){
 	return false;
 }
 
+//
+// Spark a Meetup
+//
 function toggleDatePopover(e){
 	e.original.preventDefault();
 
@@ -302,20 +306,65 @@ function toggleDatePopover(e){
 			{label: 'Next week', fn: sparkedEventDate },
 			{label: 'Next weekend', fn: sparkedEventDate },
 			{label: 'Next month', fn: sparkedEventDate },
-			{label: 'A specific date', fn: pickSpecific}
+			{label: 'A specific date', fn: pickSpecificDate}
 		]
 	});
 }
 
+function toggleTimePopover(e){
+	e.original.preventDefault();
+
+	views.momentary_show({
+		$target: $(e.node),
+		type	 : 'popover',
+		buttons: [
+			{label: 'Morning', fn: sparkedEventTime },
+			{label: 'Afternoon', fn: sparkedEventTime },
+			{label: 'Evening', fn: sparkedEventTime },
+			{label: 'A specific time', fn: pickSpecificTime}
+		]
+	});
+}
+
+function sparkedEventTime(e) {
+	switch (e.node.text) {
+		case "Morning":
+			views.data.sparkedMeetup.time.value = "In the morning";
+			break;
+		case "Afternoon":
+			views.data.sparkedMeetup.time.value = "In the afternoon";
+			break;
+		case "Evening":
+			views.data.sparkedMeetup.time.value = "In the evening";
+			break;
+		default:
+			views.data.sparkedMeetup.time.value = "In the evening";
+			break;
+	}
+}
+
+function pickSpecificTime(){
+	$('#sparkTimeSpecific').removeClass('display--none');
+	$('#sparkTimeLauncher').addClass('display--none');
+	$('#sparkTimeInput').focus();
+}
+
+function pickGeneralTime(){
+	$('#sparkTimeSpecific').addClass('display--none');
+	$('#sparkTimeLauncher').removeClass('display--none');
+}
+
 function sparkedEventDate(e) {
-	// console.log(e);
-	console.log('rough date picked');
+	views.data.sparkedMeetup.date.value = e.node.text;
 }
 
-function pickSpecific(){
-	window.location.href= "#!/calendar/";
+function pickSpecificDate(){
+	$('#calendar-template-container').removeClass('display--none');
 }
 
+//
+// Spark a Meetup - Calendar
+//
 function Calendar($el, events){
 	this.$el = $el;
 	this.$dates = null;
@@ -345,7 +394,7 @@ Calendar.prototype = {
 
 		// offset days to correct day of week
 		for (i = 0; i < dayOfWeekOffset; i++) {
-			calendarOutput += "<div class=\"atMedium_border--top _proto_calendar-date _proto_calendar-day\">";
+			calendarOutput += "<div class=\"_proto_calendar-date _proto_calendar-day\">";
 			calendarOutput += "</div>";
 		}
 
@@ -354,7 +403,7 @@ Calendar.prototype = {
 
 			// if there's a mup, do this
 			if( month && month[i] ){
-				calendarOutput += "<div class=\"atMedium_border--top _proto_calendar-date--hasEvents _proto_calendar-day _proto_calendar-date\">";
+				calendarOutput += "<div data-date=\"" + this.cursor + "\" class=\"_proto_calendar-date--hasEvents _proto_calendar-day _proto_calendar-date\">";
 				calendarOutput += "<strong class=\"display--block\">"+i+"</strong>";
 
 				// uncomment this to put event count
@@ -371,7 +420,7 @@ Calendar.prototype = {
 
 			// if there's not a mup, do this
 			else {
-				calendarOutput += '<div data-date-test="' + this.cursor.format('MM') + '/' + i + '/' + this.cursor.format('YYYY') + ' 0:00' + '" class="atMedium_border--top _proto_calendar-day _proto_calendar-date">';
+				calendarOutput += '<div data-date="' + this.cursor.format('YYYY') + ',' + this.cursor.format('MM') + ',' + i + '" class="_proto_calendar-day _proto_calendar-date">'; // data-date-formatted="' + this.cursor.format('MM') + '/' + i + '/' + this.cursor.format('YYYY') + ' 0:00' + '"
 				calendarOutput += "<span class=\"display--block\">"+i+"</span>";
 				calendarOutput += "</div>";
 			}
@@ -383,7 +432,6 @@ Calendar.prototype = {
 
 	init: function(){
 		// collate events into a nice data structure
-		console.log(this);
 		for(var i=0; i<this.events.length; i++){
 			var event = this.events[i];
 			var date = moment(event.time);
@@ -410,12 +458,63 @@ Calendar.prototype = {
 		// let's go!
 		this.redraw();
 
-		$('#calendar-container').on('click', '._proto_calendar-date', function(){
-			window.location.href= "#!/events/" + moment($(this).data('dateTest')).valueOf();
+		$('#calendar-container').on('click', '._proto_calendar-date', function(e){
+			e.preventDefault();
+
+			var clickedDate    = new Date($(this).data('date')),
+					clickedDateUTC = moment(clickedDate).utc();
+
+			views.data.sparkedMeetup.date.value = clickedDateUTC;
+			views.data.sparkedMeetup.date.isGeneral = false;
+			$('#calendar-template-container').addClass('display--none');
+
 		});
 
 	}
 };
+
+function postSparkedMeetup() {
+	views.modal_hide();
+
+	var newSparkedEvent = new Items.SparkedEvent({
+		member : views.data.current_member,
+		sugDate : {
+			value: views.data.sparkedMeetup.date.value,
+			isGeneral: views.data.sparkedMeetup.date.isGeneral
+		},
+		sugTime : {
+			value: views.data.sparkedMeetup.time.value,
+			isGeneral: views.data.sparkedMeetup.time.isGeneral
+		},
+		description : document.getElementById('sparkedMupSummary').value,
+		time : (new Date).getTime(),
+		interested : [
+			{ Name : views.data.current_member.name, "photo" : views.data.current_member.photo }
+		],
+		userInterested: true
+	});
+	views.data.news.unshift( newSparkedEvent );
+}
+
+function addInterested(event) {
+	var interestArr = event.context.interested,
+			newInterest  = {
+				Name: views.data.current_member.name,
+				photo: views.data.current_member.photo
+			};
+
+	// console.log(this.get(event.keypath+'.userInterested'));
+
+	if(this.get(event.keypath+'.userInterested') == true){
+		interestArr.splice(-1,1);
+		this.set(event.keypath+'.userInterested', false);
+	}
+	else{
+		interestArr.push(newInterest);
+		this.set(event.keypath+'.userInterested', true);
+	}
+	return false;
+}
 
 /*
 //////////////////////////////////////////////////////////

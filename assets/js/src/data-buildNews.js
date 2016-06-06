@@ -65,6 +65,17 @@ var Items = {
 		this.isVoted = false;
 		this.totalVotes = 0;
 		this.answers = [];
+	},
+
+	SparkedEvent: function(sparkedEvent) {
+		this.type = "sparkedEvent";
+		this.sparkedEvent = sparkedEvent;
+		this.time = sparkedEvent.time || (new Date).getTime();
+		this.sugDate = sparkedEvent.sugDate;
+		this.sugTime = sparkedEvent.sugTime;
+		this.description = sparkedEvent.description || "";
+		this.interested = sparkedEvent.interested || "no interest";
+		this.userInterested = sparkedEvent.userInterested || false;
 	}
 
 };

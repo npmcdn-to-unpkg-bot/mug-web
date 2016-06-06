@@ -32,7 +32,8 @@ router.add('', function(context){ // homepage
 			"focusCommentBox"        : focusCommentBox,
 			"toggleCommentPopover"   : toggleCommentPopover,
 			"showPostBtn"            : showPostBtn,
-			"postComment"            : postComment
+			"postComment"            : postComment,
+			"addInterested"          : addInterested
 		},
 		header : {
 			title: views.data.group.name,
@@ -129,33 +130,18 @@ router.add('spark-meetup', function(context){
 		template: "sparkMeetup",
 		events: {
 			"toggleDatePopover" : toggleDatePopover,
+			"toggleTimePopover" : toggleTimePopover,
 			"sparkedEventDate" : sparkedEventDate,
-			"pickSpecific" : pickSpecific
+			"pickSpecificDate" : pickSpecificDate,
+			"pickSpecificTime" : pickSpecificTime,
+			"pickGeneralTime" : pickGeneralTime,
+			"postSparkedMeetup" : postSparkedMeetup
 		},
 		header : {
 			title: "Spark a Meetup",
 			// buttons: [
 			// 	{ label: "Post", fn: spark_meetup }
 			// ]
-		}
-	});
-});
-
-//ROUTE: Calendar (temporary)
-router.add('calendar', function(context){
-	views.show({
-		template: "calendar-template",
-		events: {
-			//"attemptJoin": attemptJoin
-		},
-		header : {
-			title: "Calendar",
-			subtitle: views.data.group.name,
-			subtitleLink: views.data.group.link,
-			isRoot: false,
-			buttons: [
-				//{ label: "YEAH!", icon: "/css/whatever.png", fn: function(){ alert('ok!'); }}
-			]
 		}
 	});
 
