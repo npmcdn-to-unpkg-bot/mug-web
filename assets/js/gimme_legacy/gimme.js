@@ -55,6 +55,7 @@ var gimme = {
 
 
 				if(callsCompleted >= calls){
+					// console.log(item.key);
 					resolve( completeData );
 				}
 			};

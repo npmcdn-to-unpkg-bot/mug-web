@@ -112,6 +112,15 @@ function linkPosting() {
 	var $postTextarea = $('#post-textarea'),
 			$swarmLoader   = $('<div class="_proto_swarm _proto_abs-center"></div>');
 	var render = function(data, options) {
+		var route = "/:gid/events/:eid/";
+		var routeMatcher = new RegExp(route.replace(/:[^\s/]+/g, '([\\w-]+)'));
+		// var url = "http://www.meetup.com/Designers-Who-Code-NYC/events/230998394/";
+		var inputUrl = data.original_url;
+		var isMeetup = /https?:\/\/(.+?\.)?meetup\.com(\/[A-Za-z0-9\-\._~:\/\?#\[\]@!$&'\(\)\*\+,;\=]*)?/.test(inputUrl);
+
+		if (isMeetup) {
+			console.log(inputUrl.match(routeMatcher));
+		}
 
 		var selectorHTML = [
 		'<div class="row chunk attachment">',
