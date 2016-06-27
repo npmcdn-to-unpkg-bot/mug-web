@@ -76,7 +76,7 @@ Toast.prototype = {
   hide: function(){
     var self = this;
     self.$el.addClass('off');
-    self.$el.one(transitionEnd, function(){
+    self.$el.one('transitionend', function(){
       self.current_view.teardown();
     });
   }

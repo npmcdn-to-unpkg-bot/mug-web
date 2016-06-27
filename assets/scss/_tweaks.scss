@@ -53,12 +53,6 @@
 	padding-left: 0;
 }
 
-/*
------------------------------
-	LAYOUT
------------------------------
-*/
-
 /* _stripe.scss */
 .stripe-heroContent--full { // new variant
 	max-width: none;
@@ -103,6 +97,48 @@
 
 .spreadable--noGutters > .spreadable-item {
 	padding-left: 0;
+}
+
+// Used for when you want to fill up bounds and
+// not have the items have fluid percentage-based widths
+// Example: hscrolling event cards
+._tweak_staticGridList {
+	@include display(flex);
+	& > li {
+		padding-right: $space;
+	}
+	margin-right: -($space);
+}
+
+
+$boundsWidths: (
+	bounds: $bounds,
+	bounds--wide: $bounds-wide
+);
+$glColumns: 1, 2, 3, 4, 5; // after 5, you should probably just use inlineBlockList and standard media sizes, you animal
+
+@each $bName, $bWidth in $boundsWidths {
+	.#{$bName} {
+
+		@each $col in $glColumns {
+			._tweak_staticGridList--has#{$col} > li {
+				@include flex(1 0 ($bWidth/$col - $space*($col - 1))); //subtracting space to make up for padding
+				max-width: $bWidth/$col - $space*($col - 1); //subtracting space to make up for padding
+			}
+		}
+
+		@each $bpName, $bp in (medium: $breakpoint-m, large: $breakpoint-l) {
+			@include atMediaUp($bpName) {
+				@each $col in $glColumns {
+					.at#{str-firstCharToUpper($bpName)}__tweak_staticGridList--has#{$col} > li {
+						@include flex(1 0 ($bWidth/$col - $space*($col - 1))); //subtracting space*2 to make up for margin-left
+						max-width: $bWidth/$col - $space; //subtracting space to make up for margin-left
+					}
+				}
+			}
+		}
+
+	}
 }
 
 /*

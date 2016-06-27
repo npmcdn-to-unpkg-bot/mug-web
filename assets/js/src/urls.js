@@ -39,7 +39,7 @@ router.add('', function(context){ // homepage
 			title: views.data.group.name,
 			isRoot: false,
 			buttons: [
-				{ label: "Actions", icon: "ellipsis-h", fn: function(){ alert('tapped overflow'); } }
+				{ label: "Actions", icon: "ellipsis-h", fn: function(){ test_toast(); } }
 			]
 		},
 		observe: {
@@ -135,7 +135,8 @@ router.add('spark-meetup', function(context){
 			"pickSpecificDate" : pickSpecificDate,
 			"pickSpecificTime" : pickSpecificTime,
 			"pickGeneralTime" : pickGeneralTime,
-			"postSparkedMeetup" : postSparkedMeetup
+			"postSparkedMeetup" : postSparkedMeetup,
+			"populateSparkedMup" : populateSparkedMup
 		},
 		header : {
 			title: "Spark a Meetup",
@@ -145,7 +146,41 @@ router.add('spark-meetup', function(context){
 		}
 	});
 
-	var cal = new Calendar( $('#calendar'), views.data.events_long );
+	// uncomment this to make the calendar work
+	// var cal = new Calendar( $('#calendar'), views.data.events_long );
+
+});
+
+// ROUTE: pre-mup page
+router.add('preMup/:i', function(context){ // homepage
+	var preMUPsArr = views.data.preMUPs;
+
+	for(var i = 0; i < preMUPsArr.length; i++) {
+		if (preMUPsArr[i].id == context.params.i) {
+			views.data.preMUPRendered = preMUPsArr[i];
+			break;
+		}
+	}
+
+	views.show({
+		template : 'preMup-template',
+		events : {
+			"complete"      : toggleInviteStripe,
+			"addInterested" : addInterested,
+			"userInvited"   : userInvited,
+			"showPostBtn"   : showPostBtn,
+			"post_text"     : post_text,
+			"postComment"   : postComment
+		},
+		header : {
+			title: views.data.group.name,
+			isRoot: false,
+			goHome: true,
+			buttons: [
+				{ label: "Actions", icon: "ellipsis-h", fn: function(){ alert('tapped overflow'); } }
+			]
+		}
+	});
 
 });
 

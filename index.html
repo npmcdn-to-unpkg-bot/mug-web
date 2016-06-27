@@ -113,74 +113,7 @@ DISCUSSION FEED
 ///////////////////////////////////////////////
 -->
 				{{#if type == 'discussion'}}
-				<div class="row chunk attachment">
-					<div class="row-item row-item--shrink">
-						<div class="avatar avatar--person avatar--small" style="background-image: url({{top_post.member.photo.thumb}});"></div>
-					</div>
-
-					<div class="row-item valign--middle">
-						<p class="text--small text--smallTest"><span class="text--bold">{{top_post.member.name}}</span> &middot; <span class="text--secondary">{{helpers.dateRelative(time)}}</span></p>
-					</div>
-				</div>
-				<div class="expandableContent chunk">
-					<p>{{top_post.body}}</p>
-				</div>
-
-				{{#link}}
-				<div class="_proto_card--postAttach attachment chunk">
-					<a href="{{original_url}}">
-						<span class="row chunk">
-							<span class="row-item row-item--shrink">
-								<span class="thumb media--l" style="background-image:url({{thumbnail_url}})"></span>
-							</span>
-							<span class="row-item valign--middle">
-								<a href="{{original_url}}" class="link">{{title}}</a>
-								<p class="display--none atMedium_display--block">{{description}}</p>
-							</span>
-						</span>
-						<p class="display--block atMedium_display--none chunk">{{description}}</p>
-						<span class="row text--caption">
-							<span class="row-item row-item--shrink thumb" style="background-image:url({{favicon_url}}); background-color: transparent; width: 16px; height: auto;"></span>
-							<span class="row-item valign--middle">{{provider_display}}</span>
-						</span>
-					</a>
-				</div>
-				{{/link}}
-
-				<div class="chunk">
-					{{> postActions }}
-				</div>
-
-				{{#if posts.length > 0 || showCommentBox}}
-					<ul class="_proto_discussion-replies">
-						{{#posts}}
-							<li class="attachmentt">
-								<div class="row chunk">
-									<div class="row-item row-item--shrink">
-										<a href="#" class="avatar avatar--person avatar--small" style="background-image: url({{member.photo.thumb}});"></a>
-									</div>
-									<div class="row-item attachment">
-										<p class="text--small">
-											<span class="text--bold">{{member.name}}</span><span class="text--secondary"> &middot; {{helpers.dateRelative(time)}}</span>
-										</p>
-										
-										<p class="js-expandableContent--inline chunk">{{body}}</p>
-										
-										<div class="chunk">
-											{{> postActions }}
-										</div>
-
-									</div>
-								</div>
-							</li>
-						{{/posts}}
-					</ul>
-				{{/if}}
-
-				<div class="chunk">
-					{{ > replyBox}}
-				</div>
-
+					{{ > discussionTemplate }}
 				{{/if}}
 
 <!--
@@ -481,7 +414,8 @@ DISCUSSION FEED
 /////////////////////////////////////////
 -->
 				{{#if type == 'sparkedEvent'}}
-					<div class="_proto_statusEventContainer">
+					<!-- Person • Timestamp -->
+					<!-- <div class="_proto_statusEventContainer">
 						<div class="row chunk attachment">
 							<div class="row-item row-item--shrink">
 								<div class="avatar avatar--person avatar--small" style="background-image: url({{sparkedEvent.member.photo}});"></div>
@@ -490,28 +424,35 @@ DISCUSSION FEED
 							<div class="row-item valign--middle">
 								<p class="text--small text--smallTest"><span class="text--bold">{{sparkedEvent.member.name}}</span> &middot; <span class="text--secondary">{{helpers.dateRelative(sparkedEvent.time)}}</span></p>
 							</div>
-						</div>
-						<div class="expandableContent chunk">
-							<p>{{sparkedEvent.description}}</p>
-						</div>
+						</div> -->
 
-						<!-- <div class="row">
-							<div class="row-item--shrink">
-								<div class="avatar--icon _tweak_avatar--icon">
-									{{{helpers.svgIcon('calendar--sched')}}}
+						<a href="#!/preMup/{{sparkedEvent.id}}" class="row">
+							<span class="chunk row-item valign--middle">
+								<p class="text--bold">{{sparkedEvent.description}}</p>
+								<p class="text--secondary">Still planning this idea</p>
+							</span>
+							<span class="row-item row-item--shrink valign--middle">{{{helpers.svgIcon('chevronRight', 'icon--hint')}}}</span>
+						</a>
+						<div class="row chunk">
+							{{#if interested}}
+								<div class="row-item">
+									<ul class="inlineblockList">
+										{{#interested}}
+											<li><span class="avatar avatar--person avatar--small" style="background-image: url({{photo}});">{{Name}}</span></li>
+										{{/interested}}
+										<li class="text--caption">{{interested.length}} people. Started by {{sparkedEvent.member.name}}</li>
+									</ul>
 								</div>
-							</div>
-							<div class="row-item">
-								<div class="chunk">
-									<p>A new Meetup was sparked</p>
-									<p class="text--caption">{{helpers.dateRelative(time)}} by <a href="#" class="link">{{current_member.name}}</a></p>
-								</div>
-							</div>
+							{{/if}}
+							<!-- <div class="row-item row-item--shrink"><a href="#" class="link" on-click="addInterested">{{#userInterested}}Not Interested{{/userInterested}}{{^userInterested}}Interested{{/userInterested}}</a></div> -->
 						</div>
 
-						<p class="chunk">{{sparkedEvent.description}}</p>-->
+						<div class="chunk attachment bordered padding--left padding--right _hacks_flush">
+							{{> postActions }}
+						</div>
 
-						<div class="card _proto_card--postAttach">
+						<!-- PreMUP Details with date/time -->
+						<!-- <div class="card _proto_card--postAttach">
 							<div class="row chunk">
 								<div class="row-item row-item--shrink">{{{helpers.svgIcon('calendar')}}}</div>
 								<div class="row-item"><p>{{sparkedEvent.sugDate.value}}</p></div>
@@ -536,7 +477,7 @@ DISCUSSION FEED
 							</div>
 
 						</div>
-					</div>
+					</div>-->
 				{{/if}}
 
 			</li>
@@ -628,19 +569,32 @@ to posts in the feed
 /////////////////////////////////////////////////////
 -->
 <script id="postActions" type="text/template">
-	<ul class="inlineblockList attachment">
-		<li class="text--caption row valign--middle">
-			<a href="#" on-click="likePost" class="row-item row-item--shrink display--inlineBlock valign--middle">{{{helpers.svgIcon('like', 'userLiked--' + userLiked)}}}</a>
-			{{#if like_count > 0}}<span class="row-item row-item--shrink display--inlineBlock valign--middle">{{like_count}} likes</span>{{/if}}
-		</li>
-		<li class="padding--left text--caption row valign--middle _proto_discussion-reply">
-			<a href="#" on-click="focusCommentBox" class="row-item row-item--shrink display--inlineBlock valign--middle">{{{helpers.svgIcon('reply')}}}</a>
-			{{#if replyCount > 0}}<a href="{{event.event_url + '#event_comment-' + event_comment_id}}" class="row-item row-item--shrink display--inlineBlock valign--middle replyCounter">{{replyCount}} replies</a>{{/if}}
-		</li>
-		<li class="padding--left text--caption">
-			<a href="#" class="display--inlineBlock valign--middle" on-click="toggleCommentPopover">{{{helpers.svgIcon('overflow')}}}</a>
-		</li>
-	</ul>
+	{{#if type == 'sparkedEvent'}}
+		<ul class="inlineblockList attachment">
+			<li class="text--caption row valign--middle">
+				<a href="#" on-click="addInterested" class="row-item row-item--shrink display--inlineBlock valign--middle">{{{helpers.svgIcon('like', 'userLiked--' + userInterested)}}}</a>
+				<!-- {{#if like_count > 0}}<span class="row-item row-item--shrink display--inlineBlock valign--middle">{{like_count}} likes</span>{{/if}} -->
+			</li>
+			<li class="padding--left text--caption row valign--middle _proto_discussion-reply">
+				<a href="#!/preMup/{{id}}" class="row-item row-item--shrink display--inlineBlock valign--middle">{{{helpers.svgIcon('comment', 'icon--hint')}}}</a>
+				<!-- {{#if replyCount > 0}}<a href="{{event.event_url + '#event_comment-' + event_comment_id}}" class="row-item row-item--shrink display--inlineBlock valign--middle replyCounter">{{replyCount}} replies</a>{{/if}} -->
+			</li>
+		</ul>
+	{{else}}
+		<ul class="inlineblockList attachment">
+			<li class="text--caption row valign--middle">
+				<a href="#" on-click="likePost" class="row-item row-item--shrink display--inlineBlock valign--middle">{{{helpers.svgIcon('like', 'userLiked--' + userLiked)}}}</a>
+				{{#if like_count > 0}}<span class="row-item row-item--shrink display--inlineBlock valign--middle">{{like_count}} likes</span>{{/if}}
+			</li>
+			<li class="padding--left text--caption row valign--middle _proto_discussion-reply">
+				<a href="#" on-click="focusCommentBox" class="row-item row-item--shrink display--inlineBlock valign--middle">{{{helpers.svgIcon('comment', 'icon--hint')}}}</a>
+				{{#if replyCount > 0}}<a href="{{event.event_url + '#event_comment-' + event_comment_id}}" class="row-item row-item--shrink display--inlineBlock valign--middle replyCounter">{{replyCount}} replies</a>{{/if}}
+			</li>
+			<li class="padding--left text--caption">
+				<a href="#" class="display--inlineBlock valign--middle" on-click="toggleCommentPopover">{{{helpers.svgIcon('overflow')}}}</a>
+			</li>
+		</ul>
+	{{/if}}
 </script>
 
 <!--
@@ -702,6 +656,84 @@ Calendar used for "Spark a Meetup"
 			<div class="_proto_calendar-dates"></div>
 		</div>
 
+	</div>
+</script>
+
+<!--
+/////////////////////////////////////////////////////
+Partial: Discussion post
+#discussionTemplate
+
+Used to render text posts in the MUG and MUP feeds
+/////////////////////////////////////////////////////
+-->
+<script type="text/template" id="discussionTemplate">
+	<div class="row chunk attachment">
+		<div class="row-item row-item--shrink">
+			<div class="avatar avatar--person avatar--small" style="background-image: url({{top_post.member.photo.thumb}});"></div>
+		</div>
+
+		<div class="row-item valign--middle">
+			<p class="text--small text--smallTest"><span class="text--bold">{{top_post.member.name}}</span> &middot; <span class="text--secondary">{{helpers.dateRelative(time)}}</span></p>
+		</div>
+	</div>
+	<div class="expandableContent chunk">
+		<p>{{top_post.body}}</p>
+	</div>
+
+	{{#link}}
+	<div class="_proto_card--postAttach attachment chunk">
+		<a href="{{original_url}}">
+			<span class="row chunk">
+				<span class="row-item row-item--shrink">
+					<span class="thumb media--l" style="background-image:url({{thumbnail_url}})"></span>
+				</span>
+				<span class="row-item valign--middle">
+					<a href="{{original_url}}" class="link">{{title}}</a>
+					<p class="display--none atMedium_display--block">{{description}}</p>
+				</span>
+			</span>
+			<p class="display--block atMedium_display--none chunk">{{description}}</p>
+			<span class="row text--caption">
+				<span class="row-item row-item--shrink thumb" style="background-image:url({{favicon_url}}); background-color: transparent; width: 16px; height: auto;"></span>
+				<span class="row-item valign--middle">{{provider_display}}</span>
+			</span>
+		</a>
+	</div>
+	{{/link}}
+
+	<div class="chunk">
+		{{> postActions }}
+	</div>
+
+	{{#if posts.length > 0 || showCommentBox}}
+		<ul class="_proto_discussion-replies">
+			{{#posts}}
+				<li class="attachmentt">
+					<div class="row chunk">
+						<div class="row-item row-item--shrink">
+							<a href="#" class="avatar avatar--person avatar--small" style="background-image: url({{member.photo.thumb}});"></a>
+						</div>
+						<div class="row-item attachment">
+							<p class="text--small">
+								<span class="text--bold">{{member.name}}</span><span class="text--secondary"> &middot; {{helpers.dateRelative(time)}}</span>
+							</p>
+							
+							<p class="js-expandableContent--inline chunk">{{body}}</p>
+							
+							<div class="chunk">
+								{{> postActions }}
+							</div>
+
+						</div>
+					</div>
+				</li>
+			{{/posts}}
+		</ul>
+	{{/if}}
+
+	<div class="chunk">
+		{{ > replyBox}}
 	</div>
 </script>
 
@@ -1032,16 +1064,19 @@ Template: Spark a Meetup
 
 		{{#sparkedMeetup}}
 		<div class="chunk">
-			<label for="sparkedMupSummary">What should we meet up for?</label>
-			<textarea id="sparkedMupSummary" placeholder="Let's meet up and..."></textarea>
+			<label for="sparkedMupSummary">Let's meet up and...</label>
+			<input id="sparkedMupSummary"/>
+			<ul id="suggestions" class="attachment inlineblockList">
+				{{#suggestions}}<li><button class="button button--small" on-click="populateSparkedMup">{{.}}</button></li>{{/suggestions}}
+			</ul>
 		</div>
 
-		<fieldset class="inputStack chunk">
+		
+		<!-- <fieldset class="inputStack chunk">
 			<legend>When?</legend>
 
 			<div class="inputStack-field _tweak_inputStack-field">
 				<label for="date">Pick a date</label>
-				<!-- {{#if date.isGeneral}}{{date.value}}{{else}}{{helpers.dateFormat(date.value)}}{{/if}} -->
 				<a id="date" class="launcher _tweak_launcher _proto_launcher--date" on-click="toggleDatePopover" href="javascript:void(0)">{{#if date.isGeneral}}{{date.value}}{{else}}{{helpers.dateFormat(date.value)}}{{/if}}</a>
 			</div>
 
@@ -1061,13 +1096,138 @@ Template: Spark a Meetup
 				</div>
 			</div>
 
-		</fieldset>
+		</fieldset> -->
+		
 		{{/sparkedMeetup}}
 
 		<div class="chunk align--right">
 			<a href="javascript:void(0)" class="button button--primary" on-click="postSparkedMeetup">Post</a>
 		</div>
 
+	</div></div>
+</script>
+
+<!--
+/////////////////////////////////////////////////////
+Template: Pre-MUP
+/////////////////////////////////////////////////////
+-->
+<script type="text/template" id="preMup-template">
+	{{#preMUPRendered}}
+		<header class="stripe">
+			<div class="bounds align--center">
+
+				<div class="row row--center chunk attachment">
+					<div class="row-item row-item--shrink">
+						<div class="avatar avatar--person avatar--small" style="background-image: url({{current_member.photo}});"></div>
+					</div>
+					<div class="row-item row-item--shrink valign--middle">
+						<p class="text--caption">Started by {{current_member.name}}</p>
+					</div>
+				</div>
+
+				<div class="chunk">
+					<h2 class="text--display1">{{description}}</h2>
+					<p class="text--secondary">Still planning the idea</p>
+				</div>
+
+				{{#if current_member.membership == membership.organizer}}
+					<div class="chunk">
+						<!-- {{#if suggDate.value || suggTime.value}}
+							<p>{{#suggDate.value}}Saturday, June 18{{/suggDate.value}} {{#suggTime.value}}&middot; 8:30 AM{{/suggTime.value}}</p>
+						{{/if}}
+						<p>Location goes here</p> -->
+						<div class="display--inlineBlock"><button class="button">{{{helpers.svgIcon('clock')}}} <span class="margin--right margin--left">When</span></button></div>
+						<div class="display--inlineBlock"><button class="button">{{{helpers.svgIcon('locationPin')}}} <span class="margin--right margin--left">Where</span></button></div>
+					</div>
+				{{/if}}
+
+			</div>
+		</header>
+
+		<div class="bounds bordered">
+			<div class="row"> <!--spreadable atMedium_spreadable--spread spreadable--center-->
+				{{#if interested}}
+					<ul class="inlineblockList attachment row-item">
+						<li class="text--caption row valign--middle">
+							<a href="#" on-click="addInterested" class="row-item row-item--shrink display--inlineBlock valign--middle">{{{helpers.svgIcon('like', 'userLiked--' + userInterested)}}}</a>
+						</li>
+						<li class="padding--left text--caption row valign--middle _proto_discussion-reply">
+							<a href="#" on-click="focusCommentBox" class="row-item row-item--shrink display--inlineBlock valign--middle">{{{helpers.svgIcon('reply')}}}</a>
+						</li>
+					</ul>
+					<div class="row-item row-item--shrink chunk">
+						<ul class="inlineblockList">
+							{{#interested}}
+								<li class="display--none atMedium_display--inlineBlock"><a href="#" class="avatar avatar--person avatar--small display--none atMedium_display--inlineBlock" style="background-image: url({{photo}});">{{Name}}</a></li>
+							{{/interested}}
+							<li class="text--caption">{{interested.length}} interested</li>
+						</ul>
+					</div>
+					<!-- <div class="spreadable-item chunk"><a href="#" class="button" on-click="addInterested">{{#userInterested}}Not Interested{{/userInterested}}{{^userInterested}}Interested{{/userInterested}}</a></div> -->
+				{{/if}}
+			</div>
+		</div>
+	{{/preMUPRendered}}
+
+	<div class="stripe stripe--collection padding--bottom display--none" id="inviteStripe">
+		<!-- .bounds>.row>.row-item>h3.text--bold{Who should we tell?}^.row-item--shrink>a.button.button--small[href="javascript:void(0)"]{Invite others} -->
+		<!--{{#if preMUPRendered.showInvites}}
+			<p class="chunk">show me</p>
+		{{else}}
+			<p class="chunk">hide me</p>
+		{{/if}}-->
+		<div class="hscrollGradientWrap padding--all"><div class="hscroll">
+			<ul class="_tweak_staticGridList _tweak_staticGridList--has3 hscroll-content">
+				{{#preMUPRendered}}{{#inviteWho}}
+					<li>
+						<div class="card align--center">
+							<div class="chunk"><span class="avatar avatar--person avatar--big" style="background-image: url({{photo}})">{{name}}</span></div>
+							<div class="chunk">
+								<p class="text--bold wrap--singleLine--truncate">{{name}}</p>
+								<p class="text--caption">3 Meetups with you</p>
+							</div>
+
+							<button on-click="userInvited" class="button button--small button--fullWidth chunk">Invite</button>
+							<!-- {{#if !isInvited}}
+								<button on-click="userInvited" class="button button--small button--fullWidth chunk">Invite</button>
+							{{else}}
+								<button disabled class="button button--small button--fullWidth button--disabled chunk">Invited</button>
+							{{/if}} -->
+						</div>
+					</li>
+				{{/inviteWho}}{{/preMUPRendered}}
+			</ul>
+		</div></div>
+	</div>
+
+	<div class="stripe"><div class="bounds">
+		<div class="attachment chunk">
+			<div class="row chunk _proto_postBox">
+				<div class="row row-item">
+					<div class="row-item row-item--shrink valign--middle">
+						<div class="avatar avatar--person" style="background-image: url({{current_member.photo}});"></div>
+					</div>
+					<div class="row-item valign--middle">
+						<input type="text" placeholder="Write a post" class="_proto_input--unboxed" id="post-textarea" on-keyup="showPostBtn">
+					</div>
+				</div>
+				<div class="row-item row-item--shrink valign--middle" on-click="choosePhotos1">{{{helpers.svgIcon('camera')}}}</div>
+			</div>
+			<div class="chunk align--right display--none js-postBtnContainer">
+				<button class="button button--primary" on-click="post_text">Post</button>
+			</div>
+		</div>
+
+		<ul class="_proto_discussionList">
+		{{#each preMUPRendered.feed:i}}
+			<li class="card chunk">
+				{{#if type == 'discussion'}}
+					{{ > discussionTemplate }}
+				{{/if}}
+			</li>
+		{{/each}}
+		</ul>
 	</div></div>
 </script>
 
@@ -1085,7 +1245,7 @@ Rendered as part of the photo split view
 		<ul class="list">
 			<li on-click="activateItem">
 				<a href="#!/albums/0" class="row padding--all">
-					<div class="row-item row-item--shrink">
+					<div class="row-item row-item--shrink">f
 						<div>
 							<span class="avatar" style="background-image: url({{group.keyPhoto}})"></span>
 						</div>

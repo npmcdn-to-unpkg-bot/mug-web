@@ -172,6 +172,7 @@ View.prototype = {
 		this.header_data.subtitleLink = options.subtitleLink || "";
 		this.header_data.intro = options.intro || "";
 		this.header_data.isRoot = options.isRoot || false;
+		this.header_data.goHome = options.goHome || false;
 		this.header_data.platform = this.data.platform;
 
 		if (options.search) {
@@ -241,6 +242,7 @@ View.prototype = {
 			subtitle: '',
 			subtitleLink: '',
 			isRoot: false,
+			goHome: false,
 			platform: '',
 			buttons: [],
 			cancelMode: {},

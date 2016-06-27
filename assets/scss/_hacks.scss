@@ -85,6 +85,9 @@
 
 }
 
+//
+// Don't let position:fixed view-head overlap .stripe content
+//
 .view-head:not(.view-head--mediaContent):not(#modal_header) {
 	position: fixed;
 
@@ -96,9 +99,18 @@
 		width: 320px;
 	}
 
+	& + .view-body header.stripe {
+		padding-top: $view-head-height;
+		@include atMediaUp(large){
+			padding-top: $view-head-height-tablet;
+		}
+	}
+
 }
 
+//
 // Style the overlay that comes up with modals
+//
 .shade {
 	height: 100%;
 	left: 0;
@@ -114,9 +126,27 @@
 	}
 }
 
-// way to hide something conservatively, good for file inputs
+//
+// A way to hide something conservatively, good for file inputs
+//
 .input-wrap--hidden{
 	width: 0px;
 	height: 0px;
 	overflow: hidden;
+}
+
+//
+// Don't force discussion list items (cards) to keep a 160px min-height.
+// This came up on 6/19 when dealing with Pre MUPs in the discussion list.
+//
+._proto_discussionList > .card {
+	min-height: 0;
+}
+
+//
+// Flush
+// Use negative margins to kill padding
+//
+._hacks_flush {
+	margin: 0 -#{$space};
 }

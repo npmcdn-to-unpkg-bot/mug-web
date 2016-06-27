@@ -68,6 +68,7 @@ var Items = {
 	},
 
 	SparkedEvent: function(sparkedEvent) {
+		this.id = sparkedEvent.id || 0;
 		this.type = "sparkedEvent";
 		this.sparkedEvent = sparkedEvent;
 		this.time = sparkedEvent.time || (new Date).getTime();
@@ -76,6 +77,8 @@ var Items = {
 		this.description = sparkedEvent.description || "";
 		this.interested = sparkedEvent.interested || "no interest";
 		this.userInterested = sparkedEvent.userInterested || false;
+		this.inviteWho = sparkedEvent.inviteWho || views.data.inviteWho,
+		this.feed = [];
 	}
 
 };
@@ -289,6 +292,29 @@ function buildNews(sources){
 			getPosts(thisThread);
 			news.push(thisThread);
 
+		}
+	}
+
+	// ------------------------------------------------------
+	// PreMUPs
+	// ------------------------------------------------------
+	if(sources.preMUPs){
+		var getInviteWho = function(thisPreMUP){
+			var thisPreMUP = thisPreMUP;
+			gimme.get([{"gimme": "members", "data":{"group_id": groupId, "page": 10}}], true).then(function(data){
+				thisPreMUP.inviteWho = data.members;
+				// for (var i = 0; i < thisPreMUP.inviteWho.length; i++) {
+				// 	thisPreMUP.inviteWho[i].isInvited = false;
+				// }
+				// console.log(thisPreMUP.inviteWho);
+			});
+		};
+
+		for (var i = 0; i < sources.preMUPs.length; i++) {
+			var thisPreMUP = new Items.SparkedEvent(sources.preMUPs[i]);
+			getInviteWho(thisPreMUP);
+			news.push(thisPreMUP);
+			// console.log(views.data.news);
 		}
 	}
 

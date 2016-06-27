@@ -89,7 +89,10 @@ function toggle_post_popover(event){
 //
 function post_text(event){
 	views.modal_hide();
-	var newDiscussion = new Items.Discussion();
+	var newDiscussion = new Items.Discussion(),
+			baseURI       = event.node.baseURI,
+			isPreMUPPage  = baseURI.indexOf('preMup') > -1,
+			$postBtn      = $(event.node.offsetParent).find('.js-postBtnContainer');
 
 	newDiscussion.top_post = {
 		member: {
@@ -98,11 +101,18 @@ function post_text(event){
 		},
 		body: document.getElementById('post-textarea').value
 	};
-	newDiscussion.link = views.data.linkPost;
+	if (Object.keys(views.data.linkPost).length > 0) {
+		newDiscussion.link = views.data.linkPost;
+	}
 
-	console.log(newDiscussion);
-
-	views.data.news.unshift( newDiscussion );
+	if (isPreMUPPage) {
+		views.data.preMUPRendered.feed.unshift(newDiscussion);
+		document.getElementById('post-textarea').value = '';
+		$postBtn.addClass('display--none');
+	} else {
+		views.data.news.unshift(newDiscussion);
+		views.data.linkPost = {};
+	}
 }
 
 //
@@ -482,10 +492,16 @@ Calendar.prototype = {
 	}
 };
 
+function populateSparkedMup(e) {
+	document.getElementById('sparkedMupSummary').value = e.node.textContent;
+}
+
 function postSparkedMeetup() {
 	views.modal_hide();
+	var generatedId = (new Date).getTime();
 
 	var newSparkedEvent = new Items.SparkedEvent({
+		id : generatedId,
 		member : views.data.current_member,
 		sugDate : {
 			value: views.data.sparkedMeetup.date.value,
@@ -500,9 +516,15 @@ function postSparkedMeetup() {
 		interested : [
 			{ Name : views.data.current_member.name, "photo" : views.data.current_member.photo }
 		],
-		userInterested: true
+		userInterested: true,
+		inviteWho: views.data.inviteWho
 	});
+
 	views.data.news.unshift( newSparkedEvent );
+	views.data.preMUPs.unshift( newSparkedEvent );
+
+	window.location.hash = '#!/preMup/' + generatedId;
+
 }
 
 function addInterested(event) {
@@ -510,19 +532,103 @@ function addInterested(event) {
 			newInterest  = {
 				Name: views.data.current_member.name,
 				photo: views.data.current_member.photo
-			};
+			},
+			preMUPsArr = views.data.preMUPs,
+			newsArr    = views.data.news;
 
 	// console.log(this.get(event.keypath+'.userInterested'));
 
 	if(this.get(event.keypath+'.userInterested') == true){
-		interestArr.splice(-1,1);
-		this.set(event.keypath+'.userInterested', false);
+		// interestArr.splice(-1,1);
+		interestArr.shift();
+		event.context.userInterested = false;
+
+		//
+		// HACK: Manually update the data so that it's reflected across views
+		//
+		// Update in views.data
+		for(var i = 0; i < preMUPsArr.length; i++) {
+			if (preMUPsArr[i].id == event.context.id) {
+				preMUPsArr[i].userInterested = false;
+				break;
+			}
+		}
+
+		// Update in views.data.news
+		for (var n = 0; n < newsArr.length; n++) {
+			if (newsArr[n].type == 'sparkedEvent' && newsArr[n].id == event.context.id) {
+				newsArr[n].userInterested = false;
+			}
+		}
+		// end hack
 	}
 	else{
-		interestArr.push(newInterest);
-		this.set(event.keypath+'.userInterested', true);
+		interestArr.unshift(newInterest);
+		event.context.userInterested = true;
+
+		//
+		// HACK: Manually update the data so that it's reflected across views
+		//
+		// Update in views.data
+		for(var i = 0; i < preMUPsArr.length; i++) {
+			if (preMUPsArr[i].id == event.context.id) {
+				preMUPsArr[i].userInterested = true;
+				break;
+			}
+		}
+
+		// Update in views.data.news
+		for (var n = 0; n < newsArr.length; n++) {
+			if (newsArr[n].type == 'sparkedEvent' && newsArr[n].id == event.context.id) {
+				newsArr[n].userInterested = true;
+			}
+		}
+		// end hack
 	}
+
 	return false;
+}
+
+function toggleInviteStripe(){
+	console.log(views.data.preMUPRendered);
+
+// if the user is the only person interested
+// if a user just liked the meetup
+	if (views.data.preMUPRendered.userInterested == true && views.data.preMUPRendered.interested.length < 2) {
+		// console.log('show the stripe');
+
+		// main conditions have been met, 
+		// BUT only show if the user didn't invite
+		if(!views.data.preMUPRendered.didInvite){
+			$('#inviteStripe').removeClass('display--none');
+		}
+
+	} else {
+		// console.log('hide the stripe');
+
+		// main conditions haven't been met, 
+		// BUT hide if the user invited
+		if(views.data.preMUPRendered.didInvite){
+			$('#inviteStripe').addClass('display--none');
+		}
+	}
+
+// if a user has invited people and re-visits the meetup
+	// HIDE THE INVITE STRIPE
+}
+
+function userInvited(event) {
+	views.data.preMUPRendered.didInvite = true;
+
+	$(event.node).prop('disabled', true).text('Invited');
+
+	console.log(event.context);
+
+	// if (event.context.isInvited) {
+	// 	event.context.isInvited = true;
+	// } else {
+	// 	event.context.isInvited = false;
+	// }
 }
 
 /*
@@ -775,22 +881,17 @@ function keyboard_photo_nav(){
 	});
 }
 
-/*
-function embedlyStuff(){
-	// Set up preview.
-	$('#url').preview({key:'3ed15b53335b475b850d014fdb84c97a'})
-
-	// On submit add hidden inputs to the form.
-	$('form').on('submit', function(){
-		$(this).addInputs($('#url').data('preview'));
-		return true;
-	});
-
-
-	// On submit add hidden inputs to the form.
-	$('form').on('submit', function(){
-		$(this).addInputs($('#url').data('preview'));
-		return true;
+function test_toast() {
+	views.toast_show({
+		message	 : 'Album Name has been deleted',
+		button: {label: "Undo", fn: function(){ alert('Reverse the action'); }}
 	});
 }
+
+/*
+//////////////////////////////////////////////////////////
+----------------------------------------------------------
+PREMUP INTERACTIONS
+----------------------------------------------------------
+//////////////////////////////////////////////////////////
 */

@@ -5,6 +5,7 @@
 @import 'icons';
 @import 'nav';
 @import 'proto_momentary'; // STYLES FOR POPOVER
+@import 'proto_toast'; // STYLES FOR TOAST
 @import 'proto_calendar'; // STYLES FOR CALENDAR
 @import 'proto_loader'; // STYLES FOR ANIMATED LOADER
 
@@ -185,6 +186,13 @@ Posting interface
 	border: 1px solid $C_border;
 	border-radius: 999px $defaultRadius $defaultRadius 999px;
 	padding: 0 $space-half 0 0;
+}
+
+input[type="text"]._proto_input--unboxed {
+	background: transparent;
+	border: none;
+	margin: 0;
+	padding: 0;
 }
 
 ._proto_selector-wrapper {
