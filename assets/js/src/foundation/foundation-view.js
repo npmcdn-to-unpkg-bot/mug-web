@@ -37,6 +37,7 @@ var View = function(id, data, type) {
 View.prototype = {
 
 	setup_dom: function() {
+		// console.log(this);
 		this.$header = $('<header id="' + this.header_id + '" class="view-head row"></header>');
 		this.$body = $('<div id="' + this.body_id + '" class="view-body"></div>');
 		this.$el = $('<div id="' + this.id + '" class="view"></div>').append(this.$header, this.$body);
@@ -60,6 +61,7 @@ View.prototype = {
 				break;
 			case "modal-full":
 				// always full at all widths
+				console.log('modal full detected');
 				this.$el.addClass('view--modal-full off').hide();
 				break;
 			case "media":
@@ -70,7 +72,14 @@ View.prototype = {
 				break;
 			case "modal-snap":
 				// at wide screens, is dialog, at small screens is full
+				console.log('modal snap detected');
 				this.$el.addClass('view--modal-snap off').hide();
+				break;
+			case "modal-fixed":
+				// Scroll modal content, not bg
+				console.log('modal fixed detected');
+				views._$shade.addClass('shade--fixed');
+				views._main.addClass('view--fixed');
 				break;
 			default:
 				break;
@@ -174,6 +183,7 @@ View.prototype = {
 		this.header_data.isRoot = options.isRoot || false;
 		this.header_data.goHome = options.goHome || false;
 		this.header_data.platform = this.data.platform;
+		this.header_data.hidden = options.hidden || false;
 
 		if (options.search) {
 			this.header_data.search = options.search;
@@ -246,7 +256,8 @@ View.prototype = {
 			platform: '',
 			buttons: [],
 			cancelMode: {},
-			search: {}
+			search: {},
+			hidden: ''
 		}
 
 		// RENDER HEADER

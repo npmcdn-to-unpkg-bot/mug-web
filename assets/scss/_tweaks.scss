@@ -82,6 +82,10 @@
 	}
 }
 
+._tweak_stripe-heroContent--uncenter {
+	text-align: initial;
+}
+
 // fixes to hscroll
 .hscroll-content > li {
 	white-space: normal;
@@ -171,6 +175,10 @@ $glColumns: 1, 2, 3, 4, 5; // after 5, you should probably just use inlineBlockL
 	&:hover {
 		background: $C_textHint;
 	}
+}
+
+._tweak_card--noMinHeight {
+	min-height: 0;
 }
 
 /*

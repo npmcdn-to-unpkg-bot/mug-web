@@ -81,6 +81,9 @@ ViewManager.prototype = {
 				this._main.current_view.observe(options.observe);
 			if(options.header)
 				this._main.update_header(options.header);
+				if (options.header.hidden) {
+					this._main.$header.detach();
+				}
 				$(window).scrollTop(0);
 		}
 

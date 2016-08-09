@@ -50,6 +50,37 @@ router.add('', function(context){ // homepage
 
 });
 
+// ROUTE: mugInfo (about)
+router.add('mugInfo', function(context){
+	// console.log(context);
+
+	function show_tab($ul, $li){
+		$($ul.data('tab-selectors')).hide();
+		$('#'+$li.data('show')).show();
+		$ul.find('.tabs-tab').removeClass('tabs-tab--selected');
+		$li.addClass('tabs-tab--selected');
+	}
+
+	show_tab($('.tabs'), $('.tabs-tab[data-show="mugInfo"]'));
+
+	// views.modal_show({
+	// 	template: "about",
+	// 	modalType: 'fixed',
+	// 	events: {
+	// 	},
+	// 	header : {
+	// 		title: "About",
+	// 		subtitle: views.data.group.name,
+	// 		buttons: [
+	// 			//{ label: "Post", fn: post_text }
+	// 		]
+	// 	},
+	// 	// observe: {
+	// 	// 	'uploadedPhotos': processUploadedPhotos2
+	// 	// }
+	// });
+});
+
 // ROUTE: Text post
 router.add('create-new-post', function(context){
 	views.modal_show({
@@ -289,3 +320,21 @@ router.add('photo-detail/:i', function(context){
 
 });
 
+// ROUTE: Member list
+router.add('members', function(){
+	views.show({
+		template : 'members',
+		events : {
+			"complete" : main_onComplete
+		},
+		header : {
+			hidden: "true",
+			title: "Members",
+			subtitle: views.data.group.name,
+			isRoot: false,
+			buttons: [
+				{ label: "Actions", icon: "ellipsis-h", fn: function(){ test_toast(); } }
+			]
+		}
+	});
+});

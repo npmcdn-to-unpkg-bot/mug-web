@@ -175,18 +175,18 @@ $.fn.tabs = function(){
 	function show_tab($ul, $li){
 		$($ul.data('tab-selectors')).hide();
 		$('#'+$li.data('show')).show();
-		$ul.find('li').removeClass('selected');
-		$li.addClass('selected');
+		$ul.find('.tabs-tab').removeClass('tabs-tab--selected');
+		$li.addClass('tabs-tab--selected');
 	}
 	return this.each(function(){
 		var $ul = $(this);
 		var selectors = [];
 		var activesize = $ul.data('activesize');
-		$ul.find('li').each(function(){
+		$ul.find('.tabs-tab').each(function(){
 			selectors.push('#'+$(this).data('show'));
 		});
 		$ul.data('tab-selectors', selectors.join(','));
-		$ul.delegate('li', 'click', function(){
+		$ul.delegate('.tabs-tab', 'click', function(){
 			show_tab($ul, $(this));
 		});
 
@@ -197,7 +197,7 @@ $.fn.tabs = function(){
 				(activesize == 'handheld' && w <= 500) ||
 				(activesize == 'medium' && w <= 900)){
 				$ul.show();
-				show_tab($ul, $ul.find('li.selected:first'));
+				show_tab($ul, $ul.find('.tabs-tab.tabs-tab--selected:first'));
 			}
 			else{
 				$($ul.data('tab-selectors')).show();
@@ -260,6 +260,58 @@ function priorityPlusSetup() {
 		updateNav();
 	}
 
+}
+
+//
+// LINE-CLAMP STYLE TRUNCATION
+//
+// truncating text
+function emsToPixels(element, ems) {
+	var el = $(element),
+		ruler = el.find('[data-ruler]');
+	if (ruler.length === 0) {
+		ruler = $('<div data-ruler style="position:absolute;top:-9999px;display:block;height:1em;width:0;visibility:hidden;padding:0;margin:0;border:none;overflow:hidden"></div>');
+		el.append(ruler);
+	}
+	return ems * ruler.height();
+}
+
+function ellipsis(element, lines, options) {
+	var el = $(element),
+			options = options || {},
+			more = options.more || false,
+			title = typeof options.title === "undefined" ? true : options.title,
+			lineHeight = options.lineHeight || 1.5,
+			wrapWith = options.wrapWith || false,
+			em = emsToPixels(el, 1),
+			height = ((lines * lineHeight) + 0.5) * em,
+			originalHtml = el.data('original-html') || el.html(),
+			originalText = el.data('original-text') || el.text(),
+			text = originalText,
+			moreHref = options.moreHref || 'javascript:void(0)',
+			moreLinkHtml = options.moreHref ? '<a href="' + options.moreHref + '" class="link">read more</a>' : '<a href="javascript:void(0)" class="link" data-toggle-ellipsis>read more</a>';
+
+	while (el.outerHeight() > height && text.match(/\s/)) {
+		text = text.replace(/\W*\s(\S)*$/, '...');
+		el.text(text);
+		if (more) { el.append(' ' + moreLinkHtml); }
+	}
+
+	if (wrapWith) { el.wrapInner(wrapWith); }
+
+	el.data('trimmed-text', text);
+	el.data('original-html', originalHtml);
+	if (title) { el.attr('title', originalText); }
+
+	el.attr('data-ellipsis-applied', true);
+}
+
+function toggleEllipsis(e) {
+	var target = $(e.target),
+			el = target.parents('[data-ellipsis-applied]'),
+			html = el.data('original-html');
+
+	el.html(html);
 }
 
 // CSS transition end callback
@@ -393,21 +445,9 @@ function defaultRenderCompleteActions($el){
 	$el = $el || $('body');
 	//$el.find('.hscroll').hscroll();
 	//$el.find('.exactlist').exactlist();
-	// $el.find('.tabs').tabs();
+	$el.find('.tabs').tabs();
 	// autosize($el.find('textarea'));
 	priorityPlusSetup();
 
-	// special platform emulation class magic
-	if(typeof platform !== 'undefined' && platform == 'ios'){
-		$el.find('.list--form, .ios_list--tableview').each(function(){
-			$(this).closest('.stripe').addClass('stripe--collection');
-		});
-	}
-	if(typeof platform !== 'undefined' && platform == 'android'){
-		$el.find('input[type="radio"], input[type="checkbox"]').each(function(){
-			$(this).closest('label').append('<span class="android-inkdrop"></span>');
-			console.log('sup');
-		});
-	}
 	$el.css({backgroundColor: $el.find('[class^=stripe]:last').css('backgroundColor')}); // make last color extend to bottom
 }

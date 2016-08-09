@@ -35,15 +35,31 @@
 	z-index: map-get($zindex-map, "modal");
 }
 
-// MODAL VIEW SNAP
+// MODAL VIEW SNAP (default)
 // full at narrow widths, dialog at wide widths
-.view--modal-snap {
+.view--modal-snap,
+.view--modal-fixed {
 	@include modal-full;
 	@include atMediaUp(small){
 		@include modal-dialog;
 	}
 	z-index: map-get($zindex-map, "modal");
 }
+
+// MODAL VIEW FIXED
+// Scroll modal content, not bg
+.view--modal-fixed {
+	top: 0 !important;
+}
+
+.shade--fixed {
+	position: fixed;
+}
+
+.view--fixed {
+	position: fixed;
+}
+
 
 // MODAL VIEW LARGE
 // CURRENTLY ONLY USED FOR PHOTO UPLOAD DIALOG
@@ -149,4 +165,29 @@
 //
 ._hacks_flush {
 	margin: 0 -#{$space};
+}
+
+//
+// Exact list
+// Limits lists to one line
+// Used in this prototype for member list sidebar
+//
+._hacks_exactList--small {
+	height: $media-xs;
+}
+
+._hacks_atLarge_exactList--spread {
+	@include atMediaUp(large) {
+		height: auto;
+		margin-right: 0;
+
+		.exactList-content {
+			text-align: initial;
+		}
+
+		._hacks_exactList-indicator {
+			display: none;
+		}
+
+	}
 }

@@ -8,17 +8,30 @@
 function main_onComplete() {
 	console.log('DOM is ready');
 
-	//
-	// Text truncation
-	//
-	// this is weird, make it easier
-	$('.js-fndTextTrunc').each(function() {
-		var $el = $(this);
-		ellipsis($el, 7, { wrapWith: '<p>', more: true, title: false }); // see js/src/foundation/foundationTextTrunc for this code
+	// Line-clamp style text truncation
+	$('.js-expandableContent--desc').each(function() {
+		var el = $(this);
+		ellipsis(el, 5, { wrapWith: '<p>', title: false, more: true, moreHref: '#!/mugInfo' });
 	});
 
+	$('.js-expandableContent').each(function() {
+		var el = $(this);
+		ellipsis(el, 7, { wrapWith: '<p>', title: false, more: true });
+	});
 	$(document.body).on('click', '[data-ellipsis-applied] [data-toggle-ellipsis]', function(e) { toggleEllipsis(e) });
 
+	$('.js-expandableContent--inline').each(function() {
+		var el = $(this);
+		ellipsis(el, 5, { wrapWith: '<span>', title: false, more: true });
+	});
+	$(document.body).on('click', '[data-ellipsis-applied] [data-toggle-ellipsis]', function(e) { toggleEllipsis(e) });
+
+	function show_tab($ul, $li){
+		$($ul.data('tab-selectors')).hide();
+		$('#'+$li.data('show')).show();
+		$ul.find('.tabs-tab').removeClass('tabs-tab--selected');
+		$li.addClass('tabs-tab--selected');
+	}
 }
 
 /*

@@ -11,6 +11,38 @@
 
 /*
 ------------------------------
+Hero header
+------------------------------
+*/
+._proto_groupLogo {
+	background-size: contain;
+	border-radius: $defaultRadius;
+	border: 1px solid $C_textPrimaryInverted;
+	width: $media-m;
+	height: $media-m;
+	@include atMediaUp(medium) {
+		width: $media-l;
+		height: $media-l;
+	}
+}
+
+/*
+------------------------------
+MUG meta info
+------------------------------
+*/
+.spreadable > .spreadable-item._proto_mugMeta {
+
+	@include atMediaUp(large) {
+		@include flex-basis($block-5);
+		order: 1;
+		padding-left: $space;
+	}
+
+}
+
+/*
+------------------------------
 Discussion feed
 ------------------------------
 */
@@ -66,8 +98,6 @@ Discussion feed
 
 ._proto_card--postAttach--past {
 
-	// .dateDisplay-day,
-	// .dateDisplay-month,
 	h5,
 	p {
 		color: $C_textSecondary;
@@ -118,7 +148,6 @@ Discussion feed
 }
 .result-bar-progress {
 	background: $C_contentBGInverted;
-	// border-radius: 999px;
 	height: 100%;
 	width: 0; //will get set by js
 }
@@ -238,6 +267,18 @@ $clockSVG: 'data:image/svg+xml;utf8,<svg height="24" viewBox="0 0 24 24" width="
 	background-size: $media-xs;
 }
 
+/*
+------------------------------
+Member list
+------------------------------
+*/
+
+// Make sure everything stays aligned
+.atMedium_spreadable--spread ._proto_memberName { // extra class used to beat specificity
+	@include atMediaUp(medium) {
+		width: $block-4;
+	}
+}
 
 
 

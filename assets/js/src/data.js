@@ -182,7 +182,7 @@ var processData = function(){
 // Either pull with Gimme, or use cached data,
 // then process it using `processData()`
 // ------------------------------------------------
-gimme.apiKey = "1e84f701a17435513a17796245794d"; // 7060231d422c3421e3c13406e606631 715d68731b3913292f447f4c45547
+gimme.apiKey = "7060231d422c3421e3c13406e606631"; // 715d68731b3913292f447f4c45547 1e84f701a17435513a17796245794d
 gimme.get([{"gimme": "group", "data": {"group_id": groupId} }], true).then(function(data){
 	urlname = data.group.urlname;
 
@@ -195,10 +195,10 @@ gimme.get([{"gimme": "group", "data": {"group_id": groupId} }], true).then(funct
 				{"gimme": "events", "key": "events_short", "data": {"group_id": groupId, "page": 3}}, // for feed
 				// {"gimme": "events", "key": "events_long", "data": {"group_id": groupId, "page": 20}}, // for calendar
 
-				{"gimme": "events", "key": "events_recent", "data": {"status": "past", "group_id": groupId, "page": 3, "desc": true}},
+				// {"gimme": "events", "key": "events_recent", "data": {"status": "past", "group_id": groupId, "page": 3, "desc": true}},
 
 				// {"gimme": "events_meta", "data": {"page": 20, "group_id": groupId}},
-				// {"gimme": "members", "data":{"group_id": groupId, "page": 32}},
+				{"gimme": "members", "data":{"group_id": groupId, "page": 18}},
 				// {"gimme": "members", "key":"inviteWho", "data":{"group_id": groupId, "page": 10}}
 
 				// {"gimme": "photo_albums", "data": {"page": 10, "group_id": groupId}},
