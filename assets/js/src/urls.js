@@ -328,13 +328,7 @@ router.add('members', function(){
 			"complete" : main_onComplete
 		},
 		header : {
-			hidden: "true",
-			title: "Members",
-			subtitle: views.data.group.name,
-			isRoot: false,
-			buttons: [
-				{ label: "Actions", icon: "ellipsis-h", fn: function(){ test_toast(); } }
-			]
+			hidden: true
 		}
 	});
 });
