@@ -42,8 +42,7 @@ module.exports = function(grunt) {
 						DIR_BOWER + 'rlite/rlite.js',
 						DIR_BOWER + 'moment/moment.js',
 						DIR_BOWER + 'jquery-waypoints/waypoints.min.js',
-						// DIR_JS    + '/gimme_legacy/gimme.js',
-						'node_modules/gimme/gimme.js',
+						DIR_JS    + '/gimme_legacy/gimme.js',
 						DIR_BOWER + 'jquery.cookie/jquery.cookie.js',
 						DIR_BOWER + 'jquery-autosize/dist/autosize.js',
 						DIR_JS    + 'src/foundation/*.js'
