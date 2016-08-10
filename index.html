@@ -36,7 +36,7 @@ HEADER AREA
 	{{#group}}
 		<header class="stripe stripe--photoHero {{^keyPhoto}}photoHero--noPhoto{{/keyPhoto}}" id="heroPhoto" style="background-image: url(http://foundation.specialsnowflake.com/duotoneblend.php?url={{keyPhoto}}&colorDark=ff7900&colorLight=7700c8);">
 
-			<div class="bounds inverted align--center atMedium_align--left {{#photo}}stripe-heroContent _tweak_stripe-heroContent--uncenter{{/photo}}">
+			<div class="bounds bounds--wide inverted align--center atMedium_align--left {{#photo}}stripe-heroContent _tweak_stripe-heroContent--uncenter{{/photo}}">
 
 				<div class="chunk spreadable atMedium_spreadable--spread">
 					<div class="spreadable-item spreadable-item--shrink">
@@ -73,7 +73,7 @@ HEADER AREA
 		</header>
 	{{/group}}
 
-<section class="stripe"><div class="bounds flush--bottom">
+<section class="stripe"><div class="bounds bounds--wide flush--bottom">
 	<div class="row tabs">
 		<div data-show="activity" class="row-item tabs-tab tabs-tab--selected"><a href="javascript:void(0)">Activity</a></div>
 		<div data-show="meetups" class="row-item tabs-tab"><a href="javascript:void(0)">Meetups (3)</a></div>
@@ -83,7 +83,7 @@ HEADER AREA
 </div></section>
 
 <div id="activity">
-<section class="stripe stripe--collection"><div class="bounds">
+<section class="stripe stripe--collection"><div class="bounds bounds--wide">
 
 	<div class="spreadable atLarge_spreadable--spread">
 
@@ -592,7 +592,7 @@ DISCUSSION FEED
 </div> <!-- end #activity tab -->
 
 <div id="meetups">
-<section class="stripe stripe--collection"><div class="bounds">
+<section class="stripe stripe--collection"><div class="bounds bounds--wide">
 	<ul class="list">
 		{{#each events_recent:i}}
 
@@ -606,7 +606,7 @@ DISCUSSION FEED
 	</ul>
 </div></section>
 
-<section class="stripe"><div class="bounds">
+<section class="stripe"><div class="bounds bounds--wide">
 	<h2 class="text--label">Upcoming</h2>
 	<ul class="list">
 		{{#events_short}}
@@ -622,29 +622,54 @@ DISCUSSION FEED
 </div> <!-- end #meetups tab -->
 
 <div id="photos">
-<section class="stripe"><div class="bounds">
-	<p>Photos grid</p>
+<section class="stripe"><div class="bounds bounds--wide">
+	<ul class="gridList gridList--has1 atMedium_gridList--has4">
+		{{#photo_albums}}
+			<li class="gridList-item">
+				<div class="_proto_flexPhotos keepAspect keepAspect--3-2 attachment">
+
+					<a href="#!/albums/{{id}}" class="_proto_flexPhotos-wrapper chunk row inverted" data-event-id="{{event.id}}">
+						<span class="row-item chunk imgFill _proto_flexPhotos--lg" style="background-image: url({{photo_sample[0].photo_link}});"></span>
+						{{#if photo_sample.length > 1}}
+							<span class="row-item row-item--shrink column _proto_flexPhotos--sm">
+								<span class="chunk imgFill column-item" style="background-image:url('{{photo_sample[1].photo_link}}')"></span>
+								{{#if photo_sample.length > 2}}
+									<span class="chunk imgFill column-item" style="background-image:url('{{photo_sample[2].photo_link}}')"></span>
+								{{/if}}
+							</span>
+						{{/if}}
+					</a>
+
+				</div>
+
+				<div class="chunk">
+					<h4 class="text--bold">{{event.name}}</h4>
+					<p class="text--caption">{{photo_count}} photos</p>
+				</div>
+			</li>
+		{{/photo_albums}}
+	</ul>
 </div></section>
 </div>
 
 <div id="mugInfo">
 {{#group}}
-<section class="stripe"><div class="bounds">
+<section class="stripe"><div class="bounds bounds--wide">
 	<div class="runningText chunk">
 		{{{group.description}}}
 	</div>
 </div></section>
 
-<section class="stripe"><div class="bounds">
+<section class="stripe"><div class="bounds bounds--wide">
 	<h2 class="text--labelSecondary chunk">Topics</h2>
-	<ul class="inlineblockList buttonList--small" id="topicListing">
+	<ul class="inlineblockList buttonList--small chunk" id="topicListing">
 		{{#each topics:i}}
 			<li><a href="http://{{topics[i].urlkey}}.meetup.com/cities/us/10012" class="button button--bordered button--small">{{topics[i].name}}</a></li>
 		{{/each}}
 	</ul>
 </div></section>
 
-<section class="stripe"><div class="bounds">
+<section class="stripe"><div class="bounds bounds--wide">
 	<h2 class="text--labelSecondary chunk">Sponsors</h2>
 	<ul>
 		<li class="chunk row">
@@ -1248,7 +1273,7 @@ Template: Poll posting
 /////////////////////////////////////////////////////
 -->
 <script id="pollPost" type="text/template">
-	<div class="stripe"><div class="bounds">
+	<section class="stripe"><div class="bounds">
 		<ul class="list list--form">
 			<li>
 				<div class="chunk">
@@ -1314,7 +1339,7 @@ Template: Poll posting
 		<a href="#" class="button button--primary" on-click="post_poll">Post</a>
 	</div>
 
-	</div></div>
+	</div></section>
 </script>
 
 <!--
@@ -1496,105 +1521,13 @@ Template: Pre-MUP
 
 <!--
 /////////////////////////////////////////////////////
-Template: Album listing
-Rendered as part of the photo split view
+Template: Album Grid
 /////////////////////////////////////////////////////
 -->
-<script id="album-listing-template" type="text/template">
-	<div class="stripe">
-		<div class="input-wrap--hidden">
-			<input type="file" class="offscreen" id="photoFileInput3" accept="image/*" capture="camera" value="{{uploadedPhotos}}" multiple />
-		</div>
-		<ul class="list">
-			<li on-click="activateItem">
-				<a href="#!/albums/0" class="row padding--all">
-					<div class="row-item row-item--shrink">f
-						<div>
-							<span class="avatar" style="background-image: url({{group.keyPhoto}})"></span>
-						</div>
-					</div>
-
-					<div class="row-item">
-						<div>
-							<p>Meetup Group Album</p>
-							<p class="text--caption">24 photos</p>
-						</div>
-					</div>
-				</a>
-			</li>
-			{{#each photo_albums:i}}
-				<li class="
-				{{#if i == 0}}item--active{{/if}}
-				{{#if i > 15}}display--none{{/if}}
-				" on-click="activateItem">
-					<a href="#!/albums/{{i}}" class="row padding--all" data-mup-id="{{event_id}}">
-						<div class="row-item row-item--shrink">
-							<div>
-								<span class="avatar" style="background-image: url({{album_photo.photo_link}})"></span>
-							</div>
-						</div>
-
-						<div class="row-item">
-							<div>
-								<p>{{title}}</p>
-								<p class="text--caption">{{photo_count}} photos</p>
-							</div>
-						</div>
-					</a>
-				</li>
-			{{/each}}
-		</ul>
-		<div class="chunk align--center">
-			<a href="javascript:void(0)" class="link" on-click="see_all_albums">See all 30 albums</a>
-		</div>
-	</div>
-</script>
-
-<!--
-/////////////////////////////////////////////////////
-Template: Album Photo Grid Listing
-Rendered as part of the photo split view
-/////////////////////////////////////////////////////
--->
-<script id="album-photo-grid-template" type="text/template">
-	<header class="stripe stripe--photoHero stripe--overlap stripe--overlap--collection" style="background-image: url({{mup_photos[0].photo_link}});"><div class="bounds bounds--wide" id="albumHeroContent">
-
-		<div class="attachment text--small">
-			<a href="http://www.meetup.com/ChicagoHOS/events/224104538/" class="card card--event event--past">
-				<div class="chunk">
-					<div class="row row--spaceBetween">
-						<div class="row-item row-item--shrink">
-							<p class="wrap--singleLine--truncate chunk"><span class="text--secondary">Sunday July 22 at 6:00 pm</span></p>
-						</div>
-						<div class="row-item row-item--shrink align--right"><div class="row"><img src="style/img/posttypes/photos.svg" class="row-item row-item--shrink row-item--alignMiddle" height="20"> <span class="row-item row-item--shrink row-item--alignMiddle text--secondary">3</span></div> <div class="row"><img src="style/img/posttypes/discussions.svg" class="row-item row-item--shrink row-item--alignMiddle" height="20"> <span class="row-item row-item--shrink row-item--alignMiddle text--secondary">17</span></div> </div>
-					</div>
-					<p class="text--secondary">29 hikers went to</p>
-					<p class="text--bold">Waterfall Glenn - Last minute fast paced 10 mile hike</p>
-				</div>
-			</a>
-		</div>
-
-	</div></header>
-
-	<div class="stripe stripe--collection"><div class="bounds bounds--wide">
-		<ul class="chunk gridList gridList--photoGrid gridList--has4 atLarge_gridList--has5" id="photoAlbumGrid">
-			<!-- <li id="photoUploadNewContainer" class="gridList-item"><a href="#" class="thumb photoUploadNew" on-click="choosePhotos3">
-				<span class="thumb-content thumb-content--middle align--center">
-					<img src="style/img/plus_bl.svg" alt="plus" class="media--l margin--center">
-				</span>
-			</a></li> -->
-			{{#each mup_photos:i}}
-				<li class="gridList-item {{#if i >= 19}} display--none{{/if}}">
-					<a href="#!/photo-detail" class="thumb" style="background-image: url({{photo_link}});">
-						<a href="javascript:void(0)" class="thumb-content thumb-content--top align--left display--none" on-click="delete_photo"><img src="style/img/circle-with-cross_wht.svg" alt="circle with cross" class="media--xs"></a>
-					</a>
-				</li>
-			{{/each}}
-		</ul>
-		<div class="chunk align--center">
-			<a href="javascript:void(0)" class="link" on-click="see_all_photos">See all 321 photos</a>
-		</div>
-	</div></div>
+<script id="photoAlbumGrid" type="text/template">
+	{{#album_photos}}
+		<div class="chunk">{{photo_id}}</div>
+	{{/album_photos}}
 </script>
 
 <!--

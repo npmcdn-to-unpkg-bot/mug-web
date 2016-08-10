@@ -192,7 +192,7 @@ gimme.get([{"gimme": "group", "data": {"group_id": groupId} }], true).then(funct
 				// {"gimme": "groups", "data": {"page": 8, "zip": zip}},
 				{"gimme": "group", "data": {"group_id": groupId} },
 
-				{"gimme": "events", "key": "events_short", "data": {"group_id": groupId, "page": 3}}, // for feed
+				// {"gimme": "events", "key": "events_short", "data": {"group_id": groupId, "page": 3}}, // for feed
 				// {"gimme": "events", "key": "events_long", "data": {"group_id": groupId, "page": 20}}, // for calendar
 
 				// {"gimme": "events", "key": "events_recent", "data": {"status": "past", "group_id": groupId, "page": 3, "desc": true}},
@@ -201,7 +201,8 @@ gimme.get([{"gimme": "group", "data": {"group_id": groupId} }], true).then(funct
 				{"gimme": "members", "data":{"group_id": groupId, "page": 18}},
 				// {"gimme": "members", "key":"inviteWho", "data":{"group_id": groupId, "page": 10}}
 
-				// {"gimme": "photo_albums", "data": {"page": 10, "group_id": groupId}},
+				{"gimme": "photo_albums", "data": {"page": 10, "urlkey": urlname}}
+				// {"gimme": "photo_albums", "data": {"page": 10, "group_id": groupId}}, // v2 API group albums
 				// {"gimme": "photos", "key": "mup_photos", "data": {"page": 20, "group_id": groupId}},
 
 				// {"gimme": "boards", "key": "boards_posts", data:{"urlkey": urlname, "page": 2}, children: [ // Which boards to pull?

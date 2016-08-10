@@ -215,66 +215,23 @@ router.add('preMup/:i', function(context){ // homepage
 
 });
 
-// Album split
-function show_album_split(){
+// ROUTE: Album grid
+router.add('albums/:i', function(context){ // homepage
 
-	// Split view accepts two options objs
-	views.split_show({
-		template: "album-listing-template",
-		events: {
-			"choosePhotos3": choosePhotos3,
-			"activateItem": activateItem,
-			"see_all_albums": see_all_albums
-		},
-		observe: {
-			'uploadedPhotos': processUploadedPhotos3
-		},
-		header : {
-			title: "Photo Albums",
-			subtitle: views.data.group.name,
-			subtitleLink: views.data.group.link,
-			buttons: [
-				{ label: "Create album", icon: "plus", fn: choosePhotos3 }
-			]
-		}
-	}, {
-		template: "album-photo-grid-template",
-		events: {
-			"choosePhotos3": choosePhotos3,
-			"enter_album_edit_mode": enter_album_edit_mode,
-			"delete_photo": delete_photo,
-			"see_all_photos": see_all_photos
-		},
-		observe: {
-			'uploadedPhotos': processUploadedPhotos3
+	gimme.get([
+		{"gimme": "album_photos", "data": {"page": 20, "photo_album_id": context.params.i}}
+	], true).then(function(data){
+		views.data.album_photos = data.album_photos;
+	});
+
+	views.show({
+		template : 'photoAlbumGrid',
+		events : {
 		},
 		header : {
-			title: "Album Name",
-			subtitle: "n photos",
-			buttons: [
-				{ label: "Edit", fn: enter_album_edit_mode }
-			]
 		}
 	});
 
-}
-
-// ROUTE: photo album list (split)
-router.add('albums', function(context){
-	// set selected group
-	// views.data.selectedAlbum = views.data.albums[0];
-
-	show_album_split();
-	views.focus('splitList');
-});
-
-// ROUTE: photo album photo grid (split)
-router.add('albums/:i', function(context){
-	// set selected group
-	// views.data.selectedAlbum = views.data.albums[context.params.i];
-
-	show_album_split();
-	views.focus('detail');
 });
 
 // ROUTE: Photo detail screen

@@ -588,17 +588,32 @@ group: function( item ){
 },
 
 photo_albums: function( item ){
+	var uk = item.urlkey || defaults.urlkey;
+
 	return {
-		method: '2/photo_albums',
+		method: uk+'/photo_albums',
 		parse: function(data){
-			return data.results;
+			return data.data;
 		},
-		data: {
-			photo_album_id: defaults.photo_album_id,
-			group_id: defaults.group_id
-		}
+		data: {}
 	};
 },
+
+//
+// v2 photo albums
+//
+// photo_albums: function( item ){
+// 	return {
+// 		method: '2/photo_albums',
+// 		parse: function(data){
+// 			return data.results;
+// 		},
+// 		data: {
+// 			// photo_album_id: defaults.photo_album_id,
+// 			group_id: defaults.group_id
+// 		}
+// 	};
+// },
 
 photos: function( item ){
 	return {
@@ -608,6 +623,19 @@ photos: function( item ){
 		},
 		data: {
 			group_id: defaults.group_id,
+			fields: 'member_photo'
+		}
+	};
+},
+
+album_photos: function( item ){
+	return {
+		method: '2/photos',
+		parse: function(data){
+			return data.results;
+		},
+		data: {
+			photo_album_id: defaults.photo_album_id,
 			fields: 'member_photo'
 		}
 	};
