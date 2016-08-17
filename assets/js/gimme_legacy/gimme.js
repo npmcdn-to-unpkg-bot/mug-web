@@ -599,6 +599,19 @@ photo_albums: function( item ){
 	};
 },
 
+photo_album_meta: function( item ){
+	var uk  = item.urlkey || defaults.urlkey,
+			aid = item.photo_album_id || defaults.photo_album_id;
+
+	return {
+		method: uk+'/photo_albums/'+aid,
+		parse: function(data){
+			return data.data;
+		},
+		data: {}
+	};
+},
+
 //
 // v2 photo albums
 //

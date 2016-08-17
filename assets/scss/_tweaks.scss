@@ -86,16 +86,34 @@
 	text-align: initial;
 }
 
+._tweak_inlineblockList--avatarOverlap > li {
+	padding-right: 0;
+	margin-right: -#{$space-half};
+}
+
+._tweak_avatar--bordered {
+	border: 1px solid $C_contentBG;
+}
+
 // fixes to hscroll
 .hscroll-content > li {
 	white-space: normal;
 }
-.hscroll--breakBounds {
-	transform: translateX($space);
-	margin-left: -#{$space};
+
+._tweak_hscroll--breakBounds {
+	margin: 0 -#{$space};
+
+	.hscroll-content {
+		transform: translateX($space);
+	}
+
 	@include atMediaUp(medium) {
-		transform: translateX(0);
-		margin-left: 0;
+		margin: 0;
+
+		.hscroll-content {
+			transform: translateX(0);
+		}
+
 	}
 }
 
@@ -145,6 +163,52 @@ $glColumns: 1, 2, 3, 4, 5; // after 5, you should probably just use inlineBlockL
 	}
 }
 
+// breakBounds
+// Used to make an element horizontally flush 
+// against the `.bounds` edges
+._tweak_breakBounds {
+	margin: 0 -#{$space};
+}
+
+._tweak_atMedium_breakBounds--unbreak {
+	@include atMediaUp(medium) {
+		margin: 0;
+	}
+}
+
+//
+// photoGrid
+// Removes negative margins from `.gridList--photoGrid`
+// on larger displays
+//
+._tweak_gridList--photoGrid {
+	@include atMediaUp(large) {
+		margin-left: 0;
+		margin-right: 0;
+	}
+}
+
+/*
+-----------------------------
+	MODIFIERS
+-----------------------------
+*/
+._tweak_position--relative {
+	position: relative;
+}
+
+._tweak_atLarge_flush--top {
+	@include atMediaUp(large) {
+		padding-top: 0;
+	}
+}
+
+._tweak_atLarge_flush--bottom {
+	@include atMediaUp(large) {
+		padding-bottom: 0;
+	}
+}
+
 /*
 -----------------------------
 	UI COMPONENTS
@@ -179,6 +243,10 @@ $glColumns: 1, 2, 3, 4, 5; // after 5, you should probably just use inlineBlockL
 
 ._tweak_card--noMinHeight {
 	min-height: 0;
+}
+
+._tweak_card {
+	box-shadow: 0 1px 2px $C_border;
 }
 
 /*

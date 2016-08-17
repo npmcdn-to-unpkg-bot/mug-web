@@ -38,24 +38,26 @@ HEADER AREA
 
 			<div class="bounds bounds--wide inverted align--center atMedium_align--left {{#photo}}stripe-heroContent _tweak_stripe-heroContent--uncenter{{/photo}}">
 
-				<div class="chunk spreadable atMedium_spreadable--spread">
-					<div class="spreadable-item spreadable-item--shrink">
+				<div class="chunk spreadable atMedium_spreadable--spread padding--bottom _tweak_atLarge_flush--bottom">
+					<div class="spreadable-item spreadable-item--shrink display--none atMedium_display--block">
 						<div class="avatar _proto_groupLogo" {{#logo}}style="background-image: url( {{ logo }} )"{{/logo}} {{^logo}}style="opacity: 0;"{{/logo}}></div>
 					</div>
 
 					<div class="spreadable-item">
 						<div class="text--display text--display1">{{name}}</div>
-						<a href="#!/members" class="display--inlineBlock">
-							{{#if members > 4}}
-								We&apos;re {{helpers.numberFormat(members)}} {{who}}
-							{{else}}
-								<strong>{{who}}</strong> wanted
-							{{/if}}
-						</a>
-						&middot;
-						<a href="" class="display--inlineBlock">
-							{{group.city}}, {{group.state}}
-						</a>
+						<div class="chunk">
+							<a href="#!/members" class="display--inlineBlock">
+								{{#if members > 4}}
+									{{helpers.numberFormat(members)}} {{who}}
+								{{else}}
+									<strong>{{who}}</strong> wanted
+								{{/if}}
+							</a>
+							in
+							<a href="" class="display--inlineBlock">
+								{{group.city}}, {{group.state}}
+							</a>
+						</div>
 						<!--
 						{{#if current_member.membership == MEMBERSHIP.MEMBER || current_member.membership == MEMBERSHIP.ORGANIZER}}
 							&middot;
@@ -64,6 +66,12 @@ HEADER AREA
 							</a>
 						{{/if}}
 						-->
+						<!-- <ul class="inlineblockList _tweak_inlineblockList--avatarOverlap">
+							{{#each ../members:i}}{{#if i<10}}
+								<li><a href="#!/members" class="avatar avatar--person avatar--small _tweak_avatar--bordered" style="background-image: url({{photo}});">{{Name}}</a></li>
+							{{/if}}{{/each}}
+						</ul> -->
+
 					</div>
 
 				</div>
@@ -73,17 +81,7 @@ HEADER AREA
 		</header>
 	{{/group}}
 
-<section class="stripe"><div class="bounds bounds--wide flush--bottom">
-	<div class="row tabs">
-		<div data-show="activity" class="row-item tabs-tab tabs-tab--selected"><a href="javascript:void(0)">Activity</a></div>
-		<div data-show="meetups" class="row-item tabs-tab"><a href="javascript:void(0)">Meetups (3)</a></div>
-		<div data-show="photos" class="row-item tabs-tab"><a href="javascript:void(0)">Photos</a></div>
-		<div data-show="mugInfo" class="row-item tabs-tab"><a href="javascript:void(0)">About</a></div>
-	</div>
-</div></section>
-
-<div id="activity">
-<section class="stripe stripe--collection"><div class="bounds bounds--wide">
+<section class="stripe stripe--collection _tweak_position--relative {{#if current_member.membership != membership.alien}}padding--top{{/if}} _tweak_atLarge_flush--top"><div class="bounds bounds--wide">
 
 	<div class="spreadable atLarge_spreadable--spread">
 
@@ -94,14 +92,16 @@ MUG META INFO
 -->
 	<div class="spreadable-item spreadable-item--shrink _proto_mugMeta">
 
-		<button class="button button--primary button--fullWidth chunk">Join us</button>
+		{{#if current_member.membership == membership.alien}}
+			<button class="button button--primary button--fullWidth chunk _proto_joinBtn">Join us</button>
 
-		<div class="chunk js-expandableContent--desc">
-			{{{group.simple_html_description}}}
-		</div>
+			<div class="chunk js-expandableContent--desc">
+				{{{group.simple_html_description}}}
+			</div>
+		{{/if}}
 
-		<div class="chunk">
-			<h2 class="text--label display--none atMedium_display--block">Leadership Team</h2>
+		<div class="chunk display--none atLarge_display--block">
+			<h2 class="text--labelSecondary display--none atMedium_display--block">Leadership Team</h2>
 			<ul>
 				<li class="chunk">
 					{{#group.organizer}}
@@ -141,17 +141,21 @@ MUG META INFO
 			</ul>
 		</div>
 
+		<!--
+		'most active' isn't available from the v2 API events endpoint 
+		-->
 		<a href="#!/members" class="chunk">
-			<h2 class="text--label display--none atMedium_display--block">Most Active Members</h2>
+			<h2 class="text--labelSecondary display--none atMedium_display--block">Most Active Members</h2>
 			<div class="exactList _hacks_atLarge_exactList--spread _hacks_exactList--small row row--noGutters">
 				<ul class="inlineblockList exactList-content row-item">
-					{{#members}} <!-- this isn't available from the v2 API events endpoint -->
+					{{#members}}
 						<li class="chunk"><div class="avatar avatar--person avatar--small" style="background-image: url({{photo}});">{{Name}}</div></li>
 					{{/members}}
 				</ul>
 				<div class="row-item row-item--shrink _hacks_exactList-indicator">{{{helpers.svgIcon('chevronRight', 'icon--s valign--middle')}}}</div>
 			</div>
 		</a>
+		
 
 	</div>
 
@@ -165,17 +169,51 @@ NEXT UPCOMING MUP
 	{{#if events_short.length < 1}}
 		<p>No upcoming MUP</p>
 	{{else}}
-		<section class="chunk">
-			<h2 class="text--label">Our next Meetup</h2>
-			<div class="card _tweak_card--noMinHeight">
-				{{#events_short.0}}
-					<a href="{{event_url}}">
-						{{> eventItem }}
-					</a>
-				{{/events_short}}
+		{{#if current_member.membership != membership.alien}}
+			<div class="row chunk _proto_postBox">
+				<a href="javascript:void(0)" class="row row-item" on-click="toggle_post_popover">
+					<div class="row-item row-item--shrink valign--middle">
+						<div class="avatar avatar--person" style="background-image: url({{current_member.photo}});"></div>
+					</div>
+					<div class="row-item valign--middle text--hint">Write a post</div>
+				</a>
+				<div class="row-item row-item--shrink valign--middle" on-click="choosePhotos1">{{{helpers.svgIcon('camera')}}}</div>
 			</div>
-		</section>
+		{{/if}}
+
+		<div class="row">
+			<div class="row-item"><h2 class="text--labelSecondary">Upcoming Meetups</h2></div>
+			<div class="row-item row-item--shrink"><a href="#!/meetups" class="link text--small">Calendar</a></div>
+		</div>
+		<div class="hscroll atMedium_hscroll--unclip _tweak_hscroll--breakBounds"><ul class="hscroll-content hscroll-content--cards _proto_upcomingMupsList">
+			{{#events_short}}
+			<li class="_proto_upcomingMupsList-item chunk"><div class="card _tweak_card _tweak_card--noMinHeight">
+				<a href="{{event_url}}">
+					{{> eventItem }}
+				</a>
+			</div></li>
+			{{/events_short}}
+		</ul></div>
 	{{/if}}
+
+<!--
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+PHOTOS
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+-->
+<div class="row">
+	<div class="row-item"><h2 class="text--labelSecondary">Photos</h2></div>
+	<div class="row-item row-item--shrink"><a href="#!/groupPhotos" class="link text--small">Albums</a></div>
+</div>
+
+<div class="_tweak_breakBounds _tweak_atMedium_breakBounds--unbreak _proto_photoGrid _proto_photoGrid--scroll _proto_atMedium_photoGrid--scrollUnclip _hacks_breakBounds--alignLabel chunk">
+{{#mup_photos}}
+	<a href="#!/photo-detail/{{photo_id}}" class="_proto_photoGrid-item">
+		<div class="thumb _proto_photoGrid-image" style="background-image:url('{{photo_link}}')"></div>
+		<!-- <img class="_proto_photoGrid-image" src="{{photo_link}}"/> -->
+	</a>
+{{/mup_photos}}
+</div>
 
 <!--
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -186,23 +224,13 @@ DISCUSSION FEED
 
 	<div id="discussions">
 
-		<div class="row chunk attachment">
-			<h2 class="row-item text--label">Recent activity</h2>
-			<a href="javascript:void(0)" class="row-item row-item--shrink text--caption"><span class="valign--middle">Most discussed</span> {{{helpers.svgIcon('chevronDown', 'icon--s valign--middle')}}}</a>
+		<div class="row">
+			<h2 class="row-item text--labelSecondary">Recent activity</h2>
+			<!--<a href="javascript:void(0)" class="row-item row-item--shrink text--caption"><span class="valign--middle">Most discussed</span> {{{helpers.svgIcon('chevronDown', 'icon--s valign--middle')}}}</a>-->
 		</div>
 
-		<div class="row chunk _proto_postBox">
-			<a href="javascript:void(0)" class="row row-item" on-click="toggle_post_popover">
-				<div class="row-item row-item--shrink valign--middle">
-					<div class="avatar avatar--person" style="background-image: url({{current_member.photo}});"></div>
-				</div>
-				<div class="row-item valign--middle text--hint">Write a post</div>
-			</a>
-			<div class="row-item row-item--shrink valign--middle" on-click="choosePhotos1">{{{helpers.svgIcon('camera')}}}</div>
-		</div>
-
-		<ul class="_proto_discussionList">{{#each news:i}}
-			<li class="card chunk">
+		<ul class="_proto_discussionList _tweak_breakBounds">{{#each news:i}}
+			<li class="card _tweak_card chunk">
 <!--
 ///////////////////////////////////////////////
 // DISCUSSION (text post)
@@ -242,16 +270,16 @@ DISCUSSION FEED
 					</div>
 				</div>
 
-				<div class="_proto_flexPhotos chunk keepAspect keepAspect--3-2 attachment">
+				<div class="_proto_flexPhotos chunk keepAspect keepAspect--3-2">
 
 					<div class="_proto_flexPhotos-wrapper chunk row inverted">
-						<a href="#!/albums" class="_tweak_button--contrast _proto_albumLink button button--contrast" data-event-id="{{event.id}}">View album</a>
-						<a href="#!/photo-detail/{{photos[0].photo_id}}" data-event-id="{{event.id}}" class="row-item chunk imgFill _proto_flexPhotos--lg" style="background-image: url({{photos[0].photo_link}});"></a>
+						<a href="#!/albums/{{id}}" class="_tweak_button--contrast _proto_albumLink button button--contrast" data-event-id="{{event.id}}">View album</a>
+						<a href="#!/photo-detail/{{photos[0].photo_id}}" data-event-id="{{event.id}}" class="row-item chunk imgFill _proto_flexPhotos--lg _proto_flexPhotos-photo" style="background-image: url({{photos[0].photo_link}});"></a>
 						{{#if photos.length > 1}}
 							<span class="row-item row-item--shrink column _proto_flexPhotos--sm">
-								<a href="#!/photo-detail/{{photos[1].photo_id}}" class="chunk imgFill column-item" style="background-image:url('{{photos[1].photo_link}}')"></a>
+								<a href="#!/photo-detail/{{photos[1].photo_id}}" class="chunk imgFill column-item _proto_flexPhotos-photo" style="background-image:url('{{photos[1].photo_link}}')"></a>
 								{{#if photos.length > 2}}
-									<a href="#!/photo-detail/{{photos[2].photo_id}}" class="chunk imgFill column-item" style="background-image:url('{{photos[2].photo_link}}')"></a>
+									<a href="#!/photo-detail/{{photos[2].photo_id}}" class="chunk imgFill column-item _proto_flexPhotos-photo" style="background-image:url('{{photos[2].photo_link}}')"></a>
 								{{/if}}
 							</span>
 						{{/if}}
@@ -589,121 +617,6 @@ DISCUSSION FEED
 </div>	<!-- end .spreadable -->
 
 </div></section>
-</div> <!-- end #activity tab -->
-
-<div id="meetups">
-<section class="stripe stripe--collection"><div class="bounds bounds--wide">
-	<ul class="list">
-		{{#each events_recent:i}}
-
-			{{#if i<2}}
-			<li class="list-item chunk">
-				{{> eventItem}}
-			</li>
-			{{/if}}
-
-		{{/each}}
-	</ul>
-</div></section>
-
-<section class="stripe"><div class="bounds bounds--wide">
-	<h2 class="text--label">Upcoming</h2>
-	<ul class="list">
-		{{#events_short}}
-			<li class="list-item chunk">
-				{{> eventItem}}
-			</li>
-		{{/events_short}}
-	</ul>
-
-	<a href="#!/events" class="link align--center display--block chunk">See all Meetups</a>
-
-</div></section>
-</div> <!-- end #meetups tab -->
-
-<div id="photos">
-<section class="stripe"><div class="bounds bounds--wide">
-	<ul class="gridList gridList--has1 atMedium_gridList--has4">
-		{{#photo_albums}}
-			<li class="gridList-item">
-				<div class="_proto_flexPhotos keepAspect keepAspect--3-2 attachment">
-
-					<a href="#!/albums/{{id}}" class="_proto_flexPhotos-wrapper chunk row inverted" data-event-id="{{event.id}}">
-						<span class="row-item chunk imgFill _proto_flexPhotos--lg" style="background-image: url({{photo_sample[0].photo_link}});"></span>
-						{{#if photo_sample.length > 1}}
-							<span class="row-item row-item--shrink column _proto_flexPhotos--sm">
-								<span class="chunk imgFill column-item" style="background-image:url('{{photo_sample[1].photo_link}}')"></span>
-								{{#if photo_sample.length > 2}}
-									<span class="chunk imgFill column-item" style="background-image:url('{{photo_sample[2].photo_link}}')"></span>
-								{{/if}}
-							</span>
-						{{/if}}
-					</a>
-
-				</div>
-
-				<div class="chunk">
-					<h4 class="text--bold">{{event.name}}</h4>
-					<p class="text--caption">{{photo_count}} photos</p>
-				</div>
-			</li>
-		{{/photo_albums}}
-	</ul>
-</div></section>
-</div>
-
-<div id="mugInfo">
-{{#group}}
-<section class="stripe"><div class="bounds bounds--wide">
-	<div class="runningText chunk">
-		{{{group.description}}}
-	</div>
-</div></section>
-
-<section class="stripe"><div class="bounds bounds--wide">
-	<h2 class="text--labelSecondary chunk">Topics</h2>
-	<ul class="inlineblockList buttonList--small chunk" id="topicListing">
-		{{#each topics:i}}
-			<li><a href="http://{{topics[i].urlkey}}.meetup.com/cities/us/10012" class="button button--bordered button--small">{{topics[i].name}}</a></li>
-		{{/each}}
-	</ul>
-</div></section>
-
-<section class="stripe"><div class="bounds bounds--wide">
-	<h2 class="text--labelSecondary chunk">Sponsors</h2>
-	<ul>
-		<li class="chunk row">
-			<div class="row-item row-item--shrink">
-				<div class="thumb media--l" style="background-image: url('https://placekitten.com/g/72/72');"></div>
-			</div>
-			<div class="row-item valign--middle">
-				<h3 class="text--bold">Sponsor Name</h3>
-				<p>Optional sponsor text goes here</p>
-			</div>
-		</li>
-		<li class="chunk row">
-			<div class="row-item row-item--shrink">
-				<div class="thumb media--l" style="background-image: url('https://placekitten.com/g/72/72');"></div>
-			</div>
-			<div class="row-item valign--middle">
-				<h3 class="text--bold">Sponsor Name</h3>
-				<p>Optional sponsor text goes here</p>
-			</div>
-		</li>
-		<li class="chunk row">
-			<div class="row-item row-item--shrink">
-				<div class="thumb media--l" style="background-image: url('https://placekitten.com/g/72/72');"></div>
-			</div>
-			<div class="row-item valign--middle">
-				<h3 class="text--bold">Sponsor Name</h3>
-				<p>Optional sponsor text goes here</p>
-			</div>
-		</li>
-	</ul>
-</div></section>
-
-{{/group}}
-</div>
 
 <footer class="stripe stripe--inverted inverted">
 	<div class="bounds align--center">
@@ -1009,25 +922,343 @@ TEMPLATES
 -->
 <!--
 /////////////////////////////////////////////////////
-Template: Posting interface
+Template: About screen
 /////////////////////////////////////////////////////
 -->
 <script id="about" type="text/template">
-	{{#group}}
-	<div class="stripe"><div class="bounds">
-		<h2 class="text--label">Description</h2>
+{{#group}}
+<section class="stripe"><div class="bounds bounds--wide">
+	<div class="runningText chunk">
 		{{{group.description}}}
-	</div></div>
+	</div>
+</div></section>
 
-	<div class="stripe"><div class="bounds">
-		<h2 class="text--label">Topics</h2>
-		<ul class="inlineblockList buttonList--small" id="topicListing">
-			{{#each topics:i}}
-				<li><a href="http://{{topics[i].urlkey}}.meetup.com/cities/us/10012" class="button button--bordered button--small">{{topics[i].name}}</a></li>
-			{{/each}}
+<section class="stripe"><div class="bounds bounds--wide">
+	<h2 class="text--labelSecondary chunk">Topics</h2>
+	<ul class="inlineblockList buttonList--small chunk" id="topicListing">
+		{{#each topics:i}}
+			<li><a href="http://{{topics[i].urlkey}}.meetup.com/cities/us/10012" class="button button--bordered button--small">{{topics[i].name}}</a></li>
+		{{/each}}
+	</ul>
+</div></section>
+
+<section class="stripe"><div class="bounds bounds--wide">
+	<h2 class="text--labelSecondary chunk">Sponsors</h2>
+	<ul>
+		<li class="chunk row">
+			<div class="row-item row-item--shrink">
+				<div class="thumb media--l" style="background-image: url('https://placekitten.com/g/72/72');"></div>
+			</div>
+			<div class="row-item valign--middle">
+				<h3 class="text--bold">Sponsor Name</h3>
+				<p>Optional sponsor text goes here</p>
+			</div>
+		</li>
+		<li class="chunk row">
+			<div class="row-item row-item--shrink">
+				<div class="thumb media--l" style="background-image: url('https://placekitten.com/g/72/72');"></div>
+			</div>
+			<div class="row-item valign--middle">
+				<h3 class="text--bold">Sponsor Name</h3>
+				<p>Optional sponsor text goes here</p>
+			</div>
+		</li>
+		<li class="chunk row">
+			<div class="row-item row-item--shrink">
+				<div class="thumb media--l" style="background-image: url('https://placekitten.com/g/72/72');"></div>
+			</div>
+			<div class="row-item valign--middle">
+				<h3 class="text--bold">Sponsor Name</h3>
+				<p>Optional sponsor text goes here</p>
+			</div>
+		</li>
+	</ul>
+</div></section>
+
+{{/group}}
+</script>
+
+<!--
+/////////////////////////////////////////////////////
+Template: Meetups screen
+/////////////////////////////////////////////////////
+-->
+<script id="meetups" type="text/template">
+<section class="stripe stripe--collection"><div class="bounds bounds--wide">
+	<ul class="list">
+		{{#each events_recent:i}}
+
+			{{#if i<2}}
+			<li class="list-item chunk">
+				{{> eventItem}}
+			</li>
+			{{/if}}
+
+		{{/each}}
+	</ul>
+</div></section>
+
+<section class="stripe"><div class="bounds bounds--wide">
+	<h2 class="text--label">Upcoming</h2>
+	<ul class="list">
+		{{#events_short}}
+			<li class="list-item chunk">
+				{{> eventItem}}
+			</li>
+		{{/events_short}}
+	</ul>
+
+	<a href="#!/events" class="link align--center display--block chunk">See all Meetups</a>
+
+</div></section>
+</script>
+
+<!--
+/////////////////////////////////////////////////////
+Template: Photo Albums
+/////////////////////////////////////////////////////
+-->
+<script id="albums" type="text/template">
+<section class="stripe"><div class="bounds bounds--wide">
+	<div class="spreadable atMedium_spreadable--spread">
+		<div class="spreadable-item chunk">
+			<div class="text--display3 display--inlineBlock">{{photo_albums.length}} albums</div>
+			<div class="text--display3 display--inlineBlock _hacks_text--unbold"> &middot; </div>
+			<div class="text--display3 display--inlineBlock _hacks_text--unbold"><a href="#!/groupPhotos" class="link">{n} photos</a></div>
+		</div>
+		<div class="spreadable-item spreadable-item--shrink chunk">
+			<button class="button button--icon"><span class="button-icon">{{{helpers.svgIcon('plus', 'icon--s')}}}</span><span class="button-label">Add photos</span></button>
+		</div>
+	</div>
+</div></section>
+<section class="stripe"><div class="bounds bounds--wide">
+	<ul class="gridList gridList--has1 atMedium_gridList--has4">
+		{{#photo_albums}}
+			<li class="gridList-item">
+				<div class="_proto_flexPhotos keepAspect keepAspect--3-2">
+
+					<a href="#!/albums/{{id}}" class="_proto_flexPhotos-wrapper chunk row inverted" data-event-id="{{event.id}}">
+						<span class="row-item chunk imgFill _proto_flexPhotos--lg _proto_flexPhotos-photo" style="background-image: url({{photo_sample[0].photo_link}});"></span>
+						{{#if photo_sample.length > 1}}
+							<span class="row-item row-item--shrink column _proto_flexPhotos--sm">
+								<span class="chunk imgFill column-item _proto_flexPhotos-photo" style="background-image:url('{{photo_sample[1].photo_link}}')"></span>
+								{{#if photo_sample.length > 2}}
+									<span class="chunk imgFill column-item _proto_flexPhotos-photo" style="background-image:url('{{photo_sample[2].photo_link}}')"></span>
+								{{/if}}
+							</span>
+						{{/if}}
+					</a>
+
+				</div>
+
+				<div class="chunk">
+					<h4 class="text--bold">{{event.name}}</h4>
+					<p class="text--caption">{{photo_count}} photos</p>
+				</div>
+			</li>
+		{{/photo_albums}}
+	</ul>
+</div></section>
+</script>
+
+<!--
+/////////////////////////////////////////////////////
+Template: Photo Albums
+/////////////////////////////////////////////////////
+-->
+<script id="groupPhotos" type="text/template">
+<section class="stripe"><div class="bounds bounds--wide">
+	<div class="spreadable atMedium_spreadable--spread">
+		<div class="spreadable-item chunk">
+			<div class="text--display3 display--inlineBlock _hacks_text--unbold"><a href="#!/albums" class="link">{{photo_albums.length}} albums</a></div>
+			<div class="text--display3 display--inlineBlock _hacks_text--unbold"> &middot; </div>
+			<div class="text--display3 display--inlineBlock">{n} photos</div>
+		</div>
+		<div class="spreadable-item spreadable-item--shrink chunk">
+			<button class="button button--icon"><span class="button-icon">{{{helpers.svgIcon('plus', 'icon--s')}}}</span><span class="button-label">Add photos</span></button>
+		</div>
+	</div>
+</div></section>
+
+{{#each photo_albums:i}}
+<section class="stripe"><div class="bounds bounds--wide">
+<div class="chunk">
+	<h4 class="text--big">{{event.name}} <span class="_hacks_text--unbold"> &middot; <a href="#!/albums/{{id}}" class="link">{{photo_count}} photos</a></span></h4>
+</div>
+<ul class="gridList gridList--photoGrid _tweak_gridList--photoGrid gridList--has4 atLarge_gridList--has5 chunk">
+{{#photo_sample_long}}
+	<li class="gridList-item"><a href="#!/photo-detail/{{photo_id}}" class="thumb" style="background-image: url({{photo_link}});"></a></li>
+{{/photo_sample_long}}
+{{#if photo_count > 19}}
+	<li class="gridList-item">
+		<a href="#!/albums/{{id}}" class="align--center valign--middle">
+			+{{photo_count}}
+		</a>
+	</li>
+{{/if}}
+</ul>
+</div></section>
+{{/each}}
+</script>
+
+<!--
+/////////////////////////////////////////////////////
+Template: Album Grid
+/////////////////////////////////////////////////////
+-->
+<script id="albumPhotos" type="text/template">
+	<section class="stripe"><div class="bounds bounds--wide">
+		{{#photo_album_meta}}
+			<div class="chunk">
+				<h1 class="text--display3"><a href="#" class="link">{{title}}</a></h1>
+				{{#event}}
+					<p>{{yes_rsvp_count}} went &middot; {{helpers.dateRelative(time)}}</p>
+				{{/event}}
+			</div>
+		{{/photo_album_meta}}
+
+		<ul class="gridList gridList--photoGrid gridList--has4 atLarge_gridList--has5 chunk">
+		{{#album_photos}}
+			<li class="gridList-item"><a href="#!/photo-detail/{{photo_id}}" class="thumb" style="background-image: url({{photo_link}});"></a></li>
+		{{/album_photos}}
 		</ul>
-	</div></div>
-	{{/group}}
+	</div></section>
+
+	<section class="stripe"><div class="bounds bounds--wide">
+		<div class="chunk align--center">
+			<h2 class="text--big">More albums</h2>
+		</div>
+
+		<ul class="chunk gridList gridList--has1 atMedium_gridList--has4">
+			{{#photo_albums}}
+				<li class="gridList-item">
+					<div class="_proto_flexPhotos keepAspect keepAspect--3-2">
+
+						<a href="#!/albums/{{id}}" class="_proto_flexPhotos-wrapper chunk row inverted" data-event-id="{{event.id}}">
+							<span class="row-item chunk imgFill _proto_flexPhotos--lg _proto_flexPhotos-photo" style="background-image: url({{photo_sample[0].photo_link}});"></span>
+							{{#if photo_sample.length > 1}}
+								<span class="row-item row-item--shrink column _proto_flexPhotos--sm">
+									<span class="chunk imgFill column-item _proto_flexPhotos-photo" style="background-image:url('{{photo_sample[1].photo_link}}')"></span>
+									{{#if photo_sample.length > 2}}
+										<span class="chunk imgFill column-item _proto_flexPhotos-photo" style="background-image:url('{{photo_sample[2].photo_link}}')"></span>
+									{{/if}}
+								</span>
+							{{/if}}
+						</a>
+
+					</div>
+
+					<div class="chunk">
+						<h4 class="text--bold">{{event.name}}</h4>
+						<p class="text--caption">{{photo_count}} photos</p>
+					</div>
+				</li>
+			{{/photo_albums}}
+		</ul>
+	</div></section>
+</script>
+
+<!--
+/////////////////////////////////////////////////////
+Template: Photo Detail View
+/////////////////////////////////////////////////////
+-->
+<script id="photoDetail" type="text/template">
+
+<div class="view view--mediaContent spreadable-item">
+	<div class="view-body view-body--mediaContent" style="background-image: url({{displayed_photo.highres_link}});">
+		<a class="mediaNav mediaNav--prev" rel="prev" href="#">
+			<span class="mediaNav-icon">&#10094;</span>
+		</a>
+		<a class="mediaNav mediaNav--next" rel="next" href="#">
+			<span class="mediaNav-icon">&#10095;</span>
+		</a>
+	</div>
+</div>
+
+<div class="view view--mediaMeta spreadable-item spreadable-item--shrink">
+	<div class="view-body">
+		<section class="stripe border--none">
+			<div class="bounds bounds--mediaMeta attachment">
+				<div class="chunk">
+					<p>Photo caption goes here</p>
+					<!-- <p class="text--secondary">&mdash; with <a class="link" href="#">somebody</a></p> -->
+				</div>
+				<div class="chunk">
+					<p class="text--caption">Added to <a href="{{group.link}}" class="link">{{group.name}}</a> by <a href="#" class="link">{{displayed_photo.member.name}}</a> on {{helpers.dateFormat(displayed_photo.created)}}</p>
+				</div>
+
+				{{#if displayed_photo.event_data}}
+					<div class="chunk bordered text--small">
+						<a class="link row" href="{{displayed_photo.event_data.event_url}}">
+							{{{helpers.svgIcon('calendar', 'row-item row-item--shrink valign--middle')}}} 
+							<span class="row-item">{{displayed_photo.event_data.name}}</span>
+						</a>
+					</div>
+				{{/if}}
+
+			</div>
+		</section>
+		<section class="stripe">
+
+			<div class="bounds bounds--mediaMeta attachment">
+				<div class="attachment text--small">
+					<div class="chunk">
+						<p class="text--small"><strong>2 Likes</strong> &middot; <a href="#" class="link">Like</a> &middot; <a href="#" class="link">Comment</a> &middot; <a href="#!/tag-members" class="link">Tag members</a></p>
+					</div>
+
+					<ul class="list">
+
+						<li class="row">
+							<div class="row-item--shrink">
+								<div class="chunk ">
+									<div class="avatar avatar--person avatar--small" style="background-image: url(http://lorempixel.com/people/50/50);"></div>
+								</div>
+							</div>
+							<div class="row-item">
+								<div class="chunk">
+									<p><strong>Member Name</strong> <span class="js-expandableContent--inline">What a great photo! Our group is the coolest.</span></p>
+								</div>
+							</div>
+						</li>
+
+						<li class="row">
+							<div class="row-item--shrink">
+								<div class="chunk ">
+									<div class="avatar avatar--person avatar--small" style="background-image: url(http://lorempixel.com/people/48/48);"></div>
+								</div>
+							</div>
+							<div class="row-item">
+								<div class="chunk">
+									<p><strong>Member Name</strong> <span class="js-expandableContent--inline">Yea, that was such a fun day we had. Thanks for uploading this to the event album.</span></p>
+								</div>
+							</div>
+						</li>
+
+						<li class="row">
+							<div class="row-item--shrink">
+								<div class="chunk">
+									<div class="avatar avatar--person avatar--small" style="background-image: url({{current_member.photo}});"></div>
+								</div>
+							</div>
+							<div class="row-item">
+								<div class="chunk">
+									<textarea placeholder="Write a comment&hellip;" on-keyup="showPostBtn"></textarea>
+								</div>
+								<div class="chunk align--right display--none postBtnContainer">
+									<button class="button button--primary button--small" on-click="postComment">Post</button>
+								</div>
+							</div>
+						</li>
+
+					</ul>
+				</div>
+
+			</div>
+		</section>
+	</div>
+</div>
+
 </script>
 
 <!--
@@ -1122,7 +1353,7 @@ Template: Photo posting
 		<ul class="cardList row--wrap span--100 gridList gridList--has1 {{#if previewPhotos.length > 1}}atMedium_gridList--has2 atLarge_gridList--has3{{/if}}">
 			{{#previewPhotos}}
 			<li class="gridList-item">
-				<div class="chunk card">
+				<div class="chunk card _tweak_card">
 
 					<!-- <div class="card" style="background-image: url({{.}});"></div> -->
 					<div class="align--center _proto_photoUploadPreview">
@@ -1509,7 +1740,7 @@ Template: Pre-MUP
 
 		<ul class="_proto_discussionList">
 		{{#each preMUPRendered.feed:i}}
-			<li class="card chunk">
+			<li class="card _tweak_card chunk">
 				{{#if type == 'discussion'}}
 					{{ > discussionTemplate }}
 				{{/if}}
@@ -1519,122 +1750,8 @@ Template: Pre-MUP
 	</div></div>
 </script>
 
-<!--
-/////////////////////////////////////////////////////
-Template: Album Grid
-/////////////////////////////////////////////////////
--->
-<script id="photoAlbumGrid" type="text/template">
-	{{#album_photos}}
-		<div class="chunk">{{photo_id}}</div>
-	{{/album_photos}}
-</script>
-
-<!--
-/////////////////////////////////////////////////////
-Template: Photo Detail View
-/////////////////////////////////////////////////////
--->
-<script id="photoDetail" type="text/template">
-
-<div class="view view--mediaContent spreadable-item">
-	<div class="view-body view-body--mediaContent" style="background-image: url({{displayed_photo.highres_link}});">
-		<a class="mediaNav mediaNav--prev" rel="prev" href="#">
-			<span class="mediaNav-icon">&#10094;</span>
-		</a>
-		<a class="mediaNav mediaNav--next" rel="next" href="#">
-			<span class="mediaNav-icon">&#10095;</span>
-		</a>
-	</div>
-</div>
-
-<div class="view view--mediaMeta spreadable-item spreadable-item--shrink">
-	<div class="view-body">
-		<section class="stripe border--none">
-			<div class="bounds bounds--mediaMeta attachment">
-				<div class="chunk">
-					<p>Photo caption goes here</p>
-					<!-- <p class="text--secondary">&mdash; with <a class="link" href="#">somebody</a></p> -->
-				</div>
-				<div class="chunk">
-					<p class="text--caption">Added to <a href="{{group.link}}" class="link">{{group.name}}</a> by <a href="#" class="link">{{displayed_photo.member.name}}</a> on {{helpers.dateFormat(displayed_photo.created)}}</p>
-				</div>
-
-				{{#if displayed_photo.event_data}}
-					<div class="chunk bordered text--small">
-						<a class="link row" href="{{displayed_photo.event_data.event_url}}">
-							{{{helpers.svgIcon('calendar', 'row-item row-item--shrink valign--middle')}}} 
-							<span class="row-item">{{displayed_photo.event_data.name}}</span>
-						</a>
-					</div>
-				{{/if}}
-
-			</div>
-		</section>
-		<section class="stripe">
-
-			<div class="bounds bounds--mediaMeta attachment">
-				<div class="attachment text--small">
-					<div class="chunk">
-						<p class="text--small"><strong>2 Likes</strong> &middot; <a href="#" class="link">Like</a> &middot; <a href="#" class="link">Comment</a> &middot; <a href="#!/tag-members" class="link">Tag members</a></p>
-					</div>
-
-					<ul class="list">
-
-						<li class="row">
-							<div class="row-item--shrink">
-								<div class="chunk ">
-									<div class="avatar avatar--person avatar--small" style="background-image: url(http://lorempixel.com/people/50/50);"></div>
-								</div>
-							</div>
-							<div class="row-item">
-								<div class="chunk">
-									<p><strong>Member Name</strong> <span class="js-expandableContent--inline">What a great photo! Our group is the coolest.</span></p>
-								</div>
-							</div>
-						</li>
-
-						<li class="row">
-							<div class="row-item--shrink">
-								<div class="chunk ">
-									<div class="avatar avatar--person avatar--small" style="background-image: url(http://lorempixel.com/people/48/48);"></div>
-								</div>
-							</div>
-							<div class="row-item">
-								<div class="chunk">
-									<p><strong>Member Name</strong> <span class="js-expandableContent--inline">Yea, that was such a fun day we had. Thanks for uploading this to the event album.</span></p>
-								</div>
-							</div>
-						</li>
-
-						<li class="row">
-							<div class="row-item--shrink">
-								<div class="chunk">
-									<div class="avatar avatar--person avatar--small" style="background-image: url({{current_member.photo}});"></div>
-								</div>
-							</div>
-							<div class="row-item">
-								<div class="chunk">
-									<textarea placeholder="Write a comment&hellip;" on-keyup="showPostBtn"></textarea>
-								</div>
-								<div class="chunk align--right display--none postBtnContainer">
-									<button class="button button--primary button--small" on-click="postComment">Post</button>
-								</div>
-							</div>
-						</li>
-
-					</ul>
-				</div>
-
-			</div>
-		</section>
-	</div>
-</div>
-
-</script>
-
 <script id="members" type="text/template">
-<section class="stripe"><div class="bounds">
+<section class="stripe"><div class="bounds bounds--wide">
 	<div class="row chunk">
 		<div class="row-item">
 			<h1 class="text--display3">Members</h1>
@@ -1650,18 +1767,18 @@ Template: Photo Detail View
 	</div>
 </div></section>
 
-<section class="stripe"><div class="bounds">
+<section class="stripe"><div class="bounds bounds--wide">
 	<ul class="list">
 		{{#members}}
 			<li class="list-item chunk">
 				<div class="row">
-					<div class="row-item row-item--shrink valign--middle">
-						<div class="avatar avatar--person" style="background-image:url({{photo}})"></div>
-					</div>
-					<div class="row-item spreadable atMedium_spreadable--spread">
-						<div class="spreadable-item spreadable-item--shrink _proto_memberName valign--middle">{{name}}</div>
-						<div class="spreadable-item valign--middle">{{bio}}</div>
-					</div>
+					<a href="#!/members/{{id}}" class="row-item row-item--shrink valign--middle">
+						<span class="avatar avatar--person" style="background-image:url({{photo}})"></span>
+					</a>
+					<a href="#!/members/{{id}}" class="row-item spreadable atMedium_spreadable--spread valign--middle">
+						<span class="spreadable-item spreadable-item--shrink _proto_memberName valign--middle text--bold">{{name}}</span>
+						{{#bio}}<span class="spreadable-item valign--middle _hacks_wrap--2line--truncate">{{bio}}</span>{{/bio}}
+					</a>
 					<div class="row-item row-item--shrink valign--middle">{{{helpers.svgIcon('overflow')}}}</div>
 				</div>
 			</li>

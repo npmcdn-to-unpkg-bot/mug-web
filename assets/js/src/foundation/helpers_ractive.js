@@ -445,7 +445,7 @@ function defaultRenderCompleteActions($el){
 	$el = $el || $('body');
 	//$el.find('.hscroll').hscroll();
 	//$el.find('.exactlist').exactlist();
-	$el.find('.tabs').tabs();
+	// $el.find('.tabs').tabs();
 	// autosize($el.find('textarea'));
 	priorityPlusSetup();
 

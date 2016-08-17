@@ -51,7 +51,7 @@ router.add('', function(context){ // homepage
 });
 
 // ROUTE: mugInfo (about)
-router.add('mugInfo', function(context){
+router.add('about', function(context){
 	// console.log(context);
 
 	function show_tab($ul, $li){
@@ -216,20 +216,54 @@ router.add('preMup/:i', function(context){ // homepage
 });
 
 // ROUTE: Album grid
-router.add('albums/:i', function(context){ // homepage
-
-	gimme.get([
-		{"gimme": "album_photos", "data": {"page": 20, "photo_album_id": context.params.i}}
-	], true).then(function(data){
-		views.data.album_photos = data.album_photos;
-	});
+router.add('albums', function(context){
 
 	views.show({
-		template : 'photoAlbumGrid',
+		template : 'albums',
 		events : {
+			"complete" : main_onComplete
 		},
 		header : {
+			hidden: true
 		}
+	});
+
+});
+
+// ROUTE: All photos
+router.add('groupPhotos', function(context){
+
+	views.show({
+		template : 'groupPhotos',
+		events : {
+			"complete" : main_onComplete
+		},
+		header : {
+			hidden: true
+		}
+	});
+
+});
+
+// ROUTE: Photo grid (by album)
+router.add('albums/:i', function(context){
+
+	gimme.get([
+		{"gimme": "album_photos", "data": {"page": 20, "photo_album_id": context.params.i}},
+		{"gimme": "photo_album_meta", "data": {"photo_album_id": context.params.i, "urlkey": views.data.group.urlname }}
+	], true).then(function(data){
+		views.data.album_photos = data.album_photos;
+		views.data.photo_album_meta = data.photo_album_meta;
+	}).then(function(){
+		views.show({
+			template : 'albumPhotos',
+			events : {
+				"complete" : main_onComplete
+			},
+			header : {
+				hidden: true
+			}
+		});
 	});
 
 });

@@ -43,7 +43,7 @@ var processData = function(){
 	views.data.current_member = {
 		photo: "https://s3.amazonaws.com/uifaces/faces/twitter/adellecharles/128.jpg",
 		name: "Sally Smeetup",
-		membership: getParameterByName('membership') || views.data.membership.organizer
+		membership: getParameterByName('membership') || views.data.membership.member
 		// membership: 1
 	};
 
@@ -157,8 +157,8 @@ var processData = function(){
 	// The magic happens in `data-buildNews.js`
 	// ----------------------------------------------
 	views.data.news = buildNews({
-		events: views.data.events_short,
-		events_recent: views.data.events_recent,
+		// events: views.data.events_short,
+		// events_recent: views.data.events_recent,
 		discussions: views.data.boards_posts,
 		preMUPs: views.data.preMUPs
 	});
@@ -182,7 +182,7 @@ var processData = function(){
 // Either pull with Gimme, or use cached data,
 // then process it using `processData()`
 // ------------------------------------------------
-gimme.apiKey = "7060231d422c3421e3c13406e606631"; // 715d68731b3913292f447f4c45547 1e84f701a17435513a17796245794d
+gimme.apiKey = "1e84f701a17435513a17796245794d"; // 1e84f701a17435513a17796245794d 7060231d422c3421e3c13406e606631 715d68731b3913292f447f4c45547
 gimme.get([{"gimme": "group", "data": {"group_id": groupId} }], true).then(function(data){
 	urlname = data.group.urlname;
 
@@ -192,18 +192,20 @@ gimme.get([{"gimme": "group", "data": {"group_id": groupId} }], true).then(funct
 				// {"gimme": "groups", "data": {"page": 8, "zip": zip}},
 				{"gimme": "group", "data": {"group_id": groupId} },
 
-				// {"gimme": "events", "key": "events_short", "data": {"group_id": groupId, "page": 3}}, // for feed
+				{"gimme": "events", "key": "events_short", "data": {"group_id": groupId, "page": 3}}, // for feed
 				// {"gimme": "events", "key": "events_long", "data": {"group_id": groupId, "page": 20}}, // for calendar
 
-				// {"gimme": "events", "key": "events_recent", "data": {"status": "past", "group_id": groupId, "page": 3, "desc": true}},
+				{"gimme": "events", "key": "events_recent", "data": {"status": "past", "group_id": groupId, "page": 3, "desc": true}},
 
 				// {"gimme": "events_meta", "data": {"page": 20, "group_id": groupId}},
 				{"gimme": "members", "data":{"group_id": groupId, "page": 18}},
 				// {"gimme": "members", "key":"inviteWho", "data":{"group_id": groupId, "page": 10}}
 
-				{"gimme": "photo_albums", "data": {"page": 10, "urlkey": urlname}}
+				{"gimme": "photo_albums", "data": {"page": 10, "urlkey": urlname}, children: [
+					{"gimme": "album_photos", "key":"photo_sample_long" ,"data": {"page": 19}, "match": [["id", "photo_album_id"]]}
+				]},
 				// {"gimme": "photo_albums", "data": {"page": 10, "group_id": groupId}}, // v2 API group albums
-				// {"gimme": "photos", "key": "mup_photos", "data": {"page": 20, "group_id": groupId}},
+				{"gimme": "photos", "key": "mup_photos", "data": {"page": 18, "group_id": groupId}}
 
 				// {"gimme": "boards", "key": "boards_posts", data:{"urlkey": urlname, "page": 2}, children: [ // Which boards to pull?
 				// 	{"gimme": "discussions", data:{"urlkey": urlname, "page": 2}, "match": [["id", "board_id"]], children: [ // Which threads from those boards?

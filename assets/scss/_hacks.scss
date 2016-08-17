@@ -5,7 +5,8 @@
 */
 
 // Hide the scroll bar on hscrolls
-.hscroll::-webkit-scrollbar {
+.hscroll::-webkit-scrollbar,
+._proto_photoGrid--scroll::-webkit-scrollbar {
 	display: none;
 }
 
@@ -167,6 +168,15 @@
 	margin: 0 -#{$space};
 }
 
+._hacks_breakBounds--alignLabel > *:first-child {
+	margin-left: $space;
+
+	@include atMediaUp(medium) {
+		margin-left: 0;
+	}
+
+}
+
 //
 // Exact list
 // Limits lists to one line
@@ -191,3 +201,26 @@
 
 	}
 }
+
+//
+// Unbold
+// Un-bolds text that is in a normally bolded context
+//
+._hacks_text--unbold {
+	font-weight: $W_normal;
+}
+
+//
+// Line-clamp truncation
+// Uses `-webkit-line-clamp` to truncate text by line 
+// instead of by char count. 
+// Maybe use JS to do char-count truncation for unsupported browsers?
+//
+._hacks_wrap--2line--truncate {
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical; 
+	overflow: hidden;
+}
+
+

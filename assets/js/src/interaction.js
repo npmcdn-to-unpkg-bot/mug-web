@@ -11,7 +11,7 @@ function main_onComplete() {
 	// Line-clamp style text truncation
 	$('.js-expandableContent--desc').each(function() {
 		var el = $(this);
-		ellipsis(el, 5, { wrapWith: '<p>', title: false, more: true, moreHref: '#!/mugInfo' });
+		ellipsis(el, 5, { wrapWith: '<p>', title: false, more: true, moreHref: '#!/about' });
 	});
 
 	$('.js-expandableContent').each(function() {
@@ -25,13 +25,6 @@ function main_onComplete() {
 		ellipsis(el, 5, { wrapWith: '<span>', title: false, more: true });
 	});
 	$(document.body).on('click', '[data-ellipsis-applied] [data-toggle-ellipsis]', function(e) { toggleEllipsis(e) });
-
-	function show_tab($ul, $li){
-		$($ul.data('tab-selectors')).hide();
-		$('#'+$li.data('show')).show();
-		$ul.find('.tabs-tab').removeClass('tabs-tab--selected');
-		$li.addClass('tabs-tab--selected');
-	}
 }
 
 /*

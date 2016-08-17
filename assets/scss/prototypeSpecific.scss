@@ -34,12 +34,119 @@ MUG meta info
 .spreadable > .spreadable-item._proto_mugMeta {
 
 	@include atMediaUp(large) {
-		@include flex-basis($block-5);
+		@include flex-basis($view-minWidth);
 		order: 1;
 		padding-left: $space;
 	}
 
 }
+
+._proto_joinBtn {
+	//-24px for stripe padding
+		// stripe padding uses $space-2
+	//-20px for 1/2 the button height
+		// button height comes from $font-size * $line-height + ($space-half * 2)
+	margin-top: -44px;
+
+	@include atMediaUp(large) {
+		margin-top: 0;
+	}
+}
+
+/*
+------------------------------
+Upcoming MUPs scrolling list
+------------------------------
+*/
+._proto_upcomingMupsList {
+	@include display(flex);
+
+	._proto_upcomingMupsList-item .card {
+		height: 100%;
+	}
+
+	@include atMediaUp(medium) {
+		@include display(block);
+
+		._proto_upcomingMupsList-item {
+			padding-right: 0;
+			width: 100%;
+		}
+
+	}
+
+}
+
+
+//
+// PHOTO GRID
+//
+$gridHeight: $media-xl;
+
+._proto_photoGrid {
+	@include display(flex);
+	flex-direction: column;
+	flex-wrap: wrap;
+	height: $gridHeight;
+	margin-top: -#{$space-quarter}; // to make up for extra top padding
+}
+
+._proto_photoGrid--scroll {
+	-webkit-overflow-scrolling: touch;
+	overflow-x: scroll;
+}
+
+._proto_atMedium_photoGrid--scrollUnclip {
+	@include atMediaUp(medium) {
+		overflow-x: hidden;
+	}
+}
+
+._proto_photoGrid-item {
+	box-sizing: border-box;
+	height: 50%;
+	overflow: hidden;
+	padding: $space-quarter $space-quarter/2 0;
+	width: 25%;
+
+	&:nth-child(3n+1) {
+		height: 100%;
+		min-width: $gridHeight;
+	}
+
+}
+
+._proto_photoGrid-image {
+	height: 100%;
+}
+
+// If we want to be semantic and use `img`, but have things
+// look funny on browsers that don't support `object-fit`...
+img._proto_photoGrid-image {
+	height: 100%;
+	object-fit: cover;
+	width: 100%;
+}
+
+// mixin taken from SQ2 file `_aspect-ratio.scss` on 08/15/2016
+// @mixin _aspect( $ratio ) {
+//   margin-bottom: 0;
+//   &:before {
+//     content: '';
+//     display: block;
+//     padding-top: $ratio;
+//   }
+// }
+
+// ._proto_photoGrid-image {
+// 	@include _aspect(percentage(1/2));
+
+// 	&:nth-child(3n+1) {
+// 		@include _aspect(percentage(1/1))
+// 	}
+// }
+
+
 
 /*
 ------------------------------
@@ -49,7 +156,6 @@ Discussion feed
 
 // Discussion list
 ._proto_discussionList {
-	margin: 0 -#{$space};
 
 	& > .card {
 		border-radius: 0;
@@ -106,7 +212,7 @@ Discussion feed
 }
 
 //
-// Photos
+// Photos (in discussion feed)
 //
 // Flex Photos - flexbox-based photo-grid
 ._proto_flexPhotos {
@@ -114,12 +220,17 @@ Discussion feed
 
 	&--sm {
 		width: percentage(1/3);
+		padding-left: $space-quarter;
 	}
 
 	&--lg {
 		width: percentage(2/3);
 	}
 
+}
+
+._proto_flexPhotos-photo {
+	margin-bottom: $space-quarter !important; // to beat out chunk
 }
 
 ._proto_flexPhotos-wrapper {
@@ -215,6 +326,17 @@ Posting interface
 	border: 1px solid $C_border;
 	border-radius: 999px $defaultRadius $defaultRadius 999px;
 	padding: 0 $space-half 0 0;
+
+	// header-overlap styles
+	left: $space;
+	position: absolute;
+	right: $space;
+	top: -#{$space-2};
+
+	@include atMediaUp(large) {
+		position: initial;
+	}
+
 }
 
 input[type="text"]._proto_input--unboxed {
