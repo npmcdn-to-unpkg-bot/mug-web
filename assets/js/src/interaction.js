@@ -25,6 +25,8 @@ function main_onComplete() {
 		ellipsis(el, 5, { wrapWith: '<span>', title: false, more: true });
 	});
 	$(document.body).on('click', '[data-ellipsis-applied] [data-toggle-ellipsis]', function(e) { toggleEllipsis(e) });
+
+	renderNavigation();
 }
 
 /*
@@ -36,40 +38,14 @@ function main_onComplete() {
 */
 function renderNavigation() {
 	if ($('.mainNav').length < 1) {
+		var isLoggedIn = getParameterByName('loggedIn') || true;
+
 		views.nav_show({
-			"loggedIn": false,
+			"loggedIn": isLoggedIn,
 			"isModern": false
 		});
 
-		// Change to sticky nav
-		
-		setTimeout(function() { // using this to deal with weird Waypoints bug
-			$('.mainNav').waypoint({
-				handler: function(direction) {
-					if (direction == 'up') {
-						// over photo
-						$(this).addClass('mainNav--photoOverlay inverted'); // change nav bg
-						$(this).find('.button--bordered').addClass('button--contrast').removeClass('button--bordered'); // change button
-						$(this).find('.js_logo--script').removeClass('display--none').addClass('display--inlineBlock'); // show script logo
-						$(this).find('.js_logo--swarm').removeClass('display--inlineBlock').addClass('display--none'); // hide swarm logo
-						$(this).find('.js_signUp').toggleClass('display--none');
-						//console.log($(this).find('.js_signUp'));
-					} else {
-						// over content
-						$(this).removeClass('mainNav--photoOverlay inverted');
-						$(this).find('.button--contrast').addClass('button--bordered').removeClass('button--contrast');
-						$(this).find('.js_logo--script').removeClass('display--inlineBlock').addClass('display--none'); // show script logo
-						$(this).find('.js_logo--swarm').removeClass('display--none').addClass('display--inlineBlock'); // hide swarm logo
-						$(this).find('.js_signUp').toggleClass('display--none');
-					}
-				},
-				offset: function() {
-					return -1 * $('.stripe-heroContent').height();
-				}
-			});
-		}, 1);
-		$('.mainNav').addClass('mainNav--sticky mainNav--photoOverlay inverted');
-		
+		views.data.isLoggedIn = isLoggedIn;
 	}
 }
 
@@ -897,7 +873,81 @@ function test_toast() {
 /*
 //////////////////////////////////////////////////////////
 ----------------------------------------------------------
-PREMUP INTERACTIONS
+GROUP NAVIGATION INTERACTIONS
 ----------------------------------------------------------
 //////////////////////////////////////////////////////////
 */
+function toggle_overflow(event){
+	var mugOverflowActions = [];
+
+	if (views.data.current_member.membership == views.data.membership.new_member || views.data.current_member.membership == views.data.membership.member) {
+		mugOverflowActions = [
+			{label: "Notifications", fn: function(){ window.location.hash = '#!/notif-settings'; return false; }},
+			{label: "Share", fn: function(){ alert('Sharing'); }},
+			{label: "Report", fn: function(){ alert('Report'); }},
+			{label: "Leave group", fn: leaveGroupWarning }
+		]
+	} else if (views.data.current_member.membership == views.data.membership.organizer) {
+		mugOverflowActions = [
+			{label: "Edit appearance", fn: edit_appearance},
+			{label: "Settings", fn: function(){ alert('Settings'); }},
+			{label: "Notifications", fn: function(){ window.location.hash = '#!/notif-settings'; return false; }},
+			{label: "Share", fn: function(){ alert('Sharing'); }},
+			{label: "Step down as organizer", fn: function(){ window.location.hash = '#!/org-handover'; return false; }}
+		]
+
+	} else {
+		mugOverflowActions = [
+			{label: "Share", fn: function(){ alert('Sharing'); }},
+			{label: "Report", fn: function(){ alert('Report'); }}
+		]
+	}
+
+	views.momentary_show({
+		$target: $(event.node),
+		type	 : 'popover',
+		buttons: mugOverflowActions
+	});
+}
+
+function leaveGroupWarning() {
+	views.dialog_show({
+		headline: "Are you sure you want to leave this Meetup group?",
+		primaryAction: { label: "Leave this Meetup", fn: function(){ alert('go to Find page'); }},
+		dismissText: "Cancel"
+	});
+}
+
+/*
+//////////////////////////////////////////////////////////
+----------------------------------------------------------
+NOTIFS SETTINGS
+----------------------------------------------------------
+//////////////////////////////////////////////////////////
+*/
+function toggleNotifs(event) {
+	$('.js-notifSection').toggleClass('display--none');
+	if ($('.js-notifSetting').text() === 'on') {
+		$('.js-notifSetting').text('off');
+		$('.js-notifSetting').addClass('text--error').removeClass('text--teal');
+	} else {
+		$('.js-notifSetting').text('on');
+		$('.js-notifSetting').removeClass('text--error').addClass('text--teal');
+	}
+}
+
+/*
+//////////////////////////////////////////////////////////
+----------------------------------------------------------
+CHANNEL SETTINGS
+----------------------------------------------------------
+//////////////////////////////////////////////////////////
+*/
+function toggleSave(event) {
+	// console.log(event);
+	$(event.node).parents('.js-channelContainer').find('.js-saveBtn').toggleClass('display--none');
+}
+
+function createNewChannel(event) {
+
+}

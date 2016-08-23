@@ -1,34 +1,23 @@
+<!-- web has no back/close btn by default, add arrows only for stepped flow? -->
 	{{^cancelMode}}
-		{{#if platform == 'web'}}
-			<!-- web has logo by default, arrow in stepped flow -->
 
-			{{#if isStep || !isRoot}}
-				{{^goHome}}
-					<div class="row-item row-item--shrink row-item--alignMiddle viewHead-back" on-click="back">
-						<i class="fa fa-arrow-left"></i>
-					</div>
-				{{/goHome}}
-				{{#goHome}}
-					<a href="#!" class="row-item row-item--shrink row-item--alignMiddle viewHead-back">
-						<i class="fa fa-arrow-left"></i>
-					</a>
-				{{/goHome}}
-			{{else}}
-				<a href="http://meetup.com/" class="row-item row-item--shrink row-item--alignMiddle">
-					<img src="style/img/logo.svg" width="35" height="24" />
-				</a>
-			{{/if}}
-
-		{{else}}
-		<!-- native has arrows by default -->
-
-			{{#if !isRoot}}
+		{{#if isStep || !isRoot}}
+			{{^goHome}}
 				<div class="row-item row-item--shrink row-item--alignMiddle viewHead-back" on-click="back">
 					<i class="fa fa-arrow-left"></i>
 				</div>
-			{{/if}}
-
+			{{/goHome}}
+			{{#goHome}}
+				<a href="#!" class="row-item row-item--shrink row-item--alignMiddle viewHead-back">
+					<i class="fa fa-arrow-left"></i>
+				</a>
+			{{/goHome}}
+		{{else}}
+			<a href="http://meetup.com/" class="row-item row-item--shrink row-item--alignMiddle">
+				<img src="style/img/logo.svg" width="35" height="24" />
+			</a>
 		{{/if}}
+
 	{{/cancelMode}}
 
 	{{#cancelMode}}

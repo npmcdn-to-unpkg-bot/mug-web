@@ -14,17 +14,19 @@
 	padding: $space-half;
 
 	@include atMediaUp(medium) {
-		margin-right: $space;
+		margin-right: $space-2;
+		padding: $space-half 0;
+
 		&:last-child {
 			margin-right: 0;
 		}
+
 	}
 }
 
 .mainNav-item--profile { //this class is only used for the current/old nav structure
 	@include atMediaUp(medium) {
-		border-left: 1px solid $C_border;
-		padding: $space 0 $space $space;
+		padding: $space 0;
 		height: $view-head-height-tablet;
 	}
 	.avatar--small {
@@ -40,13 +42,13 @@
 	// }
 }
 
-.mainNav-item-label {
-	padding-top: $space-quarter;
-	font-size: 10px;
-	@include atMediaUp(small) {
-		font-size: $font-size-small;
-	}
-}
+// .mainNav-item-label {
+// 	padding-top: $space-quarter;
+// 	font-size: 10px;
+// 	@include atMediaUp(small) {
+// 		font-size: $font-size-small;
+// 	}
+// }
 
 .mainNav-item--active {
 	border-bottom: 3px solid $C_accent;
@@ -64,6 +66,7 @@
 .mainNav{
 	background: $C_contentBG;
 	box-shadow: 0px 0px $space-half 0px transparentize($C_border, .1), 0px $space-quarter $space-half 0px $C_border;
+	position: relative;
 }
 
 .mainNav .button {
@@ -73,7 +76,7 @@
 .mainNav--sticky {
 	position: fixed;
 	width: 100%;
-	z-index: 999;
+	z-index: map-get($zindex-map, modal);
 }
 
 .mainNav--photoOverlay, .stripe--photoHero {
@@ -88,3 +91,140 @@
 	background: linear-gradient(transparentize($C_contentBGInverted, .2), transparentize($C_contentBGInverted, 1));
 	box-shadow: none;
 }
+
+//
+// Power the in and out transition of the logos
+//
+.mainNav {
+	overflow: hidden;
+}
+
+// ._proto_nav-logoContainer {
+// 	display: block;
+// 	// padding: 0 $space*2;
+// 	height: $view-head-height;
+// 	width: 100%;
+// }
+
+._proto_nav-logoWrapper {
+
+	// mimicking only using `row-item--shrink` on small screens
+	@include flex-grow(0);
+	@include flex-basis(25%);
+	width: initial;
+
+	@include atMediaUp(medium) {
+		@include flex-grow(1);
+		width: auto;
+	}
+}
+
+._proto_nav-logo {
+	left: $space;
+	position: absolute;
+	top: 50%;
+	transition: transform 200ms ease-in, opacity 175ms;
+	transform: translate(0, -50%);
+	max-width: 25%;
+
+	@include atMediaUp(medium) {
+		left: 50%;
+		transform: translate(-50%, -50%);
+	}
+
+}
+
+._proto_nav-logo--offScreen--btm {
+	transform: translate(0, 100%);
+	opacity: 0;
+
+	@include atMediaUp(medium) {
+		transform: translate(-50%, 100%);
+	}
+
+}
+
+._proto_nav-logo--offScreen--top {
+	transform: translate(0, 100%);
+	opacity: 0;
+
+	@include atMediaUp(medium) {
+		transform: translate(-50%, -200%);
+	}
+
+}
+
+//
+// Profile dropdown menu styles
+//
+._proto_profileMenu {
+	@include transform(translateX(100%));
+	background: white;
+	box-shadow: 0px 0px $space-half 0px transparentize($C_border, .1), -#{$space-quarter} $space-quarter $space-half 0px $C_border;
+	max-width: $view-minWidth;
+	position: fixed;
+	right: 0;
+	top: $view-head-height;
+	width: 100%;
+	z-index: map-get($zindex-map, modal);
+
+	@include atMediaUp(medium) {
+		max-width: none;
+		top: $view-head-height-tablet;
+		width: auto;
+	}
+}
+
+._proto_profileMenu--open {
+	@include transform(translateX(0));
+}
+
+._proto_profileMenuToggle--open .icon {
+	@include transform(rotate(180deg));
+}
+
+// ._proto_atMedium_order0 { order: 0; }
+
+// ._proto_atMedium_order1 { order: 1; }
+
+// ._proto_atMedium_order2 { order: 2; }
+
+// ._proto_atMedium_order3 { order: 3; }
+
+._proto_profileMenuContainer {
+	display: flex;
+	flex-direction: column;
+}
+
+._proto_profileMenu-MUGList {
+	max-width: $view-minWidth;
+}
+
+._proto_profileMenu-user {
+	min-width: $block-5;
+}
+
+@include atMediaUp(medium) {
+
+	._proto_profileMenuContainer {
+		display: block;
+
+		._proto_profileMenu-MUGList {
+			float: left;
+			margin-right: $space;
+			position: relative;
+		}
+
+	}
+
+	._proto_profileMenu-MUGList {
+		min-height: 230px; // magic number
+		width: 50%;
+	}
+
+
+}
+
+
+
+

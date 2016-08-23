@@ -314,7 +314,6 @@ function buildNews(sources){
 			var thisPreMUP = new Items.SparkedEvent(sources.preMUPs[i]);
 			getInviteWho(thisPreMUP);
 			news.push(thisPreMUP);
-			// console.log(views.data.news);
 		}
 	}
 
@@ -331,7 +330,7 @@ function buildNews(sources){
 				return -1;
 			return 0;
 		});
-	}, 800);
+	}, 3000);
 
 	return news;
 }

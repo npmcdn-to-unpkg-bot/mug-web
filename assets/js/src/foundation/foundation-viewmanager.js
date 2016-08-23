@@ -278,7 +278,7 @@ ViewManager.prototype = {
 	momentary_hide: function() {
 		if (this._momentary) {
 			this._momentary.hide();
-			this._momentary = null;
+			// this._momentary = null;
 		}
 		//this._momentary = null; // might need to put this in a callback
 	},

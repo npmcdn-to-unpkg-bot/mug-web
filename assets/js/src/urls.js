@@ -38,8 +38,9 @@ router.add('', function(context){ // homepage
 		header : {
 			title: views.data.group.name,
 			isRoot: false,
+			isFixed: true,
 			buttons: [
-				{ label: "Actions", icon: "ellipsis-h", fn: function(){ test_toast(); } }
+				{ label: "Actions", icon: "ellipsis-h", fn: toggle_overflow }
 			]
 		},
 		observe: {
@@ -54,14 +55,14 @@ router.add('', function(context){ // homepage
 router.add('about', function(context){
 	// console.log(context);
 
-	function show_tab($ul, $li){
-		$($ul.data('tab-selectors')).hide();
-		$('#'+$li.data('show')).show();
-		$ul.find('.tabs-tab').removeClass('tabs-tab--selected');
-		$li.addClass('tabs-tab--selected');
-	}
+	// function show_tab($ul, $li){
+	// 	$($ul.data('tab-selectors')).hide();
+	// 	$('#'+$li.data('show')).show();
+	// 	$ul.find('.tabs-tab').removeClass('tabs-tab--selected');
+	// 	$li.addClass('tabs-tab--selected');
+	// }
 
-	show_tab($('.tabs'), $('.tabs-tab[data-show="mugInfo"]'));
+	// show_tab($('.tabs'), $('.tabs-tab[data-show="mugInfo"]'));
 
 	// views.modal_show({
 	// 	template: "about",
@@ -79,6 +80,53 @@ router.add('about', function(context){
 	// 	// 	'uploadedPhotos': processUploadedPhotos2
 	// 	// }
 	// });
+
+	// views.modal_show({
+	// 	template: 'about',
+	// 	modalType: 'large',
+	// 	events : {
+	// 		"complete" : main_onComplete
+	// 	},
+	// 	header : {
+	// 		title: views.data.group.name,
+	// 		isRoot: false,
+	// 		condensed: {
+	// 			bgImg: views.data.group.keyPhoto
+	// 		}
+	// 	}
+	// });
+
+	views.show({
+		template : 'about',
+		events : {
+			"complete" : main_onComplete
+		},
+		header : {
+			title: views.data.group.name,
+			isRoot: false,
+			condensed: {
+				bgImg: views.data.group.keyPhoto
+			}
+		}
+	});
+
+});
+
+// ROUTE: Member list
+router.add('meetups', function(){
+	views.show({
+		template : 'meetups',
+		events : {
+			"complete" : main_onComplete
+		},
+		header : {
+			title: views.data.group.name,
+			isRoot: false,
+			condensed: {
+				bgImg: views.data.group.keyPhoto
+			}
+		}
+	});
 });
 
 // ROUTE: Text post
@@ -224,7 +272,11 @@ router.add('albums', function(context){
 			"complete" : main_onComplete
 		},
 		header : {
-			hidden: true
+			title: views.data.group.name,
+			isRoot: false,
+			condensed: {
+				bgImg: views.data.group.keyPhoto
+			}
 		}
 	});
 
@@ -239,7 +291,11 @@ router.add('groupPhotos', function(context){
 			"complete" : main_onComplete
 		},
 		header : {
-			hidden: true
+			title: views.data.group.name,
+			isRoot: false,
+			condensed: {
+				bgImg: views.data.group.keyPhoto
+			}
 		}
 	});
 
@@ -261,7 +317,11 @@ router.add('albums/:i', function(context){
 				"complete" : main_onComplete
 			},
 			header : {
-				hidden: true
+				title: views.data.group.name,
+				isRoot: false,
+				condensed: {
+					bgImg: views.data.group.keyPhoto
+				}
 			}
 		});
 	});
@@ -319,7 +379,42 @@ router.add('members', function(){
 			"complete" : main_onComplete
 		},
 		header : {
-			hidden: true
+			title: views.data.group.name,
+			isRoot: false,
+			condensed: {
+				bgImg: views.data.group.keyPhoto
+			}
 		}
 	});
 });
+
+// ROUTE: Notif settings
+router.add('notif-settings', function(context){
+
+	views.modal_show({
+		template: "notifSettings",
+		events: {
+			"toggleNotifs" : toggleNotifs
+		},
+		header : {
+			title: "Notification settings",
+			// subtitle: views.data.group.name,
+		}
+	});
+});
+
+// ROUTE: Channel settings
+router.add('Channels', function(context){
+
+	views.modal_show({
+		template: "channelSettings",
+		events: {
+			"toggleSave" : toggleSave
+		},
+		header : {
+			title: "Channel settings",
+			// subtitle: views.data.group.name,
+		}
+	});
+});
+

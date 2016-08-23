@@ -105,6 +105,7 @@
 //
 // Don't let position:fixed view-head overlap .stripe content
 //
+/*
 .view-head:not(.view-head--mediaContent):not(#modal_header) {
 	position: fixed;
 
@@ -124,6 +125,7 @@
 	}
 
 }
+*/
 
 //
 // Style the overlay that comes up with modals
@@ -184,6 +186,7 @@
 //
 ._hacks_exactList--small {
 	height: $media-xs;
+	margin-bottom: $space-quarter; // extra space-half is just to give it some breathing room
 }
 
 ._hacks_atLarge_exactList--spread {
@@ -223,4 +226,41 @@
 	overflow: hidden;
 }
 
+//
+// Flexbox order hacks
+// Using this to reorder sidebar for large screens
+//
+._hacks_order--reset {
+	order: initial;
+}
+
+._hacks_atMedium_order--0 {
+	@include atMediaUp(medium) {
+		order: 0;
+	}
+}
+
+._hacks_atMedium_order--1 {
+	@include atMediaUp(medium) {
+		order: 1;
+	}
+}
+
+._hacks_atLarge_order--0 {
+	@include atMediaUp(large) {
+		order: 0;
+	}
+}
+
+._hacks_atLarge_order--1 {
+	@include atMediaUp(large) {
+		order: 1;
+	}
+}
+
+._hack_atMedium_padding--left {
+	@include atMediaUp(medium) {
+		padding-left: $space !important;
+	}
+}
 

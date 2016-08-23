@@ -43,29 +43,21 @@ HEADER AREA
 						<div class="avatar _proto_groupLogo" {{#logo}}style="background-image: url( {{ logo }} )"{{/logo}} {{^logo}}style="opacity: 0;"{{/logo}}></div>
 					</div>
 
-					<div class="spreadable-item">
+					<div class="spreadable-item valign--middle">
 						<div class="text--display text--display1">{{name}}</div>
-						<div class="chunk">
-							<a href="#!/members" class="display--inlineBlock">
+						{{#if current_member.membership != membership.alien}}
+						<div class="chunk display--block atLarge_display--none">
+							<a href="#!/members" class="display--inlineBlock _tweak_text--underline">
 								{{#if members > 4}}
 									{{helpers.numberFormat(members)}} {{who}}
 								{{else}}
 									<strong>{{who}}</strong> wanted
 								{{/if}}
 							</a>
-							in
-							<a href="" class="display--inlineBlock">
-								{{group.city}}, {{group.state}}
-							</a>
+							<span class="display--inlineBlock"> in {{group.city}}, {{group.state}} </span> <span class="display--inlineBlock atLarge_display--none"> &middot; <a href="#!/about" class="_tweak_text--underline">more info</a></span>
 						</div>
-						<!--
-						{{#if current_member.membership == MEMBERSHIP.MEMBER || current_member.membership == MEMBERSHIP.ORGANIZER}}
-							&middot;
-							<a href="" id="groupOverviewToggle" class="text--secondary display--inlineBlock">
-								more info
-							</a>
 						{{/if}}
-						-->
+
 						<!-- <ul class="inlineblockList _tweak_inlineblockList--avatarOverlap">
 							{{#each ../members:i}}{{#if i<10}}
 								<li><a href="#!/members" class="avatar avatar--person avatar--small _tweak_avatar--bordered" style="background-image: url({{photo}});">{{Name}}</a></li>
@@ -90,18 +82,50 @@ HEADER AREA
 MUG META INFO
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 -->
-	<div class="spreadable-item spreadable-item--shrink _proto_mugMeta">
+	<div class="spreadable-item spreadable-item--shrink _proto_mugMeta column">
 
 		{{#if current_member.membership == membership.alien}}
 			<button class="button button--primary button--fullWidth chunk _proto_joinBtn">Join us</button>
-
-			<div class="chunk js-expandableContent--desc">
-				{{{group.simple_html_description}}}
-			</div>
 		{{/if}}
 
+		<!--
+		'most active' isn't available from the v2 API events endpoint 
+		-->
+		<a href="#!/members" class="chunk _hacks_order--reset _hacks_atLarge_order--1 {{#if current_member.membership != membership.alien}}display--none atLarge_display--block{{/if}}">
+			<!-- {{#if current_member.membership != membership.alien}}
+				<h2 class="text--labelSecondary display--none atLarge_display--block">Members</h2>
+			{{/if}} -->
+
+			<span class="{{#if current_member.membership != membership.alien}}display--none{{/if}} atLarge_display--flex column">
+			<div class="exactList _hacks_atLarge_exactList--spread _hacks_exactList--small row row--noGutters order--reset _hacks_atLarge_order--1">
+				<ul class="inlineblockList exactList-content row-item">
+					{{#members}}
+						<li class="chunk"><div class="avatar avatar--person avatar--small" style="background-image: url({{photo}});">{{Name}}</div></li>
+					{{/members}}
+				</ul>
+				<div class="row-item row-item--shrink _hacks_exactList-indicator">{{{helpers.svgIcon('chevronRight', 'icon--s valign--middle')}}}</div>
+			</div>
+			<!-- {{#if current_member.membership == membership.alien}} -->
+			<div class="text--big order--reset _hacks_atLarge_order--0">
+				<a href="#!/members">
+					{{#if group.members > 4}}
+						{{helpers.numberFormat(group.members)}} {{group.who}}
+					{{else}}
+						<strong>{{group.who}}</strong> wanted
+					{{/if}}
+				</a>
+				<span> in {{group.city}}, {{group.state}} </span>
+			</div>
+			<!-- {{/if}} -->
+			</span>
+		</a>
+
+		<div class="chunk _hacks_order--reset _hacks_atLarge_order--0 {{#if current_member.membership != membership.alien}}display--none atLarge_display--block{{/if}} js-expandableContent--desc">
+			{{{group.simple_html_description}}}
+		</div>
+
 		<div class="chunk display--none atLarge_display--block">
-			<h2 class="text--labelSecondary display--none atMedium_display--block">Leadership Team</h2>
+			<!-- <h2 class="text--labelSecondary display--none atMedium_display--block">Leadership Team</h2> -->
 			<ul>
 				<li class="chunk">
 					{{#group.organizer}}
@@ -141,22 +165,6 @@ MUG META INFO
 			</ul>
 		</div>
 
-		<!--
-		'most active' isn't available from the v2 API events endpoint 
-		-->
-		<a href="#!/members" class="chunk">
-			<h2 class="text--labelSecondary display--none atMedium_display--block">Most Active Members</h2>
-			<div class="exactList _hacks_atLarge_exactList--spread _hacks_exactList--small row row--noGutters">
-				<ul class="inlineblockList exactList-content row-item">
-					{{#members}}
-						<li class="chunk"><div class="avatar avatar--person avatar--small" style="background-image: url({{photo}});">{{Name}}</div></li>
-					{{/members}}
-				</ul>
-				<div class="row-item row-item--shrink _hacks_exactList-indicator">{{{helpers.svgIcon('chevronRight', 'icon--s valign--middle')}}}</div>
-			</div>
-		</a>
-		
-
 	</div>
 
 
@@ -188,7 +196,7 @@ NEXT UPCOMING MUP
 		<div class="hscroll atMedium_hscroll--unclip _tweak_hscroll--breakBounds"><ul class="hscroll-content hscroll-content--cards _proto_upcomingMupsList">
 			{{#events_short}}
 			<li class="_proto_upcomingMupsList-item chunk"><div class="card _tweak_card _tweak_card--noMinHeight">
-				<a href="{{event_url}}">
+				<a href="{{event_url}}" class="chunk">
 					{{> eventItem }}
 				</a>
 			</div></li>
@@ -225,8 +233,18 @@ DISCUSSION FEED
 	<div id="discussions">
 
 		<div class="row">
-			<h2 class="row-item text--labelSecondary">Recent activity</h2>
-			<!--<a href="javascript:void(0)" class="row-item row-item--shrink text--caption"><span class="valign--middle">Most discussed</span> {{{helpers.svgIcon('chevronDown', 'icon--s valign--middle')}}}</a>-->
+			<h2 class="row-item text--labelSecondary">Conversations</h2>
+			{{#if current_member.membership == membership.organizer}}
+			<a href="#!/channels" class="row-item row-item--shrink link text--small">Channels</a>
+			{{/if}}
+		</div>
+
+		<div class="hscroll atMedium_hscroll--unclip _tweak_hscroll--breakBounds chunk">
+			<ul class="hscroll-content">
+				{{#channels}}
+				<li><a href="#channel" class="button button--small">{{emoji}}&nbsp;{{text}}</a></li>
+				{{/channels}}
+			</ul>
 		</div>
 
 		<ul class="_proto_discussionList _tweak_breakBounds">{{#each news:i}}
@@ -660,7 +678,7 @@ An event in a list or on it's own
 <script id="eventItem" type="text/template">
 	{{#if status !== 'past'}}
 
-		<div class="row attachment chunk">
+		<div class="row attachment">
 			<div class="row-item row-item--shrink padding--right">
 				<time datetime="{{helpers.dateFormat(time, "YYYY[-]MM[-]DD")}}" class="dateDisplay">
 					<span class="dateDisplay-day">{{helpers.dateFormat(time, "DD")}}</span>
@@ -927,23 +945,105 @@ Template: About screen
 -->
 <script id="about" type="text/template">
 {{#group}}
-<section class="stripe"><div class="bounds bounds--wide">
-	<div class="runningText chunk">
-		{{{group.description}}}
+<!-- <header class="stripe stripe--photoHero {{^keyPhoto}}photoHero--noPhoto{{/keyPhoto}}" id="heroPhoto" style="background-image: url(http://foundation.specialsnowflake.com/duotoneblend.php?url={{keyPhoto}}&colorDark=ff7900&colorLight=7700c8);">
+
+	<div class="bounds bounds--wide inverted align--center atMedium_align--left {{#photo}}stripe-heroContent _tweak_stripe-heroContent--uncenter{{/photo}}">
+
+		<div class="chunk spreadable atMedium_spreadable--spread padding--bottom _tweak_atLarge_flush--bottom">
+
+			<div class="spreadable-item spreadable-item--shrink display--none atMedium_display--block">
+				<div class="avatar _proto_groupLogo" {{#logo}}style="background-image: url( {{ logo }} )"{{/logo}} {{^logo}}style="opacity: 0;"{{/logo}}></div>
+			</div>
+
+			<div class="spreadable-item valign--middle">
+				<div class="text--display text--display1">{{name}}</div>
+			</div>
+
+		</div>
+
+	</div>
+
+</header> -->
+
+<section class="stripe"><div class="bounds bounds--widee">
+	<div class="spreadable atMedium_spreadable--spread">
+
+		<div class="spreadable-item spreadable-item--shrink _hacks_order--reset _hacks_atMedium_order--1 display--flex atMedium_display--block padding--none _hack_atMedium_padding--left">
+			<div class="chunk span--100">
+				<h3 class="text--labelSecondary">Location</h3>
+				<p>{{city}}, {{state}}</p>
+			</div>
+			<div class="chunk span--100">
+				<h3 class="text--labelSecondary">Founded</h3>
+				<p>{{helpers.dateFormat(created)}}</p>
+			</div>
+		</div>
+
+		<div class="spreadable-item _hacks_order--reset _hacks_atMedium_order--0 flush--left">
+			<h2 class="text--labelSecondary display--inlineBlock atMedium_display--none">Description</h2>
+			<div class="runningText chunk">
+				{{{description}}}
+			</div>
+
+			<div class="chunk bordered">
+				<!-- <h2 class="text--display3 chunk">Topics</h2> -->
+				<ul class="inlineblockList buttonList--small" id="topicListing">
+					<h2 class="text--label margin--right display--inlineBlock">Topics</h2>
+					{{#each topics:i}}
+						<li><a href="http://{{topics[i].urlkey}}.meetup.com/cities/us/10012" class="button button--bordered button--small">{{topics[i].name}}</a></li>
+					{{/each}}
+				</ul>
+			</div>
+		</div>
+
 	</div>
 </div></section>
 
-<section class="stripe"><div class="bounds bounds--wide">
-	<h2 class="text--labelSecondary chunk">Topics</h2>
-	<ul class="inlineblockList buttonList--small chunk" id="topicListing">
-		{{#each topics:i}}
-			<li><a href="http://{{topics[i].urlkey}}.meetup.com/cities/us/10012" class="button button--bordered button--small">{{topics[i].name}}</a></li>
-		{{/each}}
-	</ul>
+<section class="stripe"><div class="bounds bounds--widee">
+	<div class="chunk">
+		<h2 class="text--display3 chunk">Leadership Team</h2>
+		<ul>
+			<li class="chunk">
+				{{#group.organizer}}
+					<div class="row">
+						<div class="row-item row-item--shrink">
+							<div class="avatar avatar--person" style="background-image: url('{{photo.highres_link}}');"></div>
+						</div>
+						<div class="row-item">
+							<p>{{name}}</p>
+							<p class="text--caption">Organizer since {date}</p>
+						</div>
+					</div>
+				{{/group}}
+			</li>
+			<li class="chunk">
+				<div class="row">
+					<div class="row-item row-item--shrink">
+						<div class="avatar avatar--person" style="background-image: url('#');"></div>
+					</div>
+					<div class="row-item">
+						<p>Org Name</p>
+						<p class="text--caption">Co-organizer since DATE</p>
+					</div>
+				</div>
+			</li>
+			<li class="chunk">
+				<div class="row">
+					<div class="row-item row-item--shrink">
+						<div class="avatar avatar--person" style="background-image: url('#');"></div>
+					</div>
+					<div class="row-item">
+						<p>Org Name</p>
+						<p class="text--caption">Organizer since DATE</p>
+					</div>
+				</div>
+			</li>
+		</ul>
+	</div>
 </div></section>
 
-<section class="stripe"><div class="bounds bounds--wide">
-	<h2 class="text--labelSecondary chunk">Sponsors</h2>
+<section class="stripe"><div class="bounds bounds--widee">
+	<h2 class="text--display3 chunk">Sponsors</h2>
 	<ul>
 		<li class="chunk row">
 			<div class="row-item row-item--shrink">
@@ -975,14 +1075,47 @@ Template: About screen
 	</ul>
 </div></section>
 
+<section class="stripe"><div class="bounds bounds--widee">
+	<h2 class="text--display3 chunk">Members are also in</h2>
+	<ul>
+		<li class="chunk row">
+			<div class="row-item row-item--shrink">
+				<div class="thumb media--l" style="background-image: url('https://placekitten.com/g/72/72');"></div>
+			</div>
+			<div class="row-item valign--middle">
+				<h3 class="text--bold">Group Name</h3>
+				<p>123 Chapter Who</p>
+			</div>
+		</li>
+		<li class="chunk row">
+			<div class="row-item row-item--shrink">
+				<div class="thumb media--l" style="background-image: url('https://placekitten.com/g/72/72');"></div>
+			</div>
+			<div class="row-item valign--middle">
+				<h3 class="text--bold">Group Name</h3>
+				<p>123 Chapter Who</p>
+			</div>
+		</li>
+		<li class="chunk row">
+			<div class="row-item row-item--shrink">
+				<div class="thumb media--l" style="background-image: url('https://placekitten.com/g/72/72');"></div>
+			</div>
+			<div class="row-item valign--middle">
+				<h3 class="text--bold">Group Name</h3>
+				<p>123 Chapter Who</p>
+			</div>
+		</li>
+	</ul>
+</div></section>
+
 {{/group}}
 </script>
 
 <!--
 /////////////////////////////////////////////////////
-Template: Meetups screen
+Template: Meetups screen - past MUPs shown
 /////////////////////////////////////////////////////
--->
+
 <script id="meetups" type="text/template">
 <section class="stripe stripe--collection"><div class="bounds bounds--wide">
 	<ul class="list">
@@ -1007,8 +1140,56 @@ Template: Meetups screen
 			</li>
 		{{/events_short}}
 	</ul>
+</div></section>
+</script>
+-->
 
-	<a href="#!/events" class="link align--center display--block chunk">See all Meetups</a>
+<!--
+/////////////////////////////////////////////////////
+Template: Meetups screen
+/////////////////////////////////////////////////////
+-->
+<script id="meetups" type="text/template">
+<section class="stripe"><div class="bounds bounds--wide flush--bottom">
+
+	<div class="spreadable atMedium_spreadable--spread">
+		<div class="spreadable-item chunk">
+			<h1 class="text--display3">Meetups</h1>
+		</div>
+
+		<div class="spreadable-item spreadable-item--shrink valign--middle chunk">
+			<button class="button button--icon"><span class="button-icon">{{{helpers.svgIcon('plus', 'icon--s')}}}</span><span class="button-label">Schedule a Meetup</span></button>
+		</div>
+	</div>
+
+	<div class="tabs">
+		<div data-show="upcomingMups" class="tabs-tab tabs-tab--selected"><a href="javascript:void(0)">Upcoming</a></div>
+		<div data-show="pastMups" class="tabs-tab"><a href="javascript:void(0)">Past</a></div>
+	</div>
+
+</div></section>
+
+<section class="stripe"><div class="bounds bounds--wide">
+
+	<div id="upcomingMups">
+		<ul class="list">
+			{{#events_short}}
+				<li class="list-item chunk">
+					{{> eventItem}}
+				</li>
+			{{/events_short}}
+		</ul>
+	</div>
+
+	<div id="pastMups">
+		<ul class="list">
+			{{#each events_recent:i}}
+				<li class="list-item chunk">
+					{{> eventItem}}
+				</li>
+			{{/each}}
+		</ul>
+	</div>
 
 </div></section>
 </script>
@@ -1070,8 +1251,8 @@ Template: Photo Albums
 <section class="stripe"><div class="bounds bounds--wide">
 	<div class="spreadable atMedium_spreadable--spread">
 		<div class="spreadable-item chunk">
-			<div class="text--display3 display--inlineBlock _hacks_text--unbold"><a href="#!/albums" class="link">{{photo_albums.length}} albums</a></div>
-			<div class="text--display3 display--inlineBlock _hacks_text--unbold"> &middot; </div>
+			<!-- <div class="text--display3 display--inlineBlock _hacks_text--unbold"><a href="#!/albums" class="link">{{photo_albums.length}} albums</a></div>
+			<div class="text--display3 display--inlineBlock _hacks_text--unbold"> &middot; </div> -->
 			<div class="text--display3 display--inlineBlock">{n} photos</div>
 		</div>
 		<div class="spreadable-item spreadable-item--shrink chunk">
@@ -1785,6 +1966,109 @@ Template: Pre-MUP
 		{{/members}}
 	</ul>
 </div></section>
+</script>
+
+<!--
+/////////////////////////////////////////////////////
+Template: Notif Settings
+/////////////////////////////////////////////////////
+-->
+<script id="notifSettings" type="text/template">
+	<section class="stripe border--none"><div class="bounds">
+		<div class="row chunk">
+			<div class="row-item">
+				<p class="text--big"><span class="_hacks_text--unbold">Notifications are&nbsp;</span><span class="text--teal js-notifSetting">on</span></p>
+			</div>
+			<div class="row-item row-item--shrink">
+				<button class="button button--small" on-click="toggleNotifs">Turn off</button>
+			</div>
+		</div>
+	</div></section>
+
+	<section class="stripe border--none js-notifSection"><div class="bounds">
+		<h2 class="text--labelSecondary chunk">Group notifications</h2>
+
+		<label for="newMups" class="label--switch row chunk">
+			<span class="row-item row-item--shrink valign--middle">{{{helpers.svgIcon('calendar--sched')}}}</span>
+			<span class="row-item valign--middle">New Meetups</span>
+			<span class="row-item row-item--shrink valign--middle"><input id="newMups" class="checkbox" value="newMups" type="checkbox" checked></span>
+		</label>
+
+		<label for="mupRemind" class="label--switch row chunk">
+			<span class="row-item row-item--shrink valign--middle">{{{helpers.svgIcon('calendar')}}}</span>
+			<span class="row-item valign--middle">Meetup Reminders</span>
+			<span class="row-item row-item--shrink valign--middle"><input id="mupRemind" class="checkbox" value="mupRemind" type="checkbox" checked></span>
+		</label>
+
+		<label for="personalAct" class="label--switch row chunk">
+			<span class="row-item row-item--shrink valign--middle">{{{helpers.svgIcon('bolts')}}}</span>
+			<span class="row-item valign--middle">Personal Activity</span>
+			<span class="row-item row-item--shrink valign--middle"><input id="personalAct" class="checkbox" value="personalAct" type="checkbox" checked></span>
+		</label>
+
+		<label for="newPhoto" class="label--switch row chunk">
+			<span class="row-item row-item--shrink valign--middle">{{{helpers.svgIcon('photos')}}}</span>
+			<span class="row-item valign--middle">New Photos</span>
+			<span class="row-item row-item--shrink valign--middle"><input id="newPhoto" class="checkbox" value="newPhoto" type="checkbox" checked></span>
+		</label>
+	</div></section>
+
+	<section class="stripe border--none js-notifSection"><div class="bounds">
+		<h2 class="text--labelSecondary chunk">Channel notifications</h2>
+		{{#channels}}
+		<label for="{{id}}" class="label--switch row chunk">
+			<span class="row-item valign--middle"><button class="button button--small _tweak_button--noClick">{{emoji}}&nbsp;{{text}}</button></span>
+			<span class="row-item row-item--shrink valign--middle"><input id="{{id}}" class="checkbox" value="{{id}}" type="checkbox" checked></span>
+		</label>
+		{{/channels}}
+	</div></section>
+</script>
+
+<!--
+/////////////////////////////////////////////////////
+Template: Channel Settings
+/////////////////////////////////////////////////////
+-->
+<script id="channelSettings" type="text/template">
+	<section class="stripe border--none js-notifSection"><div class="bounds">
+		<h2 class="text--labelSecondary chunk">Active channels</h2>
+		<ul>
+		{{#channels}}
+		<li class="js-channelContainer">
+			<label for="{{id}}" class="label--switch row chunk">
+				<span class="row-item valign--middle"><button class="button button--small _tweak_button--noClick">{{emoji}}&nbsp;{{text}}</button></span>
+
+				{{#if !isDefault}}
+					<span class="row-item row-item--shrink valign--middle">
+						<span on-click="editChannel">{{{helpers.svgIcon('edit', 'icon--s')}}}</span>
+					</span>
+					<span class="row-item row-item--shrink valign--middle">
+						<span on-click="deleteChannel">{{{helpers.svgIcon('crossCircle', 'icon--s')}}}</span>
+					</span>
+					<span class="row-item row-item--shrink valign--middle display--none">
+						<span on-click="saveChannel">{{{helpers.svgIcon('checkCircle', 'icon--s')}}}</span>
+					</span>
+				{{/if}}
+
+			</label>
+		</li>
+		{{/channels}}
+
+		<li class="js-channelContainer">
+			<div class="row">
+				<div class="row-item">
+					<input type="text" class="_proto_channelCreate chunk" value="💬&nbsp;Create new…" on-focus="toggleSave" on-blur="toggleSave" />
+				</div>
+				<div class="row-item row-item--shrink valign--middle display--none js-saveBtn">
+					<span on-click="saveChannel">{{{helpers.svgIcon('checkCircle', 'icon--s')}}}</span>
+				</div>
+			</div>
+			<!-- <div class="button button--small chunk" on-click="createNewChannel">
+				<span class="_proto_channelName">💬&nbsp;Create new…</span>
+			</div> -->
+		</li>
+		</ul>
+	</div></section>
 </script>
 
 <!-- SVG icons -->

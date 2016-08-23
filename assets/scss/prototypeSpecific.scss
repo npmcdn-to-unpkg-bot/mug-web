@@ -4,6 +4,7 @@
 @import 'hacks'; // SHAMEFUL QUICKFIXES
 @import 'icons';
 @import 'nav';
+@import 'proto_dialog'; // STYLES FOR DIALOG
 @import 'proto_momentary'; // STYLES FOR POPOVER
 @import 'proto_toast'; // STYLES FOR TOAST
 @import 'proto_calendar'; // STYLES FOR CALENDAR
@@ -402,7 +403,16 @@ Member list
 	}
 }
 
-
+/*
+Channel settings
+*/
+input[type="text"]._proto_channelCreate {
+	font-size: $font-size-small;
+	font-weight: $W_bold;
+	height: $space-2;
+	padding: 0 $space-half;
+	width: auto;
+}
 
 
 

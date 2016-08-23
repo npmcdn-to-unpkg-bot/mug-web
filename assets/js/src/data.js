@@ -39,6 +39,45 @@ var processData = function(){
 		pending: 5
 	};
 
+	views.data.channels = [
+		{ 
+			emoji: "😶" , 
+			text: "Help", 
+			id: "help",
+			isDefault: true
+		},
+		{ 
+			emoji: "👋" , 
+			text: "Intros", 
+			id: "intros",
+			isDefault: true
+		},
+		{ 
+			emoji: "😎" , 
+			text: "Milestones", 
+			id: "milestones",
+			isDefault: true
+		},
+		{ 
+			emoji: "🌇" , 
+			text: "Venues", 
+			id: "venues",
+			isDefault: true
+		},
+		{ 
+			emoji: "⛺️" , 
+			text: "Gear", 
+			id: "gear",
+			isDefault: false
+		},
+		{ 
+			emoji: "🏃" , 
+			text: "Hiking buddies",
+			id: "hikingBuddies",
+			isDefault: false
+		}
+	];
+
 	// Default current user
 	views.data.current_member = {
 		photo: "https://s3.amazonaws.com/uifaces/faces/twitter/adellecharles/128.jpg",
@@ -182,7 +221,7 @@ var processData = function(){
 // Either pull with Gimme, or use cached data,
 // then process it using `processData()`
 // ------------------------------------------------
-gimme.apiKey = "1e84f701a17435513a17796245794d"; // 1e84f701a17435513a17796245794d 7060231d422c3421e3c13406e606631 715d68731b3913292f447f4c45547
+gimme.apiKey = "7060231d422c3421e3c13406e606631"; // 7060231d422c3421e3c13406e606631 1e84f701a17435513a17796245794d 7060231d422c3421e3c13406e606631 715d68731b3913292f447f4c45547
 gimme.get([{"gimme": "group", "data": {"group_id": groupId} }], true).then(function(data){
 	urlname = data.group.urlname;
 
@@ -201,17 +240,17 @@ gimme.get([{"gimme": "group", "data": {"group_id": groupId} }], true).then(funct
 				{"gimme": "members", "data":{"group_id": groupId, "page": 18}},
 				// {"gimme": "members", "key":"inviteWho", "data":{"group_id": groupId, "page": 10}}
 
-				{"gimme": "photo_albums", "data": {"page": 10, "urlkey": urlname}, children: [
-					{"gimme": "album_photos", "key":"photo_sample_long" ,"data": {"page": 19}, "match": [["id", "photo_album_id"]]}
-				]},
+				// {"gimme": "photo_albums", "data": {"page": 10, "urlkey": urlname}, children: [
+				// 	{"gimme": "album_photos", "key":"photo_sample_long" ,"data": {"page": 19}, "match": [["id", "photo_album_id"]]}
+				// ]},
 				// {"gimme": "photo_albums", "data": {"page": 10, "group_id": groupId}}, // v2 API group albums
-				{"gimme": "photos", "key": "mup_photos", "data": {"page": 18, "group_id": groupId}}
+				{"gimme": "photos", "key": "mup_photos", "data": {"page": 18, "group_id": groupId}},
 
-				// {"gimme": "boards", "key": "boards_posts", data:{"urlkey": urlname, "page": 2}, children: [ // Which boards to pull?
-				// 	{"gimme": "discussions", data:{"urlkey": urlname, "page": 2}, "match": [["id", "board_id"]], children: [ // Which threads from those boards?
-				// 		{"gimme": "posts", data:{"urlkey": urlname,  "page": 2}, "match": [["id", "discussion_id"],["board.id", "board_id"]] } // Which posts from those threads?
-				// 	]}
-				// ]}
+				{"gimme": "boards", "key": "boards_posts", data:{"urlkey": urlname, "page": 2}, children: [ // Which boards to pull?
+					{"gimme": "discussions", data:{"urlkey": urlname, "page": 3}, "match": [["id", "board_id"]], children: [ // Which threads from those boards?
+						{"gimme": "posts", data:{"urlkey": urlname,  "page": 2}, "match": [["id", "discussion_id"],["board.id", "board_id"]] } // Which posts from those threads?
+					]}
+				]}
 
 		];
 		// ↑ ↑ ↑ ↑ Where we pick which data we want ↑ ↑ ↑ ↑

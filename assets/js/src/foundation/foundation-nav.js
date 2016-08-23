@@ -9,8 +9,7 @@
 var Nav = function(opts){
 	this.$el = null;
 	this.current_view = null;
-	// this.actions = null;
-	// this.navItems = false;
+	this.profileMenu = false;
 	this.show(opts);
 }
 
@@ -31,16 +30,33 @@ Nav.prototype = {
 					self.hide(event);
 				}
 			});
+
+			self.$el.on('click', '#profileMenuToggle', function(){
+				if (self.profileMenu == false) {
+					views.profileMenu_show();
+				} else {
+					views.profileMenu_hide();
+				}
+			});
+
 			// reveal
 			setTimeout(function() {
 
 				$('#main').waypoint({
-					handler: function(dir) {
-						$('.view-head').toggleClass('view-head--sticky');
+					handler: function(direction) {
+						if (direction == 'up') {
+							$('.js-view-head--fixed').removeClass('_tweak_view-head--fixed');
+						} else {
+							$('.js-view-head--fixed').addClass('_tweak_view-head--fixed');
+						}
+					},
+					offset: function() {
+						return -1 * $('.navWrapper').height();
 					}
 				});
 
 			}, 1);
+
 		}
 
 		// ON TEARDOWN
@@ -60,7 +76,7 @@ Nav.prototype = {
 		// }
 
 		// ATTACH AND RENDER
-		this.$el = $('<nav class="mainNav row"></nav>');
+		this.$el = $('<div class="navWrapper"></div>');
 		$('body').addClass('hasNav').prepend(this.$el);
 
 		this.current_view = new Components.Nav({

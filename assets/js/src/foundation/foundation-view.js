@@ -61,7 +61,6 @@ View.prototype = {
 				break;
 			case "modal-full":
 				// always full at all widths
-				console.log('modal full detected');
 				this.$el.addClass('view--modal-full off').hide();
 				break;
 			case "media":
@@ -72,12 +71,10 @@ View.prototype = {
 				break;
 			case "modal-snap":
 				// at wide screens, is dialog, at small screens is full
-				console.log('modal snap detected');
 				this.$el.addClass('view--modal-snap off').hide();
 				break;
 			case "modal-fixed":
 				// Scroll modal content, not bg
-				console.log('modal fixed detected');
 				views._$shade.addClass('shade--fixed');
 				views._main.addClass('view--fixed');
 				break;
@@ -176,14 +173,16 @@ View.prototype = {
 		this.set_mode();
 
 		var options = options || {};
-		this.header_data.title = options.title || "";
-		this.header_data.subtitle = options.subtitle || "";
+		this.header_data.title        = options.title || "";
+		this.header_data.subtitle     = options.subtitle || "";
 		this.header_data.subtitleLink = options.subtitleLink || "";
-		this.header_data.intro = options.intro || "";
-		this.header_data.isRoot = options.isRoot || false;
-		this.header_data.goHome = options.goHome || false;
-		this.header_data.platform = this.data.platform;
-		this.header_data.hidden = options.hidden || false;
+		this.header_data.intro        = options.intro || "";
+		this.header_data.isRoot       = options.isRoot || false;
+		this.header_data.goHome       = options.goHome || false;
+		this.header_data.platform     = this.data.platform;
+		this.header_data.hidden       = options.hidden || false;
+		this.header_data.isFixed      = options.isFixed || false;
+		this.header_data.condensed    = options.condensed || false;
 
 		if (options.search) {
 			this.header_data.search = options.search;
@@ -213,6 +212,41 @@ View.prototype = {
 			this.cancel_action = function() {
 				console.log('no action for cancel defined');
 			};
+		}
+
+		//
+		// Apply fixed header styles?
+		//
+		if (options.isFixed) {
+			this.$header.addClass('js-view-head--fixed');
+		} else {
+			this.$header.removeClass('js-view-head--fixed');
+		}
+
+		//
+		// Apply condensed header styles?
+		//
+		if (options.condensed) {
+			var colorDark = 'ff7900',
+					colorLight = '7700c8',
+					bgURLStr  = 'http://foundation.specialsnowflake.com/duotoneblend.php?url=' + options.condensed.bgImg + '&colorDark=' + colorDark + '&colorLight=' + colorLight + '';
+			this.$header.addClass('_tweak_view-head--condensed inverted align--center');
+			this.$header.css('background-color', '#'+colorLight);
+
+			// When we have the data, we can dynamically add the background color
+			// document.styleSheets[0].addRule('._tweak_view-head--condensed::before','background-color: #'+colorLight);
+			// document.styleSheets[0].insertRule('._tweak_view-head--condensed::before { background-color: #'+colorLight '}', 0);
+
+			// Dynamically set the blurry background image
+			document.styleSheets[0].addRule('._tweak_view-head--condensed::before','background-image: url('+bgURLStr+')');
+			document.styleSheets[0].insertRule('._tweak_view-head--condensed::before { background-image: url('+bgURLStr+') }', 0);
+
+			// Go back to MUG Home on click
+			this.$header.on('click', function(){
+				location.hash = '#!/';
+			});
+		} else {
+			this.$header.removeClass('_tweak_view-head--condensed inverted align--center').removeAttr('style');
 		}
 
 		// buttons and handlers

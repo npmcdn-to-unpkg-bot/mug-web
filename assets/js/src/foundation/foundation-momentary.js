@@ -57,7 +57,7 @@ Momentary.prototype = {
 		}
 
 		// ATTACH AND RENDER
-		this.$el = $('<div class="momentary momentary-' + opts.type + ' off"></div>');
+		this.$el = $('<div class="momentary momentary-' + opts.type + '"></div>'); // removed 'off' from default classes
 		var overlay = $('<div class="overlayScreen"></div>'); // can we reuse shade?
 		$('body').append(this.$el, overlay);
 

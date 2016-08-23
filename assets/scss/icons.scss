@@ -72,10 +72,12 @@
 
 }
 
-.icon-calendar--sched use {
-	fill: $C_success;
-}
+._proto_discussionList {
+	.icon-calendar--sched use {
+		fill: $C_success;
+	}
 
-.icon-calendar--canceled use {
-	fill: $C_attention;
+	.icon-calendar--canceled use {
+		fill: $C_attention;
+	}
 }

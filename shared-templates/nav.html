@@ -1,59 +1,148 @@
-{{#if isModern}}
+<nav class="mainNav row">
+	<!--
+	==========================================
+	Find, Create, Invite
+	==========================================
+	-->
+	<div class="row row--noGutters row-item row-item--shrink valign--middle atMedium_display--flex display--none">
 
-	<p>TBD</p>
+		<div class="valign--middle row-item row-item--shrink text--bold mainNav-item">
+			Create a Meetup
+		</div>
 
-{{else}}
+		{{#if loggedIn}}
+			<div class="valign--middle row-item row-item--shrink text--bold mainNav-item">
+				Invite
+			</div>
+		{{/if}}
 
-	<div class="row-item row-item--alignMiddle align--center mainNav-item">
+	</div>
+
+	<!--
+	==========================================
+	Meetup logo
+	==========================================
+	-->
+	<div class="row-item atMedium_align--center valign--middle flush--left _proto_nav-logoWrapper">
 		<a href="http://meetup.com/">
-			<img src="assets/img/navIcons/logo.svg" height="32" class="display--none valign--bottom mainNav-logo js_logo--swarm" />
-			<img src="assets/img/navIcons/logo-script.svg" height="32" class="display--inlineBlock valign--bottom mainNav-logo js_logo--script" />
+
+			<img src="assets/img/navIcons/logo.svg" class="valign--bottom mainNav-logo js_logo--swarm _proto_nav-logo _proto_nav-logo--offScreen--btm" />
+
+			<img src="assets/img/navIcons/logoScript.svg" class="valign--bottom mainNav-logo js_logo--script _proto_nav-logo" />
+
 		</a>
 	</div>
 
-	{{#if loggedIn}}
-		<div class="row-item row-item--shrink row-item--alignMiddle atMedium_display--none align--center mainNav-item">
+{{#if loggedIn}}
+	<!--
+	==========================================
+	Groups, Calendar (mobile-only)
+	==========================================
+	-->
+	<div class="row row-item atMedium_display--none">
+		<div class="row-item row-item--alignMiddle align--center mainNav-item">
 			<a href="#">
-				<img src="assets/img/navIcons/groups_flag_textSecondary.svg" class="display--inlineBlock valign--bottom" height="24" />
-				<span class="text--caption display--block atMedium_display--none mainNav-item-label">Groups</span>
+				<span class="text--caption display--block">Groups</span>
 			</a>
 		</div>
-		<div class="row-item row-item--shrink row-item--alignMiddle atMedium_display--none align--center mainNav-item">
+		<div class="row-item row-item--alignMiddle align--center mainNav-item">
 			<a href="#">
-				<img src="assets/img/navIcons/calendar_textSecondary.svg" class="display--inlineBlock valign--bottom" height="24" />
-				<span class="text--caption display--block atMedium_display--none mainNav-item-label">Calendar</span>
+				<span class="text--caption display--block">Calendar</span>
 			</a>
 		</div>
+	</div>
 
-		<div class="row-item row-item--shrink row-item--alignMiddle align--center mainNav-item">
+	<!--
+	==========================================
+	Notifs, Msgs, Profile
+	==========================================
+	-->
+	<div class="row row-item row-item--shrink valign--middle">
+		<div class="row-item row-item--shrink align--center display--none atMedium_display--block mainNav-item">
 			<a href="#">
-				<img src="assets/img/navIcons/messages.svg" class="display--inlineBlock valign--bottom" height="24" />
-				<span class="text--caption display--block atMedium_display--none atLarge_display--inlineBlock mainNav-item-label">Messages</span>
+				<!-- <img src="assets/img/navIcons/messages.svg" class="display--inlineBlock valign--bottom" height="24" /> -->
+				{{{helpers.svgIcon('messages', 'valign--middle')}}}
 			</a>
 		</div>
-		<div class="row-item row-item--shrink row-item--alignMiddle display--none atMedium_display--block align--center mainNav-item">
+		<div class="row-item row-item--shrink align--center display--none atMedium_display--block mainNav-item">
 			<a href="#">
-				<img src="assets/img/navIcons/notif_textSecondary.svg" class="display--inlineBlock valign--bottom" height="24" />
-				<span class="text--caption display--block atMedium_display--none atLarge_display--inlineBlock mainNav-item-label">Notifications</span>
+				{{{helpers.svgIcon('notif', 'valign--middle')}}}
 			</a>
 		</div>
-		<a href="#" class="row-item row-item--shrink row-item--alignMiddle align--center mainNav-item mainNav-item--profile">
+		<a href="#" class="row-item row-item--shrink row-item--alignMiddle align--center mainNav-item mainNav-item--profile" id="profileMenuToggle">
 			<div href="#" class="avatar avatar--small avatar--person display--inlineBlock" style="background-image: url(http://photos3.meetupstatic.com/photos/member/9/1/8/4/thumb_141217252.jpeg);">Member Name</div>
-			<span class="text--secondary valign--middle display--none atMedium_display--inline"><i class="fa fa-caret-down"></i></span>
-
-			<span class="text--caption display--block atMedium_display--none mainNav-item-label">Profile</span>
+			{{{helpers.svgIcon('chevronDown', 'icon--s valign--middle')}}}
 		</a>
+	</div>
 
-	{{else}}
+{{else}}
 
-		<div class="row row-item row-item--shrink js_signUp display--none" style="position: absolute; right: 16px;">
-			<div class="row-item row-item--shrink row-item--alignMiddle align--center mainNav-item display--none atMedium_display--inlineBlock">
-				<a href="#" class="link">Log In</a>
-			</div>
-			<div class="row-item row-item--shrink row-item--alignMiddle align--center mainNav-item">
-				<a href="#" class="button button--primary">Sign Up</a>
-			</div>
+	<div class="row row-item row-item--shrink">
+		<div class="row-item row-item--shrink row-item--alignMiddle align--center mainNav-item">
+			<a href="#">Log In</a>
 		</div>
-	{{/if}}
+		<div class="row-item row-item--shrink row-item--alignMiddle align--center mainNav-item">
+			<a href="#" class="button button--primary">Sign Up</a>
+		</div>
+	</div>
 
 {{/if}}
+</nav>
+
+{{#if loggedInn}}
+	<div class="_proto_profileMenu" id="profileMenu">
+		<div class="bounds">
+
+		<div class="_proto_profileMenuContainer">
+			<!-- 0 -->
+			<div class="chunk display--inlineBlock _proto_profileMenu-user">
+				<a href="#" class="row chunk">
+					<span class="row-item row-item--shrink valign--middle"><div class="avatar avatar--person avatar--small" style="background-image: url(http://photos3.meetupstatic.com/photos/member/9/1/8/4/thumb_141217252.jpeg)">Profile Name</div></span>
+					<span class="row-item valign--middle">Profile Name</span>
+					<span class="row-item row-item--shrink">{{{helpers.svgIcon('cog', 'valign--middle')}}}</span>
+				</a>
+
+				<a href="#" class="row chunk">
+					<span class="row-item row-item--shrink">{{{helpers.svgIcon('notif')}}}</span>
+					<span class="row-item">Notifications</span>
+				</a>
+
+				<a href="#" class="row">
+					<span class="row-item row-item--shrink">{{{helpers.svgIcon('messages')}}}</span>
+					<span class="row-item">Messages</span>
+				</a>
+			</div>
+
+			<!-- 1 -->
+			<ul class="chunk bordered _proto_profileMenu-MUGList _proto_atMedium_orderN">
+				<li class="chunk wrap--singleLine--truncate">Foreigh Androids Feel Frustrated</li>
+				<li class="chunk wrap--singleLine--truncate">CSS Layout Club</li>
+				<li class="chunk wrap--singleLine--truncate">Meetup Engineering</li>
+				<li class="chunk wrap--singleLine--truncate">Volumetric Society of NYC - 3D, Telematics, Kinect, Emotiv +</li>
+				<li class="chunk wrap--singleLine--truncate">Fat Cat Fab Lab</li>
+				<li><a href="#" class="link">see more</a></li>
+			</ul>
+
+			<!-- 2 -->
+			<a href="#" class="row chunk bordered _proto_atMedium_orderN">
+				<span class="row-item row-item--shrink valign--middle">{{{helpers.svgIcon('plus')}}}</span>
+				<span class="row-item valign--middle">Create</span>
+			</a>
+
+			<!-- 3 -->
+			<a href="#" class="row chunk bordered _proto_atMedium_orderN">
+				<span class="row-item row-item--shrink valign--middle">{{{helpers.svgIcon('user')}}}</span>
+				<span class="row-item valign--middle">Invite</span>
+			</a>
+
+			<!-- 4 -->
+			<a href="#" class="row chunk bordered _proto_atMedium_orderN">
+				<span class="row-item row-item--shrink valign--middle">{{{helpers.svgIcon('logOut')}}}</span>
+				<span class="row-item valign--middle">Log out</span>
+			</a>
+		</div>
+		</div>
+	</div>
+{{/if}}
+
+
