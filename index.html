@@ -17,6 +17,7 @@
 	<!-- JS to load before the page loads -->
 	<script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
 	<script type="text/javascript" src="assets/js/dist/depends.min.js"></script>
+	<script src="https://npmcdn.com/imagesloaded@4.1/imagesloaded.pkgd.min.js"></script>
 
 	<!-- Link preview -->
 	<script src="http://cdn.embed.ly/jquery.embedly-3.0.5.min.js" type="text/javascript"></script>
@@ -217,8 +218,8 @@ PHOTOS
 <div class="_tweak_breakBounds _tweak_atMedium_breakBounds--unbreak _proto_photoGrid _proto_photoGrid--scroll _proto_atMedium_photoGrid--scrollUnclip _hacks_breakBounds--alignLabel chunk">
 {{#mup_photos}}
 	<a href="#!/photo-detail/{{photo_id}}" class="_proto_photoGrid-item">
-		<div class="thumb _proto_photoGrid-image" style="background-image:url('{{photo_link}}')"></div>
-		<!-- <img class="_proto_photoGrid-image" src="{{photo_link}}"/> -->
+		<img class="_proto_photoGrid-image" src="{{photo_link}}"/>
+		<!-- <div class="thumb _proto_photoGrid-image" style="background-image:url('{{photo_link}}')"></div> -->
 	</a>
 {{/mup_photos}}
 </div>
@@ -945,169 +946,150 @@ Template: About screen
 -->
 <script id="about" type="text/template">
 {{#group}}
-<!-- <header class="stripe stripe--photoHero {{^keyPhoto}}photoHero--noPhoto{{/keyPhoto}}" id="heroPhoto" style="background-image: url(http://foundation.specialsnowflake.com/duotoneblend.php?url={{keyPhoto}}&colorDark=ff7900&colorLight=7700c8);">
+<section class="stripe"><div class="bounds">
 
-	<div class="bounds bounds--wide inverted align--center atMedium_align--left {{#photo}}stripe-heroContent _tweak_stripe-heroContent--uncenter{{/photo}}">
-
-		<div class="chunk spreadable atMedium_spreadable--spread padding--bottom _tweak_atLarge_flush--bottom">
-
-			<div class="spreadable-item spreadable-item--shrink display--none atMedium_display--block">
-				<div class="avatar _proto_groupLogo" {{#logo}}style="background-image: url( {{ logo }} )"{{/logo}} {{^logo}}style="opacity: 0;"{{/logo}}></div>
-			</div>
-
-			<div class="spreadable-item valign--middle">
-				<div class="text--display text--display1">{{name}}</div>
-			</div>
-
-		</div>
-
+	<div class="chunk">
+		<h2 class="text--display3">We are {{helpers.numberFormat(members)}} {{who}} in {{city}}, {{state}}</h2>
+		<h2 class="text--display3 text--hint">Founded {{helpers.dateFormat(created)}}</h2>
+		<!-- <p class="text--caption">Public group</p> -->
 	</div>
 
-</header> -->
-
-<section class="stripe"><div class="bounds bounds--widee">
-	<div class="spreadable atMedium_spreadable--spread">
-
-		<div class="spreadable-item spreadable-item--shrink _hacks_order--reset _hacks_atMedium_order--1 display--flex atMedium_display--block padding--none _hack_atMedium_padding--left">
-			<div class="chunk span--100">
-				<h3 class="text--labelSecondary">Location</h3>
-				<p>{{city}}, {{state}}</p>
+	{{#organizer}}
+		<div class="row chunk bordered">
+			<div class="row-item row-item--shrink">
+				<div class="avatar avatar--person" style="background-image: url('{{photo.highres_link}}');"></div>
 			</div>
-			<div class="chunk span--100">
-				<h3 class="text--labelSecondary">Founded</h3>
-				<p>{{helpers.dateFormat(created)}}</p>
+			<div class="row-item">
+				<p>{{name}}</p>
+				<p class="text--caption">Organizer since {date}</p>
 			</div>
 		</div>
+	{{/organizer}}
 
-		<div class="spreadable-item _hacks_order--reset _hacks_atMedium_order--0 flush--left">
-			<h2 class="text--labelSecondary display--inlineBlock atMedium_display--none">Description</h2>
-			<div class="runningText chunk">
-				{{{description}}}
-			</div>
-
-			<div class="chunk bordered">
-				<!-- <h2 class="text--display3 chunk">Topics</h2> -->
-				<ul class="inlineblockList buttonList--small" id="topicListing">
-					<h2 class="text--label margin--right display--inlineBlock">Topics</h2>
-					{{#each topics:i}}
-						<li><a href="http://{{topics[i].urlkey}}.meetup.com/cities/us/10012" class="button button--bordered button--small">{{topics[i].name}}</a></li>
-					{{/each}}
-				</ul>
-			</div>
-		</div>
-
+	<div class="runningText chunk bordered">
+		{{{description}}}
 	</div>
+
+	<div class="chunk">
+		<ul class="inlineblockList buttonList--small" id="topicListing">
+			<h2 class="text--label margin--right display--inlineBlock">Topics</h2>
+			{{#each topics:i}}
+				<li><a href="http://{{topics[i].urlkey}}.meetup.com/cities/us/10012" class="button button--bordered button--small">{{topics[i].name}}</a></li>
+			{{/each}}
+		</ul>
+	</div>
+
 </div></section>
 
-<section class="stripe"><div class="bounds bounds--widee">
+<!--
+Leadership Team stripe
+<section class="stripe"><div class="bounds">
 	<div class="chunk">
 		<h2 class="text--display3 chunk">Leadership Team</h2>
-		<ul>
-			<li class="chunk">
-				{{#group.organizer}}
-					<div class="row">
-						<div class="row-item row-item--shrink">
+		<ul class="list">
+			<li class="list-item">
+				{{#organizer}}
+					<div class="row chunk">
+						<a href="#!/members/id" class="row-item row-item--shrink">
 							<div class="avatar avatar--person" style="background-image: url('{{photo.highres_link}}');"></div>
-						</div>
-						<div class="row-item">
-							<p>{{name}}</p>
-							<p class="text--caption">Organizer since {date}</p>
-						</div>
+						</a>
+						<a href="#!/members/id" class="row-item spreadable atMedium_spreadable--spread valign--middle">
+							<span class="spreadable-item spreadable-item--shrink _proto_memberName valign--middle text--bold">{{name}}</span>
+							<span class="spreadable-item valign--middle _hacks_wrap--2line--truncate">Organizer since {date}. Bio goes here if available</span>
+						</a>
 					</div>
-				{{/group}}
+				{{/organizer}}
 			</li>
-			<li class="chunk">
-				<div class="row">
-					<div class="row-item row-item--shrink">
+			<li class="list-item">
+				<div class="row chunk">
+					<a href="#!/members/id" class="row-item row-item--shrink">
 						<div class="avatar avatar--person" style="background-image: url('#');"></div>
-					</div>
-					<div class="row-item">
-						<p>Org Name</p>
-						<p class="text--caption">Co-organizer since DATE</p>
-					</div>
+					</a>
+					<a href="#!/members/id" class="row-item spreadable atMedium_spreadable--spread valign--middle">
+						<span class="spreadable-item spreadable-item--shrink _proto_memberName valign--middle text--bold">Organizer Name</span>
+						<span class="spreadable-item valign--middle _hacks_wrap--2line--truncate">Bio goes here if available</span>
+					</a>
 				</div>
 			</li>
-			<li class="chunk">
-				<div class="row">
-					<div class="row-item row-item--shrink">
+			<li class="list-item">
+				<div class="row chunk">
+					<a href="#!/members/id" class="row-item row-item--shrink">
 						<div class="avatar avatar--person" style="background-image: url('#');"></div>
-					</div>
-					<div class="row-item">
-						<p>Org Name</p>
-						<p class="text--caption">Organizer since DATE</p>
-					</div>
+					</a>
+					<a href="#!/members/id" class="row-item spreadable atMedium_spreadable--spread valign--middle">
+						<span class="spreadable-item spreadable-item--shrink _proto_memberName valign--middle text--bold">Organizer Name</span>
+						<span class="spreadable-item valign--middle _hacks_wrap--2line--truncate">Bio goes here if available</span>
+					</a>
 				</div>
 			</li>
 		</ul>
 	</div>
 </div></section>
+-->
 
-<section class="stripe"><div class="bounds bounds--widee">
+<section class="stripe"><div class="bounds">
 	<h2 class="text--display3 chunk">Sponsors</h2>
-	<ul>
-		<li class="chunk row">
-			<div class="row-item row-item--shrink">
-				<div class="thumb media--l" style="background-image: url('https://placekitten.com/g/72/72');"></div>
-			</div>
-			<div class="row-item valign--middle">
-				<h3 class="text--bold">Sponsor Name</h3>
-				<p>Optional sponsor text goes here</p>
-			</div>
-		</li>
-		<li class="chunk row">
-			<div class="row-item row-item--shrink">
-				<div class="thumb media--l" style="background-image: url('https://placekitten.com/g/72/72');"></div>
-			</div>
-			<div class="row-item valign--middle">
-				<h3 class="text--bold">Sponsor Name</h3>
-				<p>Optional sponsor text goes here</p>
+	<ul class="gridList gridList--has1 atMedium_gridList--has2">
+		<li class="gridList-item">
+			<div class="row">
+				<div class="row-item row-item--shrink">
+					<div class="thumb media--l" style="background-image: url('https://placekitten.com/g/72/72');"></div>
+				</div>
+				<div class="row-item valign--middle">
+					<h3 class="text--bold">Sponsor Name</h3>
+					<p>Optional sponsor text goes here</p>
+				</div>
 			</div>
 		</li>
-		<li class="chunk row">
-			<div class="row-item row-item--shrink">
-				<div class="thumb media--l" style="background-image: url('https://placekitten.com/g/72/72');"></div>
+		<li class="gridList-item">
+			<div class="row">
+				<div class="row-item row-item--shrink">
+					<div class="thumb media--l" style="background-image: url('https://placekitten.com/g/72/72');"></div>
+				</div>
+				<div class="row-item valign--middle">
+					<h3 class="text--bold">Sponsor Name</h3>
+					<p>Optional sponsor text goes here</p>
+				</div>
 			</div>
-			<div class="row-item valign--middle">
-				<h3 class="text--bold">Sponsor Name</h3>
-				<p>Optional sponsor text goes here</p>
+		</li>
+		<li class="gridList-item">
+			<div class="row">
+				<div class="row-item row-item--shrink">
+					<div class="thumb media--l" style="background-image: url('https://placekitten.com/g/72/72');"></div>
+				</div>
+				<div class="row-item valign--middle">
+					<h3 class="text--bold">Sponsor Name</h3>
+					<p>Optional sponsor text goes here</p>
+				</div>
 			</div>
 		</li>
 	</ul>
 </div></section>
 
-<section class="stripe"><div class="bounds bounds--widee">
+<section class="stripe"><div class="bounds">
 	<h2 class="text--display3 chunk">Members are also in</h2>
-	<ul>
-		<li class="chunk row">
-			<div class="row-item row-item--shrink">
-				<div class="thumb media--l" style="background-image: url('https://placekitten.com/g/72/72');"></div>
-			</div>
-			<div class="row-item valign--middle">
-				<h3 class="text--bold">Group Name</h3>
-				<p>123 Chapter Who</p>
-			</div>
-		</li>
-		<li class="chunk row">
-			<div class="row-item row-item--shrink">
-				<div class="thumb media--l" style="background-image: url('https://placekitten.com/g/72/72');"></div>
-			</div>
-			<div class="row-item valign--middle">
-				<h3 class="text--bold">Group Name</h3>
-				<p>123 Chapter Who</p>
-			</div>
-		</li>
-		<li class="chunk row">
-			<div class="row-item row-item--shrink">
-				<div class="thumb media--l" style="background-image: url('https://placekitten.com/g/72/72');"></div>
-			</div>
-			<div class="row-item valign--middle">
-				<h3 class="text--bold">Group Name</h3>
-				<p>123 Chapter Who</p>
+	<ul class="gridList gridList--has1 atMedium_gridList--has2">
+		{{#similar_groups}}
+		<li class="gridList-item">
+			<div>
+			<a href="meetup.com/{{urlname}}" class="row">
+				<div class="row-item row-item--shrink">
+					<div class="thumb media--l" style="
+					background-image: url(http://foundation.specialsnowflake.com/duotoneDemo.php?url={{photos[0].photo_link}});
+					background-color: black;
+					">
+					</div>
+				</div>
+				<div class="row-item valign--middle">
+					<h3 class="text--bold">{{name}}</h3>
+					<p>123 {{who}}</p>
+				</div>
+			</a>
 			</div>
 		</li>
+		{{/similar_groups}}
 	</ul>
 </div></section>
-
 {{/group}}
 </script>
 
@@ -1158,7 +1140,11 @@ Template: Meetups screen
 		</div>
 
 		<div class="spreadable-item spreadable-item--shrink valign--middle chunk">
-			<button class="button button--icon"><span class="button-icon">{{{helpers.svgIcon('plus', 'icon--s')}}}</span><span class="button-label">Schedule a Meetup</span></button>
+			<!-- <button class="button button--icon"><span class="button-icon">{{{helpers.svgIcon('plus', 'icon--s')}}}</span><span class="button-label">Schedule a Meetup</span></button> -->
+			<a href="javascript:void(0)" class="row attachment">
+				<span class="row-item display--none atMedium_display--block valign--middle text--small">Schedule a Meetup</span>
+				<span class="row-item row-item--shrink">{{{helpers.svgIcon('plusCircleHollow', 'valign--middle')}}}</span>
+			</a>
 		</div>
 	</div>
 
@@ -1208,7 +1194,10 @@ Template: Photo Albums
 			<div class="text--display3 display--inlineBlock _hacks_text--unbold"><a href="#!/groupPhotos" class="link">{n} photos</a></div>
 		</div>
 		<div class="spreadable-item spreadable-item--shrink chunk">
-			<button class="button button--icon"><span class="button-icon">{{{helpers.svgIcon('plus', 'icon--s')}}}</span><span class="button-label">Add photos</span></button>
+			<a href="javascript:void(0)" on-click="choosePhotos1" class="row attachment">
+				<span class="row-item display--none atMedium_display--block valign--middle text--small">Add photos</span>
+				<span class="row-item row-item--shrink">{{{helpers.svgIcon('plusCircleHollow', 'valign--middle')}}}</span>
+			</a>
 		</div>
 	</div>
 </div></section>
@@ -1249,14 +1238,15 @@ Template: Photo Albums
 -->
 <script id="groupPhotos" type="text/template">
 <section class="stripe"><div class="bounds bounds--wide">
-	<div class="spreadable atMedium_spreadable--spread">
-		<div class="spreadable-item chunk">
-			<!-- <div class="text--display3 display--inlineBlock _hacks_text--unbold"><a href="#!/albums" class="link">{{photo_albums.length}} albums</a></div>
-			<div class="text--display3 display--inlineBlock _hacks_text--unbold"> &middot; </div> -->
+	<div class="row chunk">
+		<div class="row-item valign--middle">
 			<div class="text--display3 display--inlineBlock">{n} photos</div>
 		</div>
-		<div class="spreadable-item spreadable-item--shrink chunk">
-			<button class="button button--icon"><span class="button-icon">{{{helpers.svgIcon('plus', 'icon--s')}}}</span><span class="button-label">Add photos</span></button>
+		<div class="row-item row-item--shrink valign--middle">
+			<a href="javascript:void(0)" on-click="choosePhotos1" class="row attachment">
+				<span class="row-item display--none atMedium_display--block valign--middle text--small">Add photos</span>
+				<span class="row-item row-item--shrink">{{{helpers.svgIcon('plusCircleHollow', 'valign--middle')}}}</span>
+			</a>
 		</div>
 	</div>
 </div></section>
@@ -1266,20 +1256,38 @@ Template: Photo Albums
 <div class="chunk">
 	<h4 class="text--big">{{event.name}} <span class="_hacks_text--unbold"> &middot; <a href="#!/albums/{{id}}" class="link">{{photo_count}} photos</a></span></h4>
 </div>
-<ul class="gridList gridList--photoGrid _tweak_gridList--photoGrid gridList--has4 atLarge_gridList--has5 chunk">
+<!-- <ul class="gridList gridList--photoGrid _tweak_gridList--photoGrid gridList--has4 atLarge_gridList--has5 chunk">
 {{#photo_sample_long}}
 	<li class="gridList-item"><a href="#!/photo-detail/{{photo_id}}" class="thumb" style="background-image: url({{photo_link}});"></a></li>
 {{/photo_sample_long}}
 {{#if photo_count > 19}}
 	<li class="gridList-item">
-		<a href="#!/albums/{{id}}" class="align--center valign--middle">
-			+{{photo_count}}
+		<a href="#!/albums/{{id}}" class="thumb _tweak_thumbPlaceholder inverted">
+			<span class="align--center valign--middle text--display3 thumb-content thumb-content--middle">+{{photo_count-19}}</span>
+		</a>
+	</li>
+{{/if}}
+</ul> -->
+<ul class="chunk _proto_masonryGrid _proto_masonryGrid--noJS js-masonryGrid">
+{{#photo_sample_long}}
+	<li class="_proto_masonryGrid-item"><a href="#!/photo-detail/{{photo_id}}" class="_proto_masonryGrid-link">
+		<img src="{{photo_link}}" class="_proto_masonryGrid-asset">
+	</a></li>
+{{/photo_sample_long}}
+{{#if photo_count > 19}}
+	<li>
+		<a href="#!/albums/{{id}}" class="thumb _tweak_thumbPlaceholder media--xl _proto_masonryGrid-asset inverted">
+			<span class="align--center valign--middle text--display3 thumb-content thumb-content--middle">+{{photo_count-19}}</span>
 		</a>
 	</li>
 {{/if}}
 </ul>
 </div></section>
 {{/each}}
+
+<div class="input-wrap--hidden">
+	<input type="file" id="photoFileInput1" accept="image/*" capture="camera" value="{{uploadedPhotos}}" multiple />
+</div>
 </script>
 
 <!--
@@ -1288,55 +1296,81 @@ Template: Album Grid
 /////////////////////////////////////////////////////
 -->
 <script id="albumPhotos" type="text/template">
-	<section class="stripe"><div class="bounds bounds--wide">
-		{{#photo_album_meta}}
-			<div class="chunk">
-				<h1 class="text--display3"><a href="#" class="link">{{title}}</a></h1>
-				{{#event}}
-					<p>{{yes_rsvp_count}} went &middot; {{helpers.dateRelative(time)}}</p>
-				{{/event}}
+<section class="stripe"><div class="bounds bounds--wide">
+	{{#photo_album_meta}}
+		<!-- <div class="chunk">
+			<h1 class="text--display3"><a href="#" class="link">{{title}}</a></h1>
+			{{#event}}
+				<p>{{yes_rsvp_count}} went &middot; {{helpers.dateRelative(time)}}</p>
+			{{/event}}
+		</div> -->
+		<div class="chunk">
+			<div class="row">
+				<div class="row-item">
+					<h1 class="text--display3">{{title}}</h1>
+				</div>
+				<div class="row-item row-item--shrink valign--middle">
+					<!-- <button class="button button--icon">
+						<span class="button-icon">{{{helpers.svgIcon('plus', 'icon--s')}}}</span>
+						<span class="button-label display--none atMedium_display--block">Add photos</span>`
+					</button> -->
+					<a href="javascript:void(0)" on-click="choosePhotos1" class="row attachment">
+						<span class="row-item display--none atMedium_display--block valign--middle text--small">Add photos</span>
+						<span class="row-item row-item--shrink">{{{helpers.svgIcon('plusCircleHollow', 'valign--middle')}}}</span>
+					</a>
+				</div>
 			</div>
-		{{/photo_album_meta}}
-
-		<ul class="gridList gridList--photoGrid gridList--has4 atLarge_gridList--has5 chunk">
-		{{#album_photos}}
-			<li class="gridList-item"><a href="#!/photo-detail/{{photo_id}}" class="thumb" style="background-image: url({{photo_link}});"></a></li>
-		{{/album_photos}}
-		</ul>
-	</div></section>
-
-	<section class="stripe"><div class="bounds bounds--wide">
-		<div class="chunk align--center">
-			<h2 class="text--big">More albums</h2>
+			<a href="http://meetup.com/{{../group.urlname}}/events/{{event.id}}" class="attachment row link">
+				<span class="row-item row-item--shrink">{{{helpers.svgIcon('calendar', 'valign--middle')}}}</span>
+				<span class="row-item valign--middle">Meetup details</span>
+			</a>
 		</div>
+	{{/photo_album_meta}}
 
-		<ul class="chunk gridList gridList--has1 atMedium_gridList--has4">
-			{{#photo_albums}}
-				<li class="gridList-item">
-					<div class="_proto_flexPhotos keepAspect keepAspect--3-2">
+	<ul class="chunk _proto_masonryGrid _proto_masonryGrid--noJS js-masonryGrid">
+	{{#album_photos}}
+		<li class="_proto_masonryGrid-item"><a href="#!/photo-detail/{{photo_id}}" class="_proto_masonryGrid-link">
+			<img src="{{photo_link}}" class="_proto_masonryGrid-asset">
+		</a></li>
+	{{/album_photos}}
+	</ul>
+</div></section>
 
-						<a href="#!/albums/{{id}}" class="_proto_flexPhotos-wrapper chunk row inverted" data-event-id="{{event.id}}">
-							<span class="row-item chunk imgFill _proto_flexPhotos--lg _proto_flexPhotos-photo" style="background-image: url({{photo_sample[0].photo_link}});"></span>
-							{{#if photo_sample.length > 1}}
-								<span class="row-item row-item--shrink column _proto_flexPhotos--sm">
-									<span class="chunk imgFill column-item _proto_flexPhotos-photo" style="background-image:url('{{photo_sample[1].photo_link}}')"></span>
-									{{#if photo_sample.length > 2}}
-										<span class="chunk imgFill column-item _proto_flexPhotos-photo" style="background-image:url('{{photo_sample[2].photo_link}}')"></span>
-									{{/if}}
-								</span>
-							{{/if}}
-						</a>
+<section class="stripe"><div class="bounds bounds--wide">
+	<div class="chunk align--center">
+		<h2 class="text--big">More albums</h2>
+	</div>
 
-					</div>
+	<ul class="chunk gridList gridList--has1 atMedium_gridList--has3">
+		{{#photo_albums}}
+			<li class="gridList-item">
+				<div class="_proto_flexPhotos keepAspect keepAspect--3-2">
 
-					<div class="chunk">
-						<h4 class="text--bold">{{event.name}}</h4>
-						<p class="text--caption">{{photo_count}} photos</p>
-					</div>
-				</li>
-			{{/photo_albums}}
-		</ul>
-	</div></section>
+					<a href="#!/albums/{{id}}" class="_proto_flexPhotos-wrapper chunk row inverted" data-event-id="{{event.id}}">
+						<span class="row-item chunk imgFill _proto_flexPhotos--lg _proto_flexPhotos-photo" style="background-image: url({{photo_sample[0].photo_link}});"></span>
+						{{#if photo_sample.length > 1}}
+							<span class="row-item row-item--shrink column _proto_flexPhotos--sm">
+								<span class="chunk imgFill column-item _proto_flexPhotos-photo" style="background-image:url('{{photo_sample[1].photo_link}}')"></span>
+								{{#if photo_sample.length > 2}}
+									<span class="chunk imgFill column-item _proto_flexPhotos-photo" style="background-image:url('{{photo_sample[2].photo_link}}')"></span>
+								{{/if}}
+							</span>
+						{{/if}}
+					</a>
+
+				</div>
+
+				<div class="chunk">
+					<h4 class="text--bold">{{event.name}}</h4>
+					<p class="text--caption">{{photo_count}} photos</p>
+				</div>
+			</li>
+		{{/photo_albums}}
+	</ul>
+</div></section>
+<div class="input-wrap--hidden">
+	<input type="file" id="photoFileInput1" accept="image/*" capture="camera" value="{{uploadedPhotos}}" multiple />
+</div>
 </script>
 
 <!--
@@ -1348,11 +1382,11 @@ Template: Photo Detail View
 
 <div class="view view--mediaContent spreadable-item">
 	<div class="view-body view-body--mediaContent" style="background-image: url({{displayed_photo.highres_link}});">
-		<a class="mediaNav mediaNav--prev" rel="prev" href="#">
-			<span class="mediaNav-icon">&#10094;</span>
+		<a class="mediaNav mediaNav--prev inverted" rel="prev" href="#">
+			<span class="mediaNav-icon">{{{helpers.svgIcon('chevronLeft')}}}</span>
 		</a>
-		<a class="mediaNav mediaNav--next" rel="next" href="#">
-			<span class="mediaNav-icon">&#10095;</span>
+		<a class="mediaNav mediaNav--next inverted" rel="next" href="#">
+			<span class="mediaNav-icon">{{{helpers.svgIcon('chevronRight')}}}</span>
 		</a>
 	</div>
 </div>
@@ -1361,10 +1395,11 @@ Template: Photo Detail View
 	<div class="view-body">
 		<section class="stripe border--none">
 			<div class="bounds bounds--mediaMeta attachment">
+				{{#if displayed_photo.caption}}
 				<div class="chunk">
-					<p>Photo caption goes here</p>
-					<!-- <p class="text--secondary">&mdash; with <a class="link" href="#">somebody</a></p> -->
+					<p>{{displayed_photo.caption}}</p>
 				</div>
+				{{/if}}
 				<div class="chunk">
 					<p class="text--caption">Added to <a href="{{group.link}}" class="link">{{group.name}}</a> by <a href="#" class="link">{{displayed_photo.member.name}}</a> on {{helpers.dateFormat(displayed_photo.created)}}</p>
 				</div>
@@ -1675,7 +1710,7 @@ Template: Photo posting
 	</div></div> -->
 
 	<div class="align--right">
-		<a href="#" class="button button--primary" on-click="post_photo">Post</a>
+		<a href="javascript:void(0)" class="button button--primary" on-click="post_photo">Post</a>
 	</div>
 </script>
 
@@ -1932,14 +1967,17 @@ Template: Pre-MUP
 </script>
 
 <script id="members" type="text/template">
-<section class="stripe"><div class="bounds bounds--wide">
-	<div class="row chunk">
+<section class="stripe"><div class="bounds bounds--wide flush--bottom">
+	<div class="row chunk _proto_searchContainer js-searchContainer">
 		<div class="row-item">
 			<h1 class="text--display3">Members</h1>
-			<p class="text--caption">Sorted by <a href="#" class="link">last activity</a></p>
+			<p class="text--caption">Sorted by <a href="javascript:void(0)" class="link" on-click="toggleMemberSort">last activity</a></p>
 		</div>
-		<div class="row-item row-item--shrink valign--middle">{{{helpers.svgIcon('search')}}}</div>
-		<div class="row-item row-item--shrink valign--middle">{{{helpers.svgIcon('sort')}}}</div>
+		<div class="row-item row-item--shrink valign--middle row js-search _proto_search">
+			<label for="memberSearch" class="_proto_search-label row-item row-item--shrink display--block atMedium_display--none valign--middle">{{{helpers.svgIcon('search')}}}</label>
+			<input type="text" id="memberSearch" placeholder="Search for a member" class="_proto_search-input row-item visibility--a11yHide atMedium_visibility--a11yShow" on-focus="activateSearch" on-blur="deactivateSearch" />
+		</div>
+		<div class="row-item row-item--shrink valign--middle" on-click="toggleMemberSort">{{{helpers.svgIcon('sort')}}}</div>
 	</div>
 
 	<div class="tabs">
@@ -1960,7 +1998,13 @@ Template: Pre-MUP
 						<span class="spreadable-item spreadable-item--shrink _proto_memberName valign--middle text--bold">{{name}}</span>
 						{{#bio}}<span class="spreadable-item valign--middle _hacks_wrap--2line--truncate">{{bio}}</span>{{/bio}}
 					</a>
-					<div class="row-item row-item--shrink valign--middle">{{{helpers.svgIcon('overflow')}}}</div>
+
+					{{#if ../current_member.membership == membership.organizer}}
+						<div class="row-item row-item--shrink valign--middle">{{{helpers.svgIcon('overflow')}}}</div>
+					{{else}}
+						<div class="row-item row-item--shrink valign--middle">{{{helpers.svgIcon('messages')}}}</div>
+					{{/if}}
+
 				</div>
 			</li>
 		{{/members}}

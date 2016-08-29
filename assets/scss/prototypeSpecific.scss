@@ -129,6 +129,20 @@ img._proto_photoGrid-image {
 	width: 100%;
 }
 
+._proto_masonryGrid--noJS ._proto_masonryGrid-asset {
+	height: $media-xl;
+}
+
+._proto_masonryGrid {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+._proto_masonryGrid-asset {
+	box-sizing: border-box;
+	padding: 0 $space-quarter $space-quarter 0;
+}
+
 // mixin taken from SQ2 file `_aspect-ratio.scss` on 08/15/2016
 // @mixin _aspect( $ratio ) {
 //   margin-bottom: 0;
@@ -396,6 +410,8 @@ Member list
 ------------------------------
 */
 
+$searchSVG: 'data:image/svg+xml;utf8,<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="24px" height="24px" viewBox="138 138 24 24" enable-background="new 138 138 24 24" xml:space="preserve"><path d="M157.938,142.137c-2.848-2.849-7.467-2.849-10.315,0s-2.849,7.467,0,10.315s7.468,2.849,10.315,0 C160.787,149.604,160.787,144.985,157.938,142.137 M149.182,150.894c-1.988-1.988-1.988-5.21,0-7.198 c1.988-1.987,5.21-1.987,7.198,0c1.987,1.988,1.987,5.21,0,7.198C154.393,152.881,151.17,152.881,149.182,150.894 M146.803,153.272 c0.693,0.693,0.693,1.821,0,2.516l-4.407,4.407c-0.693,0.693-1.822,0.693-2.516,0c-0.693-0.693-0.693-1.822,0-2.516l4.408-4.407 C144.981,152.579,146.109,152.579,146.803,153.272"/></svg>';
+
 // Make sure everything stays aligned
 .atMedium_spreadable--spread ._proto_memberName { // extra class used to beat specificity
 	@include atMediaUp(medium) {
@@ -403,8 +419,47 @@ Member list
 	}
 }
 
+._proto_search {
+
+}
+
+._proto_searchContainer--active {
+	position: relative;
+}
+
+._proto_search--active {
+	background: $C_contentBG;
+	padding: $space $space $space 0;
+	position: absolute;
+	width: 100%;
+
+	@include atMediaUp(medium) {
+		background: initial;
+		padding: initial;
+		position: initial;
+		width: auto;
+	}
+}
+
+
+._proto_search-label {
+
+}
+
+input._proto_search-input[type="text"] {
+	@include atMediaUp(medium) {
+		background-image: url($searchSVG);
+		background-size: $media-xs;
+		background-repeat: no-repeat;
+		background-position: $space-half center;
+		padding-left: $space + $media-xs;
+	}
+}
+
 /*
+------------------------------
 Channel settings
+------------------------------
 */
 input[type="text"]._proto_channelCreate {
 	font-size: $font-size-small;
@@ -413,8 +468,6 @@ input[type="text"]._proto_channelCreate {
 	padding: 0 $space-half;
 	width: auto;
 }
-
-
 
 
 

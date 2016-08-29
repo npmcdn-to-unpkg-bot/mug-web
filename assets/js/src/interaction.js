@@ -27,6 +27,7 @@ function main_onComplete() {
 	$(document.body).on('click', '[data-ellipsis-applied] [data-toggle-ellipsis]', function(e) { toggleEllipsis(e) });
 
 	renderNavigation();
+	masonryGrid();
 }
 
 /*
@@ -201,7 +202,7 @@ function processUploadedPhotos(){
 }
 
 function post_photo(event){
-	views.modal_hide();
+	views.back();
 	var dropdown       = document.getElementById('recent-mup-list'),
 			chosenAlbum    = dropdown.value !== 'none' ? dropdown.value : 'none',
 			newPhotos;
@@ -863,6 +864,19 @@ function keyboard_photo_nav(){
 	});
 }
 
+function masonryGrid() {
+	$('.js-masonryGrid').each(function(i, el) {
+		var $el = $(el);
+
+		$el.imagesLoaded( function() {
+			$el.masonryGrid({
+				maxRowHeight: 160,
+				absMaxImgHeight: 400
+			});
+		});
+	});
+}
+
 function test_toast() {
 	views.toast_show({
 		message	 : 'Album Name has been deleted',
@@ -951,3 +965,41 @@ function toggleSave(event) {
 function createNewChannel(event) {
 
 }
+
+/*
+//////////////////////////////////////////////////////////
+----------------------------------------------------------
+MEMBER LIST
+----------------------------------------------------------
+//////////////////////////////////////////////////////////
+*/
+function activateSearch(event) {
+	var $searchContainer = $(event.node).parents('.js-searchContainer');
+
+	$searchContainer.addClass('_proto_searchContainer--active');
+	$searchContainer.find('.js-search').addClass('_proto_search--active');
+	$searchContainer.find('.js-search input').removeClass('visibility--a11yHide');
+}
+
+function deactivateSearch(event) {
+	var $searchContainer = $(event.node).parents('.js-searchContainer');
+
+	$searchContainer.removeClass('_proto_searchContainer--active');
+	$searchContainer.find('.js-search').removeClass('_proto_search--active');
+	$searchContainer.find('.js-search input').addClass('visibility--a11yHide');
+}
+
+function toggleMemberSort(event) {
+	views.momentary_show({
+		$target: $(event.node),
+		type	 : 'popover',
+		buttons: [
+			{label: 'Last activity'},
+			{label: 'Connection to you'},
+			{label: 'Name'},
+			{label: 'Date joined'}
+		]
+	});
+}
+
+

@@ -227,6 +227,8 @@ View.prototype = {
 		// Apply condensed header styles?
 		//
 		if (options.condensed) {
+			this.header_data.condensed = options.condensed;
+
 			var colorDark = 'ff7900',
 					colorLight = '7700c8',
 					bgURLStr  = 'http://foundation.specialsnowflake.com/duotoneblend.php?url=' + options.condensed.bgImg + '&colorDark=' + colorDark + '&colorLight=' + colorLight + '';
@@ -246,7 +248,13 @@ View.prototype = {
 				location.hash = '#!/';
 			});
 		} else {
+			this.header_data.condensed = false;
 			this.$header.removeClass('_tweak_view-head--condensed inverted align--center').removeAttr('style');
+
+			if (this.type == 'media') {
+				this.$header.addClass('inverted');
+			}
+
 		}
 
 		// buttons and handlers
@@ -291,7 +299,8 @@ View.prototype = {
 			buttons: [],
 			cancelMode: {},
 			search: {},
-			hidden: ''
+			hidden: '',
+			condensed: false
 		}
 
 		// RENDER HEADER

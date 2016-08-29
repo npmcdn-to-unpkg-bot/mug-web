@@ -284,8 +284,14 @@ $blurAmount: 6px; // used to set blur AND crop weird blurred edges using `paddin
 	background-position: center 20%;
 	background-repeat: no-repeat;
 	cursor: pointer;
+	height: auto;
 	overflow: hidden;
+	padding: $space-2 $space;
 	position: relative;
+
+	@include atMediaUp(medium) {
+		padding: $space-3 $space;
+	}
 
 	.viewHead-heading {
 		position: relative;
@@ -310,6 +316,10 @@ $blurAmount: 6px; // used to set blur AND crop weird blurred edges using `paddin
 		top: -#{$blurAmount};
 		width: 100%;
 	}
+}
+
+._tweak_thumbPlaceholder {
+	background: $C_black;
 }
 
 /*

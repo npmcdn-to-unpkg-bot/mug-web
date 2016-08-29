@@ -37,8 +37,8 @@ router.add('', function(context){ // homepage
 		},
 		header : {
 			title: views.data.group.name,
-			isRoot: false,
-			isFixed: true,
+			isRoot: true,
+			isFixed: false,
 			buttons: [
 				{ label: "Actions", icon: "ellipsis-h", fn: toggle_overflow }
 			]
@@ -161,7 +161,7 @@ router.add('create-photo-post', function(context){
 		template: "photoPost",
 		modalType: modalType,
 		events: {
-			"post_photo": post_photo,
+			"post_photo": post_photo
 			// "choose_recent_mup": choose_recent_mup,
 			// "toggle_tag_overlay": toggle_tag_overlay,
 			// "save_tags": save_tags,
@@ -288,7 +288,8 @@ router.add('groupPhotos', function(context){
 	views.show({
 		template : 'groupPhotos',
 		events : {
-			"complete" : main_onComplete
+			"complete" : main_onComplete,
+			"choosePhotos1" : choosePhotos1
 		},
 		header : {
 			title: views.data.group.name,
@@ -296,6 +297,9 @@ router.add('groupPhotos', function(context){
 			condensed: {
 				bgImg: views.data.group.keyPhoto
 			}
+		},
+		observe: {
+			'uploadedPhotos': processUploadedPhotos
 		}
 	});
 
@@ -314,7 +318,8 @@ router.add('albums/:i', function(context){
 		views.show({
 			template : 'albumPhotos',
 			events : {
-				"complete" : main_onComplete
+				"complete" : main_onComplete,
+				"choosePhotos1" : choosePhotos1
 			},
 			header : {
 				title: views.data.group.name,
@@ -322,6 +327,9 @@ router.add('albums/:i', function(context){
 				condensed: {
 					bgImg: views.data.group.keyPhoto
 				}
+			},
+			observe: {
+				'uploadedPhotos': processUploadedPhotos
 			}
 		});
 	});
@@ -335,21 +343,19 @@ router.add('photo-detail/:i', function(context){
 
 	gimme.get([
 		{"gimme": "photo", "key": "photo_detail", "data": {"page": 1, "photo_id": context.params.i}, children: [
-			{"gimme": "photo_albums", "key":"album_data" ,"data": {"page": 1}, "match": [["photo_album.photo_album_id", "photo_album_id"], ["photo_album.group_id", "group_id"]]},
+			// {"gimme": "photo_albums", "key":"album_data" ,"data": {"page": 1}, "match": [["photo_album.photo_album_id", "photo_album_id"], ["photo_album.group_id", "group_id"]]},
 			{"gimme": "event", "key":"event_data" ,"data": {"page": 1}, "match": [["photo_album.event_id", "event_id"]]}
 		]}
 	], true).then(function(data){
 		console.log(data);
 		views.data.displayed_photo = data.photo_detail[0];
-		views.data.displayed_photo.album_data = views.data.displayed_photo.album_data[0];
+		// views.data.displayed_photo.album_data = views.data.displayed_photo.album_data[0];
 		views.data.displayed_photo.event_data = views.data.displayed_photo.event_data[0];
 	}).then(function(){
 
 		// TODO: handle this logic elsewhere
 		// update the data for the media view based on the above call
-		views._media.header_data.title = views.data.displayed_photo.album_data.title;
-
-		console.log(views._media);
+		views._media.header_data.title = views.data.displayed_photo.event_data.name;
 
 	});
 
@@ -362,6 +368,12 @@ router.add('photo-detail/:i', function(context){
 			title: 'Meetup album', // gets updated after the data is pulled
 			subtitle: views.data.group.name,
 			subtitleLink: views.data.group.link,
+			cancelMode: {
+				icon: "close",
+				fn: function() {
+					views.back()
+				}
+			},
 			buttons: [
 			// { label: "Share", icon: "share-square-o", fn: toggle_photoDetail_share_popover},
 			// 	{ label: "More", icon: "ellipsis-h", fn: toggle_photoDetail_popover }
@@ -376,7 +388,10 @@ router.add('members', function(){
 	views.show({
 		template : 'members',
 		events : {
-			"complete" : main_onComplete
+			"complete" : main_onComplete,
+			"activateSearch" : activateSearch,
+			"deactivateSearch" : deactivateSearch,
+			"toggleMemberSort" : toggleMemberSort
 		},
 		header : {
 			title: views.data.group.name,

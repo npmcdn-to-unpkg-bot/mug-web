@@ -240,9 +240,9 @@ gimme.get([{"gimme": "group", "data": {"group_id": groupId} }], true).then(funct
 				{"gimme": "members", "data":{"group_id": groupId, "page": 18}},
 				// {"gimme": "members", "key":"inviteWho", "data":{"group_id": groupId, "page": 10}}
 
-				// {"gimme": "photo_albums", "data": {"page": 10, "urlkey": urlname}, children: [
-				// 	{"gimme": "album_photos", "key":"photo_sample_long" ,"data": {"page": 19}, "match": [["id", "photo_album_id"]]}
-				// ]},
+				{"gimme": "photo_albums", "data": {"page": 10, "urlkey": urlname}, children: [
+					{"gimme": "album_photos", "key":"photo_sample_long" ,"data": {"page": 19}, "match": [["id", "photo_album_id"]]}
+				]},
 				// {"gimme": "photo_albums", "data": {"page": 10, "group_id": groupId}}, // v2 API group albums
 				{"gimme": "photos", "key": "mup_photos", "data": {"page": 18, "group_id": groupId}},
 

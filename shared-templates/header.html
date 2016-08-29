@@ -1,4 +1,5 @@
 <!-- web has no back/close btn by default, add arrows only for stepped flow? -->
+{{^condensed}}
 	{{^cancelMode}}
 
 		{{#if isStep || !isRoot}}
@@ -13,9 +14,9 @@
 				</a>
 			{{/goHome}}
 		{{else}}
-			<a href="http://meetup.com/" class="row-item row-item--shrink row-item--alignMiddle">
+			<!-- <a href="http://meetup.com/" class="row-item row-item--shrink row-item--alignMiddle">
 				<img src="style/img/logo.svg" width="35" height="24" />
-			</a>
+			</a> -->
 		{{/if}}
 
 	{{/cancelMode}}
@@ -30,9 +31,19 @@
 			{{/icon}}
 		</div>
 	{{/cancelMode}}
+{{/condensed}}
 
 	<div class="row-item row-item--alignMiddle viewHead-heading">
+		
+		{{^condensed}}
 		<h1 class="wrap--singleLine--truncate">{{title}}</h1>
+		{{/condensed}}
+		{{#condensed}}
+		<h2 class="text--display3">{{title}}</h2>
+		{{/condensed}}
+		
+		<!-- <h1 class="{{^condensed}}wrap--singleLine--truncate{{/condensed}}">{{title}}</h1> -->
+
 		{{#subtitle}}
 			{{#subtitleLink}}
 				<a href="{{subtitleLink}}" class="display--block text--caption wrap--singleLine--truncate">{{subtitle}}</a>
@@ -43,6 +54,7 @@
 		{{/subtitle}}
 	</div>
 
+{{^condensed}}
   <div class="viewHead-actions row row-item row-item--shrink row-item--alignMiddle">
     {{#buttons}}
       <a on-click="action" data-action="{{action}}" intro="{{#intro}}{{intro}}{{/intro}}{{^intro}}none{{/intro}}" class="row-item row-item--shrink">
@@ -55,3 +67,4 @@
       </a>
     {{/buttons}}
   </div>
+{{/condensed}}
